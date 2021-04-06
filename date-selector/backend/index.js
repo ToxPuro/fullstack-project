@@ -39,6 +39,7 @@ const typeDefs = gql`
   type Query {
     allEvents: [Event]!
     me: User
+    userGroups: [Group]!
   }
 
 
@@ -70,6 +71,10 @@ const resolvers = {
     },
     me: (root, args, context) => {
       return context.currentUser
+    },
+    userGroups: (root, args, context) => {
+      const currentUser = context.currentUser;
+      return Group.find({users: currentUser._id}).populate('users')
     }
   },
   Mutation: {
