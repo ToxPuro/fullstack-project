@@ -33,6 +33,7 @@ const typeDefs = gql`
   }
 
   type Group {
+    name: String!
     users: [User]!
   }
 
@@ -56,6 +57,7 @@ const typeDefs = gql`
     ): Token
     addEvent(
       name: String!
+      group: String!
     ): Event
     createGroup(
       name: String!
@@ -113,7 +115,8 @@ const resolvers = {
       return { value: jwt.sign(userForToken, JWT_SECRET)}
     },
     addEvent: async (root, args) => {
-      const event = new Event({name: args.name})
+      const group = await Group.findOne({name: args.group})
+      const event = new Event({name: args.name, group: group._id})
       return event.save()
     },
     createGroup: async(root, args, context) => {

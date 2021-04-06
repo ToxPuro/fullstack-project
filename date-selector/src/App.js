@@ -4,7 +4,7 @@ import Login from './components/Login'
 import {BrowserRouter as Router, Switch, Route, Link, useParams, useHistory} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useApolloClient, useQuery } from "@apollo/client"
-import {ME} from './graphql/queries'
+import Button from 'react-bootstrap/Button';
 
 
 const App = () => {
@@ -31,7 +31,7 @@ const App = () => {
         </Route>
         <Route path="/">
           <Calendar/>
-          <button><Link to="/addevent">add event</Link></button>
+          <Button><Link to="/addevent">add event</Link></Button>
           <button onClick={logout}>Log Out</button>
         </Route>
       </Switch>

@@ -13,3 +13,8 @@ query{
     name
   }
 }`
+
+export const USER_GROUPS = gql`
+query{
+  userGroups{name}
+}`
