@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('./models/User')
+const Event = require('./models/Event')
 
 const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
@@ -18,6 +19,9 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
 
 
 const typeDefs = gql`
+  type Event {
+    name: String!
+  }
   type User {
     name: String!
     id: ID!
@@ -28,7 +32,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    bigcheese: String!
+    allEvents: [Event]!
   }
 
   type Mutation {
@@ -41,13 +45,16 @@ const typeDefs = gql`
       username: String!
       password: String!
     ): Token
+    addEvent(
+      name: String!
+    ): Event
   }
 `
 
 const resolvers = {
   Query: {
-    bigcheese: () => {
-      return "Big Cheese"
+    allEvents: () => {
+      return Event.find({})
     }
   },
   Mutation: {
@@ -84,7 +91,11 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, JWT_SECRET)}
     },
-  }
+    addEvent: async (root, args) => {
+      const event = new Event({name: args.name})
+      return event.save()
+    }
+    }
 }
 
 const server = new ApolloServer({
