@@ -1,4 +1,4 @@
-import Calendar from "./components/Calendar"
+import PreviewCalendar from "./components/PreviewCalendar"
 import AddEvent from './components/AddEvent'
 import Login from './components/Login'
 import {BrowserRouter as Router, Switch, Route, Link, useParams, useHistory} from 'react-router-dom'
@@ -30,7 +30,7 @@ const App = () => {
           <AddEvent/>
         </Route>
         <Route path="/">
-          <Calendar/>
+          <PreviewCalendar/>
           <Button><Link to="/addevent">add event</Link></Button>
           <button onClick={logout}>Log Out</button>
         </Route>

@@ -4,9 +4,10 @@ import { useMutation, useQuery } from '@apollo/client'
 import { ADD_EVENT} from '../graphql/mutations'
 import {USER_GROUPS} from '../graphql/queries'
 import Select from 'react-select'
+import ChoiceCalendar from './ChoiceCalendar'
 
  const AddEvent = () => {
-
+  const [ dates, setDates] = useState([])
   const [choice, setChoice] = useState(null)
   const handleChoice = selectedOption => {
     setChoice(selectedOption.value)
@@ -25,7 +26,7 @@ import Select from 'react-select'
      <Formik
        initialValues={{ name: '' }}
        onSubmit={({name}, {resetForm}) => {
-         addEvent({variables:{name, group: choice}})
+         addEvent({variables:{name, group: choice, dates}})
          resetForm({})
        }}
      >
@@ -53,6 +54,8 @@ import Select from 'react-select'
        )}
      </Formik>
      <Select options={options} onChange={handleChoice} />
+     <h2>Choose possible days</h2>
+     <ChoiceCalendar dates={dates} setDates={setDates}/>
    </div>
  )};
  

@@ -22,6 +22,8 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
 const typeDefs = gql`
   type Event {
     name: String!
+    group: String!
+    dates: [String!]!
   }
   type User {
     name: String!
@@ -34,13 +36,15 @@ const typeDefs = gql`
 
   type Group {
     name: String!
-    users: [User]!
+    users: [User!]!
+    events: [Event]!
   }
 
   type Query {
     allEvents: [Event]!
     me: User
     userGroups: [Group]!
+    userEvents: [Event]!
   }
 
 
@@ -58,6 +62,7 @@ const typeDefs = gql`
     addEvent(
       name: String!
       group: String!
+      dates: [String!]!
     ): Event
     createGroup(
       name: String!
@@ -77,6 +82,12 @@ const resolvers = {
     userGroups: (root, args, context) => {
       const currentUser = context.currentUser;
       return Group.find({users: currentUser._id}).populate('users')
+    },
+    userEvents: async (root, args, context) => {
+      const currentUser = context.currentUser
+      const groups = await Group.find({users: currentUser._id})
+      const groupIDs = groups.map(group => group._id)
+      return Event.find({group:{$in:[groupIDs]}})
     }
   },
   Mutation: {
@@ -116,11 +127,11 @@ const resolvers = {
     },
     addEvent: async (root, args) => {
       const group = await Group.findOne({name: args.group})
-      const event = new Event({name: args.name, group: group._id})
+      const event = new Event({name: args.name, group: group._id, dates: args.dates})
       return event.save()
     },
     createGroup: async(root, args, context) => {
-      const group = new Group({name: args.name, users: [...args.users, context.currentUser]})
+      const group = new Group({name: args.name, users: [...args.users, context.currentUser], events: []})
       return group.save()
     }
     }

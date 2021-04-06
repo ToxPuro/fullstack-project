@@ -6,8 +6,8 @@ mutation login($username: String!, $password: String!){
 }`
 
 export const ADD_EVENT = gql`
-mutation addEvent($name: String! $group: String!){
-  addEvent(name: $name, group: $group){name}
+mutation addEvent($name: String! $group: String! $dates: [String!]!){
+  addEvent(name: $name, group: $group dates: $dates){name}
 }`
 
 

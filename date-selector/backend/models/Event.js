@@ -9,7 +9,13 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Group',
     required: true
-  }
+  },
+  dates: [
+    {
+      type: String,
+      required: true
+    }
+  ]
 })
 
 

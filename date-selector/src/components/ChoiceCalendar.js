@@ -3,13 +3,13 @@ import * as dateFns from "date-fns"
 import '../App.css'
 import { findByPlaceholderText } from "@testing-library/dom"
 
-const Calendar = () => {
+const ChoiceCalendar = ({setDates, dates}) => {
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
       <Header month={month} setMonth={setMonth}/>
       <Days month={month}/>
-      <Cells month={month}/>
+      <Cells month={month} setDates = {setDates} dates={dates}/>
     </div>
   )
 }
@@ -58,7 +58,7 @@ const Days = ({month}) => {
   )
 }
 
-const Cells = ({month}) => {
+const Cells = ({month, setDates, dates}) => {
 
   const monthStart = dateFns.startOfMonth(month)
   const monthEnd = dateFns.endOfMonth(monthStart)
@@ -77,7 +77,7 @@ const Cells = ({month}) => {
       formattedDate = dateFns.format(day, dateFormat)
       const cloneDay = day
       days.push(
-        <CalendarDate formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart}/>
+        <CalendarDate formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} setDates={setDates} dates={dates}/>
       )
       day = dateFns.addDays(day, 1)
     }
@@ -95,12 +95,13 @@ const Cells = ({month}) => {
 
 }
 
-const CalendarDate = ({formattedDate, day, monthStart}) => {
+const CalendarDate = ({formattedDate, day, monthStart,setDates, dates}) => {
 
   const [ clicked, setClicked ] = useState(false)
 
   const onDateClick = day => {
     setClicked(!clicked)
+    setDates(dates.concat(day.toString()))
   }
 
   if(clicked){
@@ -127,4 +128,4 @@ const CalendarDate = ({formattedDate, day, monthStart}) => {
   )
 }
 
-export default Calendar
+export default ChoiceCalendar

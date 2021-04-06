@@ -12,6 +12,12 @@ const groupSchema = new mongoose.Schema({
       ref: 'User'
     }
   ],
+  events: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Event'
+    }
+  ]
 })
 
 groupSchema.plugin(uniqueValidator)
