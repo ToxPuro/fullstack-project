@@ -81,6 +81,7 @@ const resolvers = {
         })
     },
     login: async (root, args) => {
+      console.log(args)
       const user = await User.findOne({username: args.username})
       const passwordCorrect = user === null
         ? false
