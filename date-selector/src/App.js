@@ -3,11 +3,12 @@ import AddEvent from './components/AddEvent'
 import Login from './components/Login'
 import {BrowserRouter as Router, Switch, Route, Link, useParams, useHistory} from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useApolloClient } from "@apollo/client"
+import { useApolloClient, useQuery } from "@apollo/client"
+import {ME} from './graphql/queries'
+
 
 const App = () => {
   const [ token, setToken ] = useState(localStorage.getItem('user-token'))
-
   const client = useApolloClient()
 
   const logout = () => {
