@@ -3,7 +3,7 @@ import { Formik } from 'formik';
  
  const AddEvent = () => (
    <div>
-     <h1>Anywhere in your app!</h1>
+     <h1>New Event</h1>
      <Formik
        initialValues={{ name: '' }}
        onSubmit={(values, {resetForm}) => {
