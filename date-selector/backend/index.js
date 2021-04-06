@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('./models/User')
 const Event = require('./models/Event')
-const { useContext } = require('react')
+const Group = require('./models/Group')
 
 const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
@@ -32,10 +32,16 @@ const typeDefs = gql`
     value: String!
   }
 
+  type Group {
+    users: [User]!
+  }
+
   type Query {
     allEvents: [Event]!
     me: User
   }
+
+
 
   type Mutation {
     createUser(
@@ -50,6 +56,10 @@ const typeDefs = gql`
     addEvent(
       name: String!
     ): Event
+    createGroup(
+      name: String!
+      users: [String]!
+    ): Group
   }
 `
 
@@ -100,6 +110,10 @@ const resolvers = {
     addEvent: async (root, args) => {
       const event = new Event({name: args.name})
       return event.save()
+    },
+    createGroup: async(root, args, context) => {
+      const group = new Group({name: args.name, users: [...args.users, context.currentUser]})
+      return group.save()
     }
     }
 }
