@@ -2,6 +2,10 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs, resolvers } = require('./schema');
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+const User = require('./models/User')
+
+const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
 async function startApolloServer() {
 
@@ -19,7 +23,17 @@ async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-  });
+    context: async ({ req }) => {
+      const auth = req ? req.headers.authorization : null
+      if (auth && auth.toLowerCase().startsWith('bearer ')) {
+        const decodedToken = jwt.verify(
+          auth.substring(7), JWT_SECRET
+        )
+        const currentUser = await User.findById(decodedToken.id).populate('friends')
+        return { currentUser }
+      }
+    }
+  })
   await server.start();
 
   app.use(express.static('build'))
