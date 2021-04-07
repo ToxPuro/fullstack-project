@@ -1,15 +1,17 @@
 import React, { useState } from "react"
 import * as dateFns from "date-fns"
 import '../App.css'
-import { findByPlaceholderText } from "@testing-library/dom"
 
-const ChoiceCalendar = ({setDates, dates}) => {
+const EventCalendar = ({dates}) => {
+
+
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
       <Header month={month} setMonth={setMonth}/>
       <Days month={month}/>
-      <Cells month={month} setDates = {setDates} dates={dates}/>
+      <Cells month={month} dates={dates}/>
+      <ul>{dates}</ul>
     </div>
   )
 }
@@ -58,7 +60,7 @@ const Days = ({month}) => {
   )
 }
 
-const Cells = ({month, setDates, dates}) => {
+const Cells = ({month, dates}) => {
 
   const monthStart = dateFns.startOfMonth(month)
   const monthEnd = dateFns.endOfMonth(monthStart)
@@ -77,7 +79,7 @@ const Cells = ({month, setDates, dates}) => {
       formattedDate = dateFns.format(day, dateFormat)
       const cloneDay = day
       days.push(
-        <CalendarDate formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} setDates={setDates} dates={dates}/>
+        <CalendarDate formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} dates={dates}/>
       )
       day = dateFns.addDays(day, 1)
     }
@@ -95,32 +97,23 @@ const Cells = ({month, setDates, dates}) => {
 
 }
 
-const CalendarDate = ({formattedDate, day, monthStart,setDates, dates}) => {
-
-  const [ clicked, setClicked ] = useState(false)
-
-  const onDateClick = day => {
-    setClicked(!clicked)
-    setDates(dates.concat(dateFns.format(day, "DDD")))
-  }
-
-  if(clicked){
+const CalendarDate = ({formattedDate, day, monthStart, dates}) => {
+  if(dates.includes(dateFns.format(day, "DDD"))){
     return(
       <div
       className={`col cell clicked`}
       key={day}
-      onClick = {() => onDateClick(day)}
     >
       <span className="number">{formattedDate}</span>
       <span className="bg">{formattedDate}</span>
     </div>
     )
-  }
+  }  
+
   return(
     <div
     className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : ""}`}
     key={day}
-    onClick = {() => onDateClick(day)}
   >
     <span className="number">{formattedDate}</span>
     <span className="bg">{formattedDate}</span>
@@ -128,4 +121,4 @@ const CalendarDate = ({formattedDate, day, monthStart,setDates, dates}) => {
   )
 }
 
-export default ChoiceCalendar
+export default EventCalendar
