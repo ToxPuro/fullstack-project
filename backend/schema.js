@@ -5,7 +5,9 @@ const User = require('./models/User')
 const Event = require('./models/Event')
 const Group = require('./models/Group')
 
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
+require('dotenv').config()
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 const typeDefs = gql`
   type Event {

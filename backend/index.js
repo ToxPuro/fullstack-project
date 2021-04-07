@@ -5,11 +5,13 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const User = require('./models/User')
 
-const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
+require('dotenv').config()
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 async function startApolloServer() {
 
-  const MONGODB_URI = 'mongodb+srv://ToukoPuro:RyKaqXl1dMBEoxIE@cluster0.9ftzk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+  const MONGODB_URI = process.env.MONGODB_URI
 
   mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
     .then(() => {
@@ -40,8 +42,8 @@ async function startApolloServer() {
 
   server.applyMiddleware({ app });
 
-
-  await new Promise(resolve => app.listen({ port: process.env.PORT || 4000 }, resolve));
+  const PORT = process.env.PORT
+  await new Promise(resolve => app.listen({ port: PORT }, resolve));
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
   return { server, app };
 }
