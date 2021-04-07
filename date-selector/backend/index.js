@@ -22,6 +22,8 @@ async function startApolloServer() {
   });
   await server.start();
 
+  app.use(express.static('build'))
+
   server.applyMiddleware({ app });
 
 
