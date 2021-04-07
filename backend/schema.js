@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const User = require('./models/User')
 const Event = require('./models/Event')
 const Group = require('./models/Group')
+const { events } = require('./models/User')
 
 require('dotenv').config()
 
@@ -18,6 +19,7 @@ const typeDefs = gql`
   type User {
     name: String!
     id: ID!
+    events: [Event]
   }
 
   type Token {
@@ -27,14 +29,13 @@ const typeDefs = gql`
   type Group {
     name: String!
     users: [User!]!
-    events: [Event]!
   }
 
   type Query {
     allEvents: [Event]!
     me: User
     userGroups: [Group]!
-    userEvents: [Event]!
+    userEvents: User
   }
 
 
@@ -75,9 +76,8 @@ const resolvers = {
     },
     userEvents: async (root, args, context) => {
       const currentUser = context.currentUser
-      const groups = await Group.find({users: currentUser._id})
-      const groupIDs = groups.map(group => group._id)
-      return Event.find({group:{$in:[groupIDs]}})
+      await currentUser.populate('events').execPopulate()
+      return currentUser
     }
   },
   Mutation: {
@@ -118,7 +118,7 @@ const resolvers = {
     addEvent: async (root, args) => {
       const group = await Group.findOne({name: args.group})
       const event = new Event({name: args.name, group: group._id, dates: args.dates})
-      
+      await User.updateMany({}, {$push: {events: event}})
       return event.save()
     },
     createGroup: async(root, args, context) => {

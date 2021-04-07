@@ -15,7 +15,13 @@ const userSchema = new mongoose.Schema({
   passwordHash: {
     type: String,
     required: true
-  }
+  },
+  events:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Event'
+    }
+  ]
 })
 
 userSchema.plugin(uniqueValidator)
