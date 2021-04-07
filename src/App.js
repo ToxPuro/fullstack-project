@@ -2,6 +2,7 @@ import PreviewCalendar from "./components/PreviewCalendar"
 import AddEvent from './components/AddEvent'
 import Login from './components/Login'
 import Events from './components/Events'
+import Event from './components/Event'
 import {BrowserRouter as Router, Switch, Route, Link, useParams, useHistory} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useApolloClient, useQuery } from "@apollo/client"
@@ -31,6 +32,9 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route path="/events/:id">
+          <Event/>
+        </Route>
         <Route path="/addevent">
           <AddEvent/>
         </Route>

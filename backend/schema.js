@@ -15,6 +15,7 @@ const typeDefs = gql`
     name: String!
     group: String!
     dates: [String!]!
+    id: ID!
   }
   type User {
     name: String!
@@ -35,6 +36,7 @@ const typeDefs = gql`
     me: User
     userGroups: [Group]!
     userEvents: [Event]!
+    event(id: ID!): Event! 
   }
 
 
@@ -77,7 +79,11 @@ const resolvers = {
       const currentUser = context.currentUser
       await currentUser.populate('events').execPopulate()
       return currentUser.events
+    },
+    event: async(root, args) => {
+      return Event.findById(args.id)
     }
+
   },
   Mutation: {
     createUser: async (root, args) => {
