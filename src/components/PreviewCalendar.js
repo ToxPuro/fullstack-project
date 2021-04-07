@@ -1,9 +1,10 @@
 import React, { useState } from "react"
 import * as dateFns from "date-fns"
 import '../App.css'
-import { findByPlaceholderText } from "@testing-library/dom"
 
 const PreviewCalendar = () => {
+
+
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">

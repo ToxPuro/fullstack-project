@@ -18,3 +18,11 @@ export const USER_GROUPS = gql`
 query{
   userGroups{name}
 }`
+
+export const USER_EVENTS = gql`
+query{
+  userEvents{
+    name
+    dates
+  }
+}`

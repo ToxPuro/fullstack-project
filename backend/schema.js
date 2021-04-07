@@ -19,7 +19,6 @@ const typeDefs = gql`
   type User {
     name: String!
     id: ID!
-    events: [Event]
   }
 
   type Token {
@@ -35,7 +34,7 @@ const typeDefs = gql`
     allEvents: [Event]!
     me: User
     userGroups: [Group]!
-    userEvents: User
+    userEvents: [Event]!
   }
 
 
@@ -77,7 +76,7 @@ const resolvers = {
     userEvents: async (root, args, context) => {
       const currentUser = context.currentUser
       await currentUser.populate('events').execPopulate()
-      return currentUser
+      return currentUser.events
     }
   },
   Mutation: {
@@ -89,7 +88,8 @@ const resolvers = {
       const user = new User({
         username,
         name,
-        passwordHash
+        passwordHash,
+        events: []
       })
       return user.save()
         .catch(error => {
