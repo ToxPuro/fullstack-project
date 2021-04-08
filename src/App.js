@@ -3,8 +3,8 @@ import AddEvent from './components/AddEvent'
 import Login from './components/Login'
 import Events from './components/Events'
 import Event from './components/Event'
-import {BrowserRouter as Router, Switch, Route, Link, useParams, useHistory} from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import {BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { useState } from 'react'
 import { useApolloClient, useQuery } from "@apollo/client"
 import Button from 'react-bootstrap/Button';
 import { USER_EVENTS } from "./graphql/queries"

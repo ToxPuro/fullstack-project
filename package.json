@@ -36,7 +36,8 @@
     "start-server-dev": "nodemon backend/index.js",
     "build": "react-scripts build && cp -r build ./backend",
     "test": "jest --verbose",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [

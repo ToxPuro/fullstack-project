@@ -17,7 +17,7 @@ import {LOGIN} from '../graphql/mutations'
       setToken(token)
       localStorage.setItem('user-token', token)
     }
-  }, [result.data])
+  }, [result.data, setToken])
 
   return(
    <div>

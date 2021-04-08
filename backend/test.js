@@ -4,7 +4,11 @@ const typeDefs = require("./typeDefs");
 const resolvers = require("./resolvers");
 const User = require('./models/User')
 const mongoose=require('mongoose')
+const jwt = require('jsonwebtoken')
+
 require('dotenv').config()
+
+const JWT_SECRET= process.env.JWT_SECRET
 
 const server = new ApolloServer({
   typeDefs,
@@ -21,7 +25,7 @@ const server = new ApolloServer({
   }
 })
 
-const { query, mutate } = createTestClient(server);
+const { query } = createTestClient(server);
 
 
 beforeAll(() => {
