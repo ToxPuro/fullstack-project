@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
-const { UserInputError } = require("apollo-server-express")
+const { UserInputError, AuthenticationError } = require("apollo-server-express")
 
 require("dotenv").config()
 
