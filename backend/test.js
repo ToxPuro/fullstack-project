@@ -1,12 +1,12 @@
-const { ApolloServer, gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-const typeDefs = require("./typeDefs");
-const resolvers = require("./resolvers");
-const User = require('./models/User')
-const mongoose=require('mongoose')
-const jwt = require('jsonwebtoken')
+const { ApolloServer, gql } = require("apollo-server")
+const { createTestClient } = require("apollo-server-testing")
+const typeDefs = require("./typeDefs")
+const resolvers = require("./resolvers")
+const User = require("./models/User")
+const mongoose=require("mongoose")
+const jwt = require("jsonwebtoken")
 
-require('dotenv').config()
+require("dotenv").config()
 
 const JWT_SECRET= process.env.JWT_SECRET
 
@@ -15,7 +15,7 @@ const server = new ApolloServer({
   resolvers,
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+    if (auth && auth.toLowerCase().startsWith("bearer ")) {
       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
       )
@@ -25,7 +25,7 @@ const server = new ApolloServer({
   }
 })
 
-const { query } = createTestClient(server);
+const { query } = createTestClient(server)
 
 
 beforeAll(() => {
@@ -33,10 +33,10 @@ beforeAll(() => {
 
   mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
     .then(() => {
-      console.log('connected to MongoDB')
+      console.log("connected to MongoDB")
     })
     .catch((error) => {
-      console.log('error connection to MongoDB:', error.message)
+      console.log("error connection to MongoDB:", error.message)
     })
 })
 
@@ -48,12 +48,12 @@ test("find event", async () => {
         name
       }
     }
-  `;
+  `
 
-  const events = await query({ query: EVENTS });
+  const events = await query({ query: EVENTS })
 
-  expect(events.data.allEvents).toContainEqual({"id": "606c4cc30d41982dacf2a5bd", "name": "fsdfds"});
-});
+  expect(events.data.allEvents).toContainEqual({ "id": "606c4cc30d41982dacf2a5bd", "name": "fsdfds" })
+})
 
 afterAll(() => {
   mongoose.connection.close()

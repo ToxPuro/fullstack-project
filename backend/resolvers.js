@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-const User = require('./models/User')
-const Event = require('./models/Event')
-const Group = require('./models/Group')
-const {UserInputError} = require('apollo-server-express')
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
+const User = require("./models/User")
+const Event = require("./models/Event")
+const Group = require("./models/Group")
+const { UserInputError } = require("apollo-server-express")
 
-require('dotenv').config()
+require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -19,12 +19,12 @@ const resolvers = {
       return context.currentUser
     },
     userGroups: (root, args, context) => {
-      const currentUser = context.currentUser;
-      return Group.find({users: currentUser._id}).populate('users')
+      const currentUser = context.currentUser
+      return Group.find({ users: currentUser._id }).populate("users")
     },
     userEvents: async (root, args, context) => {
       const currentUser = context.currentUser
-      await currentUser.populate('events').execPopulate()
+      await currentUser.populate("events").execPopulate()
       return currentUser.events
     },
     event: async(root, args) => {
@@ -53,7 +53,7 @@ const resolvers = {
     },
     login: async (root, args) => {
       console.log(args)
-      const user = await User.findOne({username: args.username})
+      const user = await User.findOne({ username: args.username })
       const passwordCorrect = user === null
         ? false
         : await bcrypt.compare(args.password, user.passwordHash)
@@ -66,19 +66,19 @@ const resolvers = {
         id: user._id
       }
 
-      return { value: jwt.sign(userForToken, JWT_SECRET)}
+      return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
     addEvent: async (root, args) => {
-      const group = await Group.findOne({name: args.group})
-      const event = new Event({name: args.name, group: group._id, dates: args.dates})
-      await User.updateMany({}, {$push: {events: event}})
+      const group = await Group.findOne({ name: args.group })
+      const event = new Event({ name: args.name, group: group._id, dates: args.dates })
+      await User.updateMany({}, { $push: { events: event } })
       return event.save()
     },
     createGroup: async(root, args, context) => {
-      const group = new Group({name: args.name, users: [...args.users, context.currentUser], events: []})
+      const group = new Group({ name: args.name, users: [...args.users, context.currentUser], events: [] })
       return group.save()
     }
-    }
+  }
 }
 
 module.exports = resolvers

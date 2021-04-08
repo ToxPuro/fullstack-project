@@ -1,20 +1,21 @@
 import PreviewCalendar from "./components/PreviewCalendar"
-import AddEvent from './components/AddEvent'
-import Login from './components/Login'
-import Events from './components/Events'
-import Event from './components/Event'
-import {BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import { useState } from 'react'
+import AddEvent from "./components/AddEvent"
+import Login from "./components/Login"
+import Events from "./components/Events"
+import Event from "./components/Event"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { useState } from "react"
 import { useApolloClient, useQuery } from "@apollo/client"
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button"
 import { USER_EVENTS } from "./graphql/queries"
+import React from "react"
 
 
 const App = () => {
 
   const events = useQuery(USER_EVENTS)
 
-  const [ token, setToken ] = useState(localStorage.getItem('user-token'))
+  const [ token, setToken ] = useState(localStorage.getItem("user-token"))
   const client = useApolloClient()
 
   const logout = () => {
@@ -46,7 +47,7 @@ const App = () => {
         </Route>
       </Switch>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

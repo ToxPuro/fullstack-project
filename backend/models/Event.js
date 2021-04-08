@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   },
   group: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Group',
+    ref: "Group",
     required: true
   },
   dates: [
@@ -19,4 +19,4 @@ const userSchema = new mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('Event', userSchema)
+module.exports = mongoose.model("Event", userSchema)

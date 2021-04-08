@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator')
+const mongoose = require("mongoose")
+const uniqueValidator = require("mongoose-unique-validator")
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   events:[
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Event'
+      ref: "Event"
     }
   ]
 })
@@ -27,4 +27,4 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(uniqueValidator)
 
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model("User", userSchema)

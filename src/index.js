@@ -1,11 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import { setContext } from 'apollo-link-context'
-import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import React from "react"
+import ReactDOM from "react-dom"
+import App from "./App"
+import { setContext } from "apollo-link-context"
+import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache } from "@apollo/client"
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('user-token')
+  const token = localStorage.getItem("user-token")
   return {
     headers: {
       ...headers,
@@ -14,7 +14,7 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
-const httpLink = new HttpLink({ uri: '/graphql' })
+const httpLink = new HttpLink({ uri: "/graphql" })
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -22,7 +22,7 @@ const client = new ApolloClient({
 })
 
 ReactDOM.render(
-<ApolloProvider client={client}>
-  <App />
-</ApolloProvider>, 
-document.getElementById('root'))
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById("root"))
