@@ -48,7 +48,7 @@ beforeAll( async () => {
 
 
 
-test("event can be added if logged in", async () => {
+test("can't add event if not logged in", async () => {
   const passwordHash = await bcrypt.hash('salainen', 10)
   const user = new User({username: "TestiUsername", name: "TestName", events: [], passwordHash})
   const group = new Group({name: "TestGroup", users: [user]})
@@ -63,7 +63,8 @@ test("event can be added if logged in", async () => {
 
   const events = await mutate({ mutation: ADD_EVENT })
 
-  expect(events.data.addEvent).toEqual({ "name": "TestiName", "dates": ["TestiDate"] })
+
+  expect(events.errors[0].message).toEqual("user needs to be logged in")
 })
 
 afterAll(() => {
