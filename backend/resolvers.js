@@ -1,4 +1,3 @@
-const {gql} = require('apollo-server-express')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('./models/User')
@@ -10,58 +9,6 @@ require('dotenv').config()
 
 const JWT_SECRET = process.env.JWT_SECRET
 
-const typeDefs = gql`
-  type Event {
-    name: String!
-    group: String!
-    dates: [String!]!
-    id: ID!
-  }
-  type User {
-    name: String!
-    id: ID!
-  }
-
-  type Token {
-    value: String!
-  }
-
-  type Group {
-    name: String!
-    users: [User!]!
-  }
-
-  type Query {
-    allEvents: [Event]!
-    me: User
-    userGroups: [Group]!
-    userEvents: [Event]!
-    event(id: ID!): Event! 
-  }
-
-
-
-  type Mutation {
-    createUser(
-      username: String!
-      name: String!
-      password: String!
-    ): User
-    login(
-      username: String!
-      password: String!
-    ): Token
-    addEvent(
-      name: String!
-      group: String!
-      dates: [String!]!
-    ): Event
-    createGroup(
-      name: String!
-      users: [String]!
-    ): Group
-  }
-`
 
 const resolvers = {
   Query: {
@@ -134,4 +81,4 @@ const resolvers = {
     }
 }
 
-module.exports = {typeDefs, resolvers}
+module.exports = resolvers
