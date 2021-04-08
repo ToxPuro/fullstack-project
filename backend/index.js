@@ -1,7 +1,7 @@
 const express = require("express")
 const { ApolloServer } = require("apollo-server-express")
 const resolvers = require("./resolvers")
-const typeDefs = require("./typedefs")
+const typeDefs = require("./typeDefs")
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const User = require("./models/User")
@@ -45,7 +45,7 @@ async function startApolloServer() {
 
   const PORT = process.env.PORT
   await new Promise(resolve => app.listen({ port: PORT }, resolve))
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   return { server, app }
 }
 
