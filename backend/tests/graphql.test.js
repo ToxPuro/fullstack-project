@@ -47,25 +47,49 @@ beforeAll( async () => {
 })
 
 
+describe("adding event", () => {
+  beforeAll(async () => {
+    const passwordHash = await bcrypt.hash('salainen', 10)
+    const user = new User({username: "TestiUsername", name: "TestName", events: [], passwordHash})
+    const group = new Group({name: "TestGroup", users: [user]})
+    await user.save()
+    await group.save()
+  })
+  test("can't add event if not logged in", async () => {
+    const ADD_EVENT = gql`
+      mutation {
+        addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates}
+      }
+    `
 
-test("can't add event if not logged in", async () => {
-  const passwordHash = await bcrypt.hash('salainen', 10)
-  const user = new User({username: "TestiUsername", name: "TestName", events: [], passwordHash})
-  const group = new Group({name: "TestGroup", users: [user]})
-  await user.save()
-  await group.save()
+    const events = await mutate({ mutation: ADD_EVENT })
 
-  const ADD_EVENT = gql`
+    expect(events.errors[0].message).toEqual("user needs to be logged in")
+  })
+
+  test("can add event if logged in", async () => {
+    const LOGIN = gql`
+    mutation{
+      login(username: "TestiUsername", password: "salainen" ){value}
+    }`
+
+    const ADD_EVENT = gql`
     mutation {
       addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates}
     }
   `
 
-  const events = await mutate({ mutation: ADD_EVENT })
+    const token = await mutate({mutation: LOGIN})
 
+    const events = await mutate({mutation: ADD_EVENT, http: { headers: {authorization: `bearer ${token}`}}})
 
-  expect(events.errors[0].message).toEqual("user needs to be logged in")
+    console.log(events)
+
+    expect(events.data).toBe(1)
+
+  })
 })
+
 
 afterAll(() => {
   mongoose.connection.close()
