@@ -75,7 +75,7 @@ describe("adding event", () => {
 
     const ADD_EVENT = gql`
     mutation {
-      addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates}
+      addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates id group}
     }
   `
 
@@ -84,7 +84,6 @@ describe("adding event", () => {
 
 
     setOptions({
-      // If "request" or "response" is not specified, it's not modified
       request: {
         headers: {
           authorization: `bearer ${token.data.login.value}`,
@@ -93,9 +92,12 @@ describe("adding event", () => {
     });
     const events = await mutate( ADD_EVENT)
 
-    console.log(events.data.addEvent)
-
-    expect(events.data.addEvent).toStrictEqual({name: "TestiName", dates: ["TestiDate"]})
+    expect(events.data.addEvent.name).toBe("TestiName")
+    expect(events.data.addEvent.dates).toContain("TestiDate")
+    const user = await User.findOne({username: "TestiUsername"})
+    const group = await Group.findOne({name: "TestGroup"})
+    expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
+    expect(events.data.addEvent.group).toStrictEqual(group._id.toString())
 
   })
 })

@@ -74,7 +74,7 @@ const resolvers = {
       }
       const group = await Group.findOne({ name: args.group })
       const event = new Event({ name: args.name, group: group._id, dates: args.dates })
-      await User.updateMany({}, { $push: { events: event } })
+      await User.updateMany({_id:{$in:[group.users]}}, { $push: { events: event } })
       return event.save()
     },
     createGroup: async(root, args, context) => {
