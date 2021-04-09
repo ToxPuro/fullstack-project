@@ -3,9 +3,7 @@ const  {createTestClient} = require("apollo-server-integration-testing")
 const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
-const mongoose=require("mongoose")
-const jwt = require("jsonwebtoken")
-
+const mongoDB=require("../mongoDB")
 const {ADD_EVENT, LOGIN } = require("./queries")
 const helper = require("./helper")
 
@@ -13,25 +11,17 @@ const { query, mutate, setOptions } = createTestClient({apolloServer})
 
 
 beforeAll( async () => {
-  const MONGODB_URI = process.env.MONGODB_URI
-
-  await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-    .then(() => {
-      console.log("connected to MongoDB")
-    })
-    .catch((error) => {
-      console.log("error connection to MongoDB:", error.message)
-    })
-    await User.deleteMany({})
-    await Event.deleteMany({})
-    await Group.deleteMany({})
+  mongoDB.connect()
+  await User.deleteMany({})
+  await Event.deleteMany({})
+  await Group.deleteMany({})
 })
 
 
 describe("adding event", () => {
   beforeAll(async () => {
     const user = new User(helper.userObject)
-    const group = new Group({name: helper.groupObject.name, users: [user]})
+    const group = new Group({name: helper.groupObject.name , users: [user]})
     await user.save()
     await group.save()
   })
@@ -72,5 +62,5 @@ describe("adding event", () => {
 
 
 afterAll(() => {
-  mongoose.connection.close()
+  mongoDB.close()
 })
