@@ -1,5 +1,5 @@
-const { ApolloServer, gql } = require("apollo-server")
-const { createTestClient } = require("apollo-server-testing")
+const { ApolloServer, gql } = require("apollo-server-express")
+const  {createTestClient} = require("apollo-server-integration-testing")
 const typeDefs = require("../typeDefs")
 const resolvers = require("../resolvers")
 const User = require("../models/User")
@@ -22,13 +22,13 @@ const server = new ApolloServer({
       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
       )
-      const currentUser = await User.findById(decodedToken.id)
+      const currentUser = await User.findById(decodedToken.id).populate("friends")
       return { currentUser }
     }
   }
 })
 
-const { query, mutate } = createTestClient(server)
+const { query, mutate, setOptions } = createTestClient({apolloServer: server})
 
 
 beforeAll( async () => {
@@ -62,7 +62,7 @@ describe("adding event", () => {
       }
     `
 
-    const events = await mutate({ mutation: ADD_EVENT })
+    const events = await mutate( ADD_EVENT )
 
     expect(events.errors[0].message).toEqual("user needs to be logged in")
   })
@@ -79,13 +79,23 @@ describe("adding event", () => {
     }
   `
 
-    const token = await mutate({mutation: LOGIN})
+    const token = await mutate(LOGIN)
+    console.log(token.data.login.value)
 
-    const events = await mutate({mutation: ADD_EVENT, http: { headers: {authorization: `bearer ${token}`}}})
 
-    console.log(events)
+    setOptions({
+      // If "request" or "response" is not specified, it's not modified
+      request: {
+        headers: {
+          authorization: `bearer ${token.data.login.value}`,
+        }
+      }
+    });
+    const events = await mutate( ADD_EVENT)
 
-    expect(events.data).toBe(1)
+    console.log(events.data.addEvent)
+
+    expect(events.data.addEvent).toStrictEqual({name: "TestiName", dates: ["TestiDate"]})
 
   })
 })
