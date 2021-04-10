@@ -38,6 +38,7 @@ const Login = ({ setToken }) => {
         }) => (
           <form onSubmit={handleSubmit}>
            username: <input
+              id="username"
               type="text"
               name="username"
               onChange={handleChange}
@@ -48,6 +49,7 @@ const Login = ({ setToken }) => {
             <br/>
 
            password: <input
+              id="password"
               type= "password"
               name="password"
               onChange={handleChange}
@@ -55,8 +57,8 @@ const Login = ({ setToken }) => {
               value={values.password}
             />
             <br/>
-            <button type="submit">
-             Submit
+            <button type="submit" id="login-button">
+             Login
             </button>
           </form>
         )}
