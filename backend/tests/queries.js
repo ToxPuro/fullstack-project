@@ -1,4 +1,4 @@
-const {gql} = require('apollo-server-express')
+const { gql } = require("apollo-server-express")
 
 const ADD_GROUP = gql`
 mutation{
@@ -35,4 +35,4 @@ query event($id: ID!){
   event(id: $id){name}
 }`
 
-module.exports = {ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT}
+module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT }

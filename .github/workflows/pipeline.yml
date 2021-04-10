@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: '12.x'
       - name: npm install 
-        run: npm install  
+        run: npm install
+      - name: fix linting errors
+        run: npm fixlint    
       - name: lint
         run: npm run lint
       - name: build

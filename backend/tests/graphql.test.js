@@ -1,13 +1,13 @@
 const apolloServer = require("../apolloServer")
-const  {createTestClient} = require("apollo-server-integration-testing")
+const  { createTestClient } = require("apollo-server-integration-testing")
 const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const {ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT } = require("./queries")
 const helper = require("./helper")
 
-const { query, mutate, setOptions } = createTestClient({apolloServer})
+const { query, mutate, setOptions } = createTestClient({ apolloServer })
 
 
 beforeAll( async () => {
@@ -22,7 +22,7 @@ describe("login", () => {
     await user.save()
   })
   test("can login and query me works", async () => {
-    const token = await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate)
     const user = await query(ME)
     expect(user.data.me.username).toBe(helper.userObject.username)
 
@@ -49,8 +49,8 @@ describe("adding group", () => {
     await helper.login(setOptions, mutate)
 
     const result = await mutate( ADD_GROUP)
-    const group = await Group.findOne({name: helper.groupObject.name})
-    
+    const group = await Group.findOne({ name: helper.groupObject.name })
+
     expect(result.data.createGroup.name).toBe(group.name)
     expect(result.data.createGroup.name).toBe(helper.groupObject.name)
     expect(result.data.createGroup.users[0].name).toBe(helper.userObject.name)
@@ -72,7 +72,7 @@ describe("adding event", () => {
     await Event.deleteMany({})
     await Group.deleteMany({})
     const user = new User(helper.userObject)
-    const group = new Group({name: helper.groupObject.name , users: [user]})
+    const group = new Group({ name: helper.groupObject.name , users: [user] })
     await user.save()
     await group.save()
   })
@@ -89,8 +89,8 @@ describe("adding event", () => {
     expect(events.data.addEvent.name).toBe(helper.eventObject.name)
     console.log(events.data.addEvent.dates)
     expect(events.data.addEvent.dates).toEqual(helper.eventObject.dates)
-    const user = await User.findOne({username: helper.userObject.username})
-    const group = await Group.findOne({name: helper.groupObject.name})
+    const user = await User.findOne({ username: helper.userObject.username })
+    const group = await Group.findOne({ name: helper.groupObject.name })
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
     expect(events.data.addEvent.group).toStrictEqual(group._id.toString())
 
@@ -103,8 +103,8 @@ describe("adding event", () => {
   })
 
   test("can get event with id", async() => {
-    const eventInDB = await Event.findOne({name: helper.eventObject.name})
-    const event = await query(GET_EVENT, {variables: {id: eventInDB._id.toString()}})
+    const eventInDB = await Event.findOne({ name: helper.eventObject.name })
+    const event = await query(GET_EVENT, { variables: { id: eventInDB._id.toString() } })
     expect(event.data.event).toBeDefined()
   })
 })

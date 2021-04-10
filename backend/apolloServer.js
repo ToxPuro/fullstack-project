@@ -1,4 +1,4 @@
-const {ApolloServer} = require("apollo-server-express")
+const { ApolloServer } = require("apollo-server-express")
 const jwt = require("jsonwebtoken")
 const User = require("./models/User")
 const typeDefs = require("./typeDefs")

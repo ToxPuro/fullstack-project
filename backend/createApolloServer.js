@@ -16,7 +16,7 @@ async function createApolloServer() {
   apolloServer.applyMiddleware({ app })
   return { apolloServer, app }
 
-  
+
 }
 
 module.exports = createApolloServer
