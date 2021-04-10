@@ -4,7 +4,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const {ADD_EVENT, LOGIN, ADD_GROUP } = require("./queries")
+const {ADD_EVENT, LOGIN, ADD_GROUP, ME } = require("./queries")
 const helper = require("./helper")
 
 const { query, mutate, setOptions } = createTestClient({apolloServer})
@@ -12,11 +12,23 @@ const { query, mutate, setOptions } = createTestClient({apolloServer})
 
 beforeAll( async () => {
   mongoDB.connect()
-  await User.deleteMany({})
-  await Event.deleteMany({})
-  await Group.deleteMany({})
+  await helper.erase()
 })
 
+describe("login", () => {
+  beforeAll( async () => {
+    await helper.erase()
+    const user = new User(helper.userObject)
+    await user.save()
+  })
+  test("can login and query me works", async () => {
+    const token = await helper.login(setOptions, mutate)
+    const user = await query(ME)
+    expect(user.data.me.username).toBe(helper.userObject.username)
+
+  })
+
+})
 
 describe("adding group", () => {
 

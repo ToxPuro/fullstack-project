@@ -9,6 +9,7 @@ type Event {
 }
 type User {
   name: String!
+  username: String!
   id: ID!
 }
 

@@ -15,4 +15,9 @@ mutation {
   addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates id group}
 }
 `
-module.exports = {ADD_EVENT, LOGIN, ADD_GROUP}
+const ME = gql`
+query{
+  me{username}
+}`
+
+module.exports = {ADD_EVENT, LOGIN, ADD_GROUP, ME}
