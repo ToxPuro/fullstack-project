@@ -4,7 +4,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const {ADD_EVENT, ADD_GROUP, ME, USER_GROUPS } = require("./queries")
+const {ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS } = require("./queries")
 const helper = require("./helper")
 
 const { query, mutate, setOptions } = createTestClient({apolloServer})
@@ -94,6 +94,12 @@ describe("adding event", () => {
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
     expect(events.data.addEvent.group).toStrictEqual(group._id.toString())
 
+  })
+
+  test("can get users events", async () => {
+    await helper.login(setOptions, mutate)
+    const events = await query(USER_EVENTS)
+    expect(events.data.userEvents).toBeDefined()
   })
 })
 
