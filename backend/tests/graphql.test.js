@@ -48,11 +48,12 @@ describe("adding group", () => {
   test("logged in user is in the group if no users are passed in ", async() => {
     await helper.login(setOptions, mutate)
 
-    const group = await mutate( ADD_GROUP)
-    console.log(group)
-
-    expect(group.data.createGroup.name).toBe(helper.groupObject.name)
-    expect(group.data.createGroup.users[0].name).toBe(helper.userObject.name)
+    const result = await mutate( ADD_GROUP)
+    const group = await Group.findOne({name: helper.groupObject.name})
+    
+    expect(result.data.createGroup.name).toBe(group.name)
+    expect(result.data.createGroup.name).toBe(helper.groupObject.name)
+    expect(result.data.createGroup.users[0].name).toBe(helper.userObject.name)
   })
 
 })
@@ -77,8 +78,9 @@ describe("adding event", () => {
   test("can add event if logged in", async () => {
     await helper.login(setOptions, mutate)
     const events = await mutate( ADD_EVENT)
-    expect(events.data.addEvent.name).toBe("TestiName")
-    expect(events.data.addEvent.dates).toContain("TestiDate")
+    expect(events.data.addEvent.name).toBe(helper.eventObject.name)
+    console.log(events.data.addEvent.dates)
+    expect(events.data.addEvent.dates).toEqual(helper.eventObject.dates)
     const user = await User.findOne({username: helper.userObject.username})
     const group = await Group.findOne({name: helper.groupObject.name})
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)

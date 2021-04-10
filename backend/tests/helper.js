@@ -7,10 +7,10 @@ const Group = require("../models/Group")
 const passwordHash = '$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0Ok2'
 const userObject =  {username: "TestiUsername", name: "TestName", events: [], passwordHash}
 const groupObject = {name: "TestGroup"}
+const eventObject = {name: "TestiName", group: "TestGroup", dates: [ "TestiDate" ]}
 
 const login = async (setOptions, mutate) => {
   const token = await mutate(LOGIN)
-  console.log(token.data.login.value)
   setOptions({
     request: {
       headers: {
@@ -30,4 +30,4 @@ const erase = async() => {
 
 
 
-module.exports = {userObject, groupObject, login, erase}
+module.exports = {userObject, groupObject, login, erase, eventObject}
