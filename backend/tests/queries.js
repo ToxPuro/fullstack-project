@@ -20,4 +20,9 @@ query{
   me{username}
 }`
 
-module.exports = {ADD_EVENT, LOGIN, ADD_GROUP, ME}
+const USER_GROUPS = gql`
+query{
+  userGroups{name}
+}`
+
+module.exports = {ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS}

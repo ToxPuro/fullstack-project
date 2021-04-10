@@ -4,7 +4,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const {ADD_EVENT, LOGIN, ADD_GROUP, ME } = require("./queries")
+const {ADD_EVENT, ADD_GROUP, ME, USER_GROUPS } = require("./queries")
 const helper = require("./helper")
 
 const { query, mutate, setOptions } = createTestClient({apolloServer})
@@ -54,6 +54,14 @@ describe("adding group", () => {
     expect(result.data.createGroup.name).toBe(group.name)
     expect(result.data.createGroup.name).toBe(helper.groupObject.name)
     expect(result.data.createGroup.users[0].name).toBe(helper.userObject.name)
+  })
+
+  test("can get users groups", async () => {
+    await helper.login(setOptions, mutate)
+
+    const groups = await query(USER_GROUPS)
+
+    expect(groups.data.userGroups[0].name).toBe(helper.groupObject.name)
   })
 
 })
