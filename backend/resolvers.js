@@ -78,8 +78,13 @@ const resolvers = {
       return event.save()
     },
     createGroup: async(root, args, context) => {
-      const group = new Group({ name: args.name, users: [...args.users, context.currentUser], events: [] })
-      return group.save()
+      if(!context.currentUser){
+        throw new AuthenticationError("user needs to be logged in")
+      }
+      const group = new Group({ name: args.name, users: [...args.users, context.currentUser._id], events: [] })
+      await group.save()
+      await group.populate("users").execPopulate()
+      return group
     }
   }
 }

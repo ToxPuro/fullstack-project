@@ -19,6 +19,7 @@ type Token {
 type Group {
   name: String!
   users: [User!]!
+  id: ID!
 }
 
 type Query {
