@@ -30,4 +30,9 @@ query{
   userEvents{name}
 }`
 
-module.exports = {ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS}
+const GET_EVENT = gql`
+query event($id: ID!){
+  event(id: $id){name}
+}`
+
+module.exports = {ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT}
