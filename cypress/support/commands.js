@@ -29,9 +29,9 @@ Cypress.Commands.add("login", ({ username, password }) => {
   const mutation = `mutation{
     login(username: "${username}", password: "${password}"){value}
   }`
-  cy.request( 'POST', 'http://localhost:4000/graphql', {query: mutation})
-  .then((res) => {
-    localStorage.setItem("user-token", res.body.data.login.value.toString())
-    cy.visit("http://localhost:4000")
-  })
+  cy.request( "POST", "http://localhost:4000/graphql", { query: mutation })
+    .then((res) => {
+      localStorage.setItem("user-token", res.body.data.login.value.toString())
+      cy.visit("http://localhost:4000")
+    })
 })

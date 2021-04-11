@@ -1,16 +1,13 @@
-describe("Date-selector app", function() {
+describe("Login", function() {
 
   beforeEach( function() {
 
     cy.request("POST", "http://localhost:4000/testing/reset")
 
     const mutation = `mutation{
-      createUser(username: "TestUsername", name: "ABC" password: "salainen"){name}
+      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
     }`
 
-    const addGroup = `{
-      createGroup(name: "TestGroup", users: []){name}
-    }`
     cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
   })
   it("front page can be opened", function() {
@@ -29,7 +26,34 @@ describe("Date-selector app", function() {
 
   describe("when logged in", function () {
     beforeEach(function() {
-      cy.login({username: "TestUsername", password: "salainen"})
+
+      cy.request("POST", "http://localhost:4000/testing/reset")
+
+      const mutation = `mutation{
+      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
+    }`
+
+      cy.request("POST", "http://localhost:4000/graphql",{ query: mutation }).then(() => {
+        cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
+          const token = localStorage.getItem("user-token")
+          const addGroup = `mutation{
+          createGroup(name: "TestGroup", users: []){name}
+        }`
+          cy.request({
+            method: "POST",
+            url: "http://localhost:4000/graphql",
+            body: { query: addGroup },
+            headers: {
+              Authorization: `bearer ${token}`
+            }
+          }).then((res) => {
+            cy.log(JSON.stringify(res))
+          })
+        })
+
+      })
+
+
     })
     it("user can logout", function () {
       cy.get("#logout-button").click()
