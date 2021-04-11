@@ -1,6 +1,6 @@
 describe("Login", function() {
 
-  beforeEach( function() {
+  before( function() {
 
     cy.request("POST", "http://localhost:4000/testing/reset")
 
@@ -25,7 +25,7 @@ describe("Login", function() {
   })
 
   describe("when logged in", function () {
-    beforeEach(function() {
+    before(function() {
 
       cy.request("POST", "http://localhost:4000/testing/reset")
 
@@ -52,8 +52,10 @@ describe("Login", function() {
         })
 
       })
+    })
 
-
+    beforeEach(function() {
+      cy.login({ username: "TestUsername", password: "salainen" })
     })
     it("user can logout", function () {
       cy.get("#logout-button").click()
@@ -68,10 +70,56 @@ describe("Login", function() {
       cy.get("#submit-button").click()
       cy.get("#homepage-button").click()
       cy.contains("EventTestName")
+    })
+  })
+})
+
+describe("when there are events", function () {
+  before(function() {
+
+    cy.request("POST", "http://localhost:4000/testing/reset")
+
+    const mutation = `mutation{
+    createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
+  }`
+
+    cy.request("POST", "http://localhost:4000/graphql",{ query: mutation }).then(() => {
+      cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
+        const token = localStorage.getItem("user-token")
+        const addGroup = `mutation{
+        createGroup(name: "TestGroup", users: []){name}
+      }`
+        cy.request({
+          method: "POST",
+          url: "http://localhost:4000/graphql",
+          body: { query: addGroup },
+          headers: {
+            Authorization: `bearer ${token}`
+          }
+        }).then(() => {
+          const addEvent = `mutation{
+            addEvent(name: "EventTestName", group: "TestGroup", dates: []){name}
+          }`
+          cy.request({
+            method: "POST",
+            url: "http://localhost:4000/graphql",
+            body: { query: addEvent },
+            headers: {
+              Authorization: `bearer ${token}`
+            }
+          })
+        })
+      })
 
     })
   })
 
+  beforeEach(() => {
+    cy.login({ username: "TestUsername", password: "salainen" })
+  })
 
+  it("Event View", function() {
+    cy.contains("EventTestName").click()
+  })
 
 })
