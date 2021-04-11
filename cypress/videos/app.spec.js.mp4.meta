@@ -1,0 +1,21 @@
+;FFMETADATA1
+[CHAPTER]
+TIMEBASE=1/1000
+START=2445
+END=4060
+title=Date-selector app front page can be opened
+[CHAPTER]
+TIMEBASE=1/1000
+START=-412
+END=5681
+title=Date-selector app user can login with correct credentials
+[CHAPTER]
+TIMEBASE=1/1000
+START=10980
+END=11856
+title=Date-selector app when logged in user can logout
+[CHAPTER]
+TIMEBASE=1/1000
+START=11843
+END=12734
+title=Date-selector app when logged in user can add event

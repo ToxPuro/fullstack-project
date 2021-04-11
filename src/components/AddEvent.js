@@ -48,7 +48,7 @@ const AddEvent = () => {
               onBlur={handleBlur}
               value={values.name}
             />
-            <button type="submit">
+            <button id ="submit-button"type="submit">
              Submit
             </button>
           </form>

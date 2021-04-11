@@ -50,7 +50,7 @@ type Mutation {
   ): Event
   createGroup(
     name: String!
-    users: [String]!
+    users: [ID]!
   ): Group
 }
 `
