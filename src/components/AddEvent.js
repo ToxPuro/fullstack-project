@@ -2,12 +2,10 @@ import React, { useState } from "react"
 import { Formik } from "formik"
 import { useMutation, useQuery } from "@apollo/client"
 import { ADD_EVENT } from "../graphql/mutations"
-import { USER_GROUPS } from "../graphql/queries"
+import { USER_EVENTS, USER_GROUPS } from "../graphql/queries"
 import Select from "react-select"
 import ChoiceCalendar from "./ChoiceCalendar"
-
-
-
+import { Link } from "react-router-dom"
 const AddEvent = () => {
   const [ dates, setDates] = useState([])
   const [choice, setChoice] = useState(null)
@@ -21,7 +19,18 @@ const AddEvent = () => {
       { value: group.name, label: group.name }
     ))
   }
-  const [addEvent ] = useMutation(ADD_EVENT)
+  const [addEvent ] = useMutation(ADD_EVENT, {
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: USER_EVENTS })
+      store.writeQuery({
+        query: USER_EVENTS,
+        data: {
+          ...dataInStore,
+          userEvents: [...dataInStore.userEvents, response.data.addEvent]
+        }
+      })
+    }
+  })
   return(
     <div>
       <h1>New Event</h1>
@@ -57,6 +66,7 @@ const AddEvent = () => {
       <Select id="group-options"options={options} onChange={handleChoice} />
       <h2>Choose possible days</h2>
       <ChoiceCalendar dates={dates} setDates={setDates}/>
+      <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )}
 

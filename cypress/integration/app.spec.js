@@ -64,7 +64,11 @@ describe("Login", function() {
       cy.get("#addEvent-button").click()
       cy.contains("New Event")
       cy.get("#name").type("EventTestName")
-      cy.get("#group-options")
+      cy.get("#group-options").type("TestGroup{enter}")
+      cy.get("#submit-button").click()
+      cy.get("#homepage-button").click()
+      cy.contains("EventTestName")
+
     })
   })
 
