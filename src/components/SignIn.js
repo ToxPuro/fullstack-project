@@ -1,14 +1,19 @@
 import React, { useEffect } from "react"
 import { Formik } from "formik"
 import { useMutation } from "@apollo/client"
-import { LOGIN } from "../graphql/mutations"
-import { Link } from "react-router-dom"
+import { LOGIN, SIGN_IN } from "../graphql/mutations"
 
-const Login = ({ setToken }) => {
+const SignIn = ({ setToken }) => {
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
       console.log(error)
+    }
+  })
+
+  const [ signIn ] = useMutation(SIGN_IN, {
+    onError: (error) => {
+      console.log(error.graphQLErrors[0].message)
     }
   })
 
@@ -22,12 +27,13 @@ const Login = ({ setToken }) => {
 
   return(
     <div>
-      <h1>Login</h1>
+      <h1>Sign In</h1>
       <Formik
-        initialValues={{ username: "", password: "" }}
-        onSubmit={({ username, password }, { resetForm }) => {
+        initialValues={{ username: "", password: "", name: "" }}
+        onSubmit={async ({ username, name, password }, { resetForm }) => {
+          await signIn({ variables: { username, name,  password } })
           login({ variables: { username, password } })
-          resetForm({ values: { username: "", password: "" } })
+          resetForm({ values: { username: "", password: "", name: "" } })
         }}
       >
         {({
@@ -49,6 +55,17 @@ const Login = ({ setToken }) => {
 
             <br/>
 
+            name: <input
+              id="name"
+              type="text"
+              name="name"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.name}
+            />
+
+            <br/>
+
            password: <input
               id="password"
               type= "password"
@@ -59,15 +76,13 @@ const Login = ({ setToken }) => {
             />
             <br/>
             <button type="submit" id="login-button">
-             Login
+             Sign In
             </button>
           </form>
         )}
       </Formik>
-      <h2>Not yet signed in?</h2>
-      <button><Link to="SignIn">Sign In</Link></button>
     </div>
   )}
 
 
-export default Login
+export default SignIn
