@@ -26,17 +26,12 @@
 
 
 Cypress.Commands.add("login", ({ username, password }) => {
-  const mutation = `{
-    login(username: ${username}, password: ${password})
+  const mutation = `mutation{
+    login(username: "${username}", password: "${password}"){value}
   }`
-  cy.visit("http://localhost:4000/graphql")
-  cy.request(
-    { url: 'http://localhost:4000/graphql',
-      body: { mutation },
-      failOnStatusCode: false }
-  ).then(({ body }) => {
-    localStorage.setItem("user-token", JSON.stringify(body))
-    cy.log(JSON.stringify(body))
+  cy.request( 'POST', 'http://localhost:4000/graphql', {query: mutation})
+  .then((res) => {
+    localStorage.setItem("user-token", res.body.data.login.value.toString())
     cy.visit("http://localhost:4000")
   })
 })

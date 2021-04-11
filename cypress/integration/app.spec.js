@@ -1,26 +1,17 @@
 describe("Date-selector app", function() {
 
   beforeEach( function() {
-    const mutation = `{
-      createUser(username: "TestUsername", name: "TestName" password: "salainen"){name}
+
+    cy.request("POST", "http://localhost:4000/testing/reset")
+
+    const mutation = `mutation{
+      createUser(username: "TestUsername", name: "ABC" password: "salainen"){name}
     }`
 
     const addGroup = `{
       createGroup(name: "TestGroup", users: []){name}
     }`
-    cy.visit("http://localhost:4000/graphql")
-    cy.request(
-      { url: "http://localhost:4000/graphql",
-        body: { mutation },
-        failOnStatusCode: false }
-    ).then(({body}) => {
-      cy.log(body)
-      cy.request(
-        { url: "http://localhost:4000/graphql",
-        body: { mutation: addGroup },
-        failOnStatusCode: false }
-      )
-    })
+    cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
   })
   it("front page can be opened", function() {
     cy.visit("http://localhost:4000")
