@@ -6,6 +6,8 @@ import { USER_GROUPS } from "../graphql/queries"
 import Select from "react-select"
 import ChoiceCalendar from "./ChoiceCalendar"
 
+
+
 const AddEvent = () => {
   const [ dates, setDates] = useState([])
   const [choice, setChoice] = useState(null)
@@ -39,6 +41,7 @@ const AddEvent = () => {
         }) => (
           <form onSubmit={handleSubmit}>
            event name: <input
+              id="name"
               type="text"
               name="name"
               onChange={handleChange}
@@ -51,7 +54,7 @@ const AddEvent = () => {
           </form>
         )}
       </Formik>
-      <Select options={options} onChange={handleChoice} />
+      <Select id="group-options"options={options} onChange={handleChoice} />
       <h2>Choose possible days</h2>
       <ChoiceCalendar dates={dates} setDates={setDates}/>
     </div>

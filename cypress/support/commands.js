@@ -23,3 +23,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("login", ({ username, password }) => {
+  const mutation = `{
+    login(username: ${username}, password: ${password})
+  }`
+  cy.request(
+    { url: "http://localhost:4000/graphql",
+      body: { mutation },
+      failOnStatusCode: false }
+  ).then(({ body }) => {
+    localStorage.setItem("user-token", JSON.stringify(body))
+    cy.visit("http://localhost:4000")
+  })
+})
