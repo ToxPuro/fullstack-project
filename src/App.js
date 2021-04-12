@@ -9,6 +9,8 @@ import Event from "./components/Event"
 import HomePage from "./components/HomePage"
 import Groups from "./components/Groups"
 import Group from "./components/Group"
+import User from "./components/User"
+import JoinGroup from "./components/JoinGroup"
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 
 import useLogin from "./hooks/useLogin"
@@ -23,6 +25,12 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route path="/joinGroup">
+          <JoinGroup/>
+        </Route>
+        <Route path="/users/:id">
+          <User/>
+        </Route>
         <Route path ="/groups/:id">
           <Group/>
         </Route>

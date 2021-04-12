@@ -31,6 +31,7 @@ type Query {
   userEvents: [Event]!
   event(id: ID!): Event! 
   group(id: ID!): Group!
+  user(id: ID!): User!
 }
 
 

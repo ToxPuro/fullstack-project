@@ -45,5 +45,17 @@ query group($id: ID!){
   group(id: $id){
     name
     id
+    users{
+      name
+      id
+    }
+  }
+}`
+
+export const GET_USER = gql`
+query user($id: ID!){
+  user(id: $id){
+    name
+    id
   }
 }`
