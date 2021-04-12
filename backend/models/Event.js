@@ -13,7 +13,12 @@ const userSchema = new mongoose.Schema({
   dates: [
     {
       date: String,
-      votes: mongoose.Schema.Types.Mixed
+      votes: [
+        {
+          voter: String,
+          vote: String
+        }
+      ]
     }
   ]
 },
