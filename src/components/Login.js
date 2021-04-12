@@ -1,32 +1,17 @@
-import React, { useEffect } from "react"
 import { Formik } from "formik"
-import { useMutation } from "@apollo/client"
-import { LOGIN } from "../graphql/mutations"
-import { Link, useHistory } from "react-router-dom"
+import { Link } from "react-router-dom"
+import useLogin from "../hooks/useLogin"
+import React from "react"
 
 const Login = ({ setToken }) => {
-  const history = useHistory()
-  const [ login, result ] = useMutation(LOGIN, {
-    onError: (error) => {
-      console.log(error)
-    }
-  })
-  useEffect(() => {
-    if(result.data){
-      const token = result.data.login.value
-      setToken(token)
-      localStorage.setItem("user-token", token)
-      history.push("/")
-    }
-  }, [result.data, setToken])
-
+  const { login } = useLogin(setToken)
   return(
     <div>
       <h1>Login</h1>
       <Formik
         initialValues={{ username: "", password: "" }}
-        onSubmit={({ username, password }, { resetForm }) => {
-          login({ variables: { username, password } })
+        onSubmit={ async ({ username, password }, { resetForm }) => {
+          await login({ username, password })
           resetForm({ values: { username: "", password: "" } })
         }}
       >
