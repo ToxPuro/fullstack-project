@@ -78,7 +78,7 @@ const Cells = ({ month }) => {
       formattedDate = dateFns.format(day, dateFormat)
       const cloneDay = day
       days.push(
-        <CalendarDate formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart}/>
+        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart}/>
       )
       day = dateFns.addDays(day, 1)
     }

@@ -2,21 +2,21 @@ import React, { useEffect } from "react"
 import { Formik } from "formik"
 import { useMutation } from "@apollo/client"
 import { LOGIN } from "../graphql/mutations"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 const Login = ({ setToken }) => {
-
+  const history = useHistory()
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
       console.log(error)
     }
   })
-
   useEffect(() => {
     if(result.data){
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem("user-token", token)
+      history.push("/")
     }
   }, [result.data, setToken])
 

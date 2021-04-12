@@ -2,8 +2,16 @@ import React, { useEffect } from "react"
 import { Formik } from "formik"
 import { useMutation } from "@apollo/client"
 import { LOGIN, SIGN_IN } from "../graphql/mutations"
+import { useHistory } from "react-router-dom"
 
 const SignIn = ({ setToken }) => {
+  const history = useHistory()
+
+  const onSubmit = async ({ username, name, password }, { resetForm }) => {
+    await signIn({ variables: { username, name,  password } })
+    login({ variables: { username, password } })
+    resetForm({ values: { username: "", password: "", name: "" } })
+  }
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
@@ -22,19 +30,18 @@ const SignIn = ({ setToken }) => {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem("user-token", token)
+      history.push("/")
     }
   }, [result.data, setToken])
+
+
 
   return(
     <div>
       <h1>Sign In</h1>
       <Formik
         initialValues={{ username: "", password: "", name: "" }}
-        onSubmit={async ({ username, name, password }, { resetForm }) => {
-          await signIn({ variables: { username, name,  password } })
-          login({ variables: { username, password } })
-          resetForm({ values: { username: "", password: "", name: "" } })
-        }}
+        onSubmit={onSubmit}
       >
         {({
           values,
