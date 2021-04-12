@@ -122,15 +122,16 @@ const resolvers = {
       try{
         const currentUser = context.currentUser
         console.log(args)
-        const vote = { voter: currentUser.username, vote: "red" }
         if(!currentUser){
           throw new AuthenticationError("user needs to be logged in")
         }
         const event = await Event.findById(args.id)
         const dates = event.dates
         console.log(dates)
-        dates.forEach(date => {
-          date.votes.push(vote)
+        console.log(dates.find(date => date.date === "TestiDate"))
+        args.votes.forEach(vote => {
+          const date = dates.find(date => date.date === vote.date)
+          date.votes.push({ voter: currentUser.username, vote: vote.vote })
         })
         console.log(dates[0].votes)
         return event.save()
