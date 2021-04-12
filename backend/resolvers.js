@@ -15,8 +15,11 @@ const resolvers = {
     allEvents: () => {
       return Event.find({})
     },
-    me: (root, args, context) => {
-      return context.currentUser
+    me: async (root, args, context) => {
+      const currentUser =  context.currentUser
+      await currentUser.populate("events").execPopulate()
+      return currentUser
+
     },
     userGroups: (root, args, context) => {
       const currentUser = context.currentUser

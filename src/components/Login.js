@@ -50,7 +50,7 @@ const Login = ({ setToken }) => {
         )}
       </Formik>
       <h2>Not yet signed in?</h2>
-      <button><Link to="SignIn">Sign In</Link></button>
+      <button id="signIn-button"><Link to="SignIn">Sign In</Link></button>
     </div>
   )}
 

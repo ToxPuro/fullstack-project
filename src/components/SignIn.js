@@ -68,7 +68,7 @@ const SignIn = ({ setToken }) => {
               value={values.password}
             />
             <br/>
-            <button type="submit" id="login-button">
+            <button type="submit" id="submit-button">
              Sign In
             </button>
           </form>

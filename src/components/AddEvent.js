@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Formik } from "formik"
 import { useMutation, useQuery } from "@apollo/client"
 import { ADD_EVENT } from "../graphql/mutations"
-import { USER_EVENTS, USER_GROUPS } from "../graphql/queries"
+import { ME, USER_GROUPS } from "../graphql/queries"
 import Select from "react-select"
 import ChoiceCalendar from "./ChoiceCalendar"
 import { Link } from "react-router-dom"
@@ -21,12 +21,19 @@ const AddEvent = () => {
   }
   const [addEvent ] = useMutation(ADD_EVENT, {
     update: (store, response) => {
-      const dataInStore = store.readQuery({ query: USER_EVENTS })
+      console.log("dataInStore:")
+      const dataInStore = store.readQuery({ query: ME })
+      const eventsInStore = dataInStore.me.events
+      console.log(dataInStore.me)
+      console.log(eventsInStore)
+      console.log(response)
       store.writeQuery({
-        query: USER_EVENTS,
+        query: ME,
         data: {
-          ...dataInStore,
-          userEvents: [...dataInStore.userEvents, response.data.addEvent]
+          me: {
+            ...dataInStore.me,
+            events: eventsInStore.concat(response.data.addEvent)
+          }
         }
       })
     }

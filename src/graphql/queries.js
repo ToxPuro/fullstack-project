@@ -4,6 +4,10 @@ export const ME = gql`
 query{
   me{
     name
+    events{
+      name
+      id
+    }
   }
 }`
 
