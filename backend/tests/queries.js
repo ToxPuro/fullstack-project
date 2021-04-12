@@ -12,7 +12,7 @@ mutation{
 
 const ADD_EVENT = gql`
 mutation {
-  addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates id group}
+  addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates{date} id group}
 }
 `
 const ME = gql`
@@ -35,4 +35,9 @@ query event($id: ID!){
   event(id: $id){name}
 }`
 
-module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT }
+const VOTE_EVENT = gql`
+mutation voteEvent($id: ID!, $votes: [VoteInput]!){
+  voteEvent(id: $id, votes: $votes){dates{votes{voter vote}}}
+}`
+
+module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT }

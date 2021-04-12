@@ -90,7 +90,8 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name: args.group })
-      const event = new Event({ name: args.name, group: group._id, dates: args.dates })
+      const dates = args.dates.map(date => ( { date: date, votes: []  } ))
+      const event = new Event({ name: args.name, group: group._id, dates: dates })
       await User.updateMany({ _id:{ $in:[group.users] } }, { $push: { events: event } })
       return event.save()
     },
@@ -116,6 +117,26 @@ const resolvers = {
       const group = await Group.findById(args.id)
       group.users = group.users.concat(currentUser)
       return group.save()
+    },
+    voteEvent: async (root, args, context ) => {
+      try{
+        const currentUser = context.currentUser
+        console.log(args)
+        const vote = { voter: currentUser.username, vote: "red" }
+        if(!currentUser){
+          throw new AuthenticationError("user needs to be logged in")
+        }
+        const event = await Event.findById(args.id)
+        const dates = event.dates
+        console.log(dates)
+        dates.forEach(date => {
+          date.votes.push(vote)
+        })
+        console.log(dates[0].votes)
+        return event.save()
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 }

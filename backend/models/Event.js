@@ -12,11 +12,12 @@ const userSchema = new mongoose.Schema({
   },
   dates: [
     {
-      type: String,
-      required: true
+      date: String,
+      votes: mongoose.Schema.Types.Mixed
     }
   ]
-})
+},
+{ minimize: false })
 
 
 module.exports = mongoose.model("Event", userSchema)

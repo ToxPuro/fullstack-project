@@ -4,7 +4,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT } = require("./queries")
 const helper = require("./helper")
 
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
@@ -86,9 +86,10 @@ describe("adding event", () => {
   test("can add event if logged in", async () => {
     await helper.login(setOptions, mutate)
     const events = await mutate( ADD_EVENT)
+    console.log(events)
     expect(events.data.addEvent.name).toBe(helper.eventObject.name)
     console.log(events.data.addEvent.dates)
-    expect(events.data.addEvent.dates).toEqual(helper.eventObject.dates)
+    expect(events.data.addEvent.dates[0].date).toEqual(helper.eventObject.dates[0])
     const user = await User.findOne({ username: helper.userObject.username })
     const group = await Group.findOne({ name: helper.groupObject.name })
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
@@ -106,6 +107,15 @@ describe("adding event", () => {
     const eventInDB = await Event.findOne({ name: helper.eventObject.name })
     const event = await query(GET_EVENT, { variables: { id: eventInDB._id.toString() } })
     expect(event.data.event).toBeDefined()
+  })
+
+  test("can vote event", async() => {
+    const eventInDB = await Event.findOne({ name: helper.eventObject.name })
+    console.log(eventInDB)
+    await helper.login(setOptions, mutate)
+    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "red" }] } })
+    console.log(result.data.voteEvent.dates[0].votes)
+    expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "red" }])
   })
 })
 

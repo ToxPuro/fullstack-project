@@ -4,7 +4,7 @@ const typeDefs = gql`
 type Event {
   name: String!
   group: String!
-  dates: [String!]!
+  dates: [Date!]!
   id: ID!
 }
 type User {
@@ -16,6 +16,21 @@ type User {
 
 type Token {
   value: String!
+}
+
+type Vote {
+  voter: String!
+  vote: String!
+}
+
+input VoteInput {
+  date: String!
+  vote: String!
+}
+
+type Date {
+  date: String!
+  votes: [Vote]!
 }
 
 type Group {
@@ -50,7 +65,7 @@ type Mutation {
   addEvent(
     name: String!
     group: String!
-    dates: [String!]!
+    dates: [String]!
   ): Event
   createGroup(
     name: String!
@@ -59,6 +74,10 @@ type Mutation {
   joinGroup(
     id: ID!
   ): Group
+  voteEvent(
+    id: ID!
+    votes: [VoteInput]!
+  ): Event
 }
 `
 
