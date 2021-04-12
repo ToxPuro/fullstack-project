@@ -15,5 +15,10 @@ mutation createUser($name: String! $username: String! $password: String!){
   createUser(name: $name, username: $username, password: $password){name}
 }`
 
+export const ADD_GROUP = gql`
+mutation addGroup($name: String! $users: [String]!){
+  createGroup(name: $name, users: $users){name}
+}`
+
 
 

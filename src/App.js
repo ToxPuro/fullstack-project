@@ -4,9 +4,11 @@ import React, { useState } from "react"
 import SignIn from "./components/SignIn"
 
 import AddEvent from "./components/AddEvent"
-
+import AddGroup from "./components/AddGroup"
 import Event from "./components/Event"
 import HomePage from "./components/HomePage"
+import Groups from "./components/Groups"
+import Group from "./components/Group"
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 
 import useLogin from "./hooks/useLogin"
@@ -21,6 +23,15 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route path ="/groups/:id">
+          <Group/>
+        </Route>
+        <Route path="/groups">
+          <Groups/>
+        </Route>
+        <Route path="/addGroup">
+          <AddGroup/>
+        </Route>
         <Route path="/SignIn">
           <SignIn setToken= {setToken}/>
         </Route>

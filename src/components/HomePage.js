@@ -17,6 +17,8 @@ const HomePage = ({ logout }) => {
       {user.data ? <Events events={user.data.me.events}/> : null }
       <Button id="addEvent-button"><Link to="/addevent">add event</Link></Button>
       <button id="logout-button"onClick={logout}>Log Out</button>
+      <button id="addGroup-button"><Link to="/addGroup">add group</Link></button>
+      <button id="groups-button"><Link to="/groups">groups</Link></button>
     </div>
   )
 }

@@ -30,6 +30,7 @@ type Query {
   userGroups: [Group]!
   userEvents: [Event]!
   event(id: ID!): Event! 
+  group(id: ID!): Group!
 }
 
 
@@ -51,7 +52,7 @@ type Mutation {
   ): Event
   createGroup(
     name: String!
-    users: [ID]!
+    users: [String]!
   ): Group
 }
 `

@@ -12,6 +12,9 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 const resolvers = {
   Query: {
+    group: (root, args) => {
+      return Group.findById(args.id)
+    },
     allEvents: () => {
       return Event.find({})
     },
@@ -86,7 +89,12 @@ const resolvers = {
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
-      const group = new Group({ name: args.name, users: [...args.users, context.currentUser._id], events: [] })
+      const users = await User.find({ username: { $in: args.users } })
+      console.log(users)
+      if(users.length < args.users.length){
+        throw new UserInputError("Couldn't find any users with given usernames")
+      }
+      const group = new Group({ name: args.name, users: [...users, context.currentUser._id], events: [] })
       await group.save()
       await group.populate("users").execPopulate()
       return group
