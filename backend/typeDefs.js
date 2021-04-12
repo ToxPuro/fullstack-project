@@ -32,6 +32,7 @@ type Query {
   event(id: ID!): Event! 
   group(id: ID!): Group!
   user(id: ID!): User!
+  allGroups: [Group]!
 }
 
 
@@ -54,6 +55,9 @@ type Mutation {
   createGroup(
     name: String!
     users: [String]!
+  ): Group
+  joinGroup(
+    id: ID!
   ): Group
 }
 `

@@ -12,6 +12,9 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 const resolvers = {
   Query: {
+    allGroups: () => {
+      return Group.find({})
+    },
     user: (root, args) => {
       return User.findById(args.id)
     },
@@ -104,6 +107,15 @@ const resolvers = {
       await group.save()
       await group.populate("users").execPopulate()
       return group
+    },
+    joinGroup: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if(!currentUser){
+        throw new AuthenticationError("user needs to be logged in")
+      }
+      const group = await Group.findById(args.id)
+      group.users = group.users.concat(currentUser)
+      return group.save()
     }
   }
 }

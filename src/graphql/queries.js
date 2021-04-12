@@ -59,3 +59,11 @@ query user($id: ID!){
     id
   }
 }`
+
+export const ALL_GROUPS = gql`
+query{
+  allGroups{
+    name
+    id
+  }
+}`

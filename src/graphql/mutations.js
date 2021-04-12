@@ -20,5 +20,10 @@ mutation addGroup($name: String! $users: [String]!){
   createGroup(name: $name, users: $users){name}
 }`
 
+export const JOIN_GROUP = gql`
+mutation joinGroup($id: ID!){
+  joinGroup(id: $id){name}
+}`
+
 
 
