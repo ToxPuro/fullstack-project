@@ -25,5 +25,10 @@ mutation joinGroup($id: ID!){
   joinGroup(id: $id){name}
 }`
 
+export const VOTE_EVENT = gql`
+mutation voteEvent($id: ID!, $votes: [VoteInput]!){
+  voteEvent(id: $id, votes: $votes){dates{votes{voter vote}}}
+}`
+
 
 

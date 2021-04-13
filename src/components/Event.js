@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react"
-import { useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { useParams } from "react-router-dom"
 import { EVENT } from "../graphql/queries"
 import EventCalendar from "./EventCalendar"
+import { VOTE_EVENT } from "../graphql/mutations"
 
 const Event = () => {
   const [ votes, setVotes ] = useState([])
+  const [ vote, response ] = useMutation(VOTE_EVENT)
+  console.log(response)
   const id = useParams().id
   const event = useQuery(EVENT, { variables: { id } })
   useEffect(() => {
@@ -27,6 +30,7 @@ const Event = () => {
     <div>
       {event.data.event.name}
       <EventCalendar dates = {event.data.event.dates.map(date => date.date)} setVotes={setVotes} votes={votes}/>
+      <button onClick={() => vote({ variables: { id: event.data.event.id, votes } })}>Vote</button>
     </div>
   )
 }
