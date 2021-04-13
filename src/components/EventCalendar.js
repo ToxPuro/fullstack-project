@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
 
-const EventCalendar = ({ dates }) => {
+const EventCalendar = ({ dates, setVotes, votes }) => {
 
 
   const [ month, setMonth ] = useState(new Date())
@@ -10,7 +10,7 @@ const EventCalendar = ({ dates }) => {
     <div className="calendar">
       <Header month={month} setMonth={setMonth}/>
       <Days month={month}/>
-      <Cells month={month} dates={dates}/>
+      <Cells month={month} dates={dates} setVotes={setVotes} votes={votes}/>
       <ul>{dates}</ul>
     </div>
   )
@@ -60,7 +60,7 @@ const Days = ({ month }) => {
   )
 }
 
-const Cells = ({ month, dates }) => {
+const Cells = ({ month, dates, setVotes, votes }) => {
 
   const monthStart = dateFns.startOfMonth(month)
   const monthEnd = dateFns.endOfMonth(monthStart)
@@ -79,7 +79,7 @@ const Cells = ({ month, dates }) => {
       formattedDate = dateFns.format(day, dateFormat)
       const cloneDay = day
       days.push(
-        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} dates={dates}/>
+        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} dates={dates} setVotes={setVotes} votes={votes}/>
       )
       day = dateFns.addDays(day, 1)
     }
@@ -97,17 +97,39 @@ const Cells = ({ month, dates }) => {
 
 }
 
-const ChoiceDate = ({ day, formattedDate }) => {
+const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
   const [vote, setVote] = useState("blue")
   const onClick = (vote) => {
     if(vote==="blue"){
       setVote("green")
+      const cloneVotes = [...votes]
+      const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
+      cloneVotes[dayIndex].vote = "green"
+      console.log(day)
+      console.log(dayIndex)
+      console.log(cloneVotes)
+      setVotes(cloneVotes)
+
     }
     else if(vote === "green"){
       setVote("red")
+      const cloneVotes = [...votes]
+      const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
+      cloneVotes[dayIndex].vote = "red"
+      console.log(day)
+      console.log(dayIndex)
+      console.log(cloneVotes)
+      setVotes(cloneVotes)
     }
     else{
       setVote("blue")
+      const cloneVotes = [...votes]
+      const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
+      cloneVotes[dayIndex].vote = "blue"
+      console.log(day)
+      console.log(dayIndex)
+      console.log(cloneVotes)
+      setVotes(cloneVotes)
     }
   }
   return(
@@ -120,10 +142,10 @@ const ChoiceDate = ({ day, formattedDate }) => {
   )
 }
 
-const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
+const CalendarDate = ({ formattedDate, day, monthStart, dates, setVotes, votes }) => {
   if(dates.includes(dateFns.format(day, "DDD"))){
     return(
-      <ChoiceDate/>
+      <ChoiceDate setVotes={setVotes} votes={votes} day={day} formattedDate = {formattedDate}/>
 
     )
   }
