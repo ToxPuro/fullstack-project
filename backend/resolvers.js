@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
-const { UserInputError, AuthenticationError } = require("apollo-server-express")
+const { UserInputError, AuthenticationError, ForbiddenError } = require("apollo-server-express")
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -118,75 +118,74 @@ const resolvers = {
       return group.save()
     },
     voteEvent: async (root, args, context ) => {
-      try{
-        const currentUser = context.currentUser
-        if(!currentUser){
-          throw new AuthenticationError("user needs to be logged in")
-        }
-        const event = await Event.findById(args.id)
-        if(event.status !== "picking"){
-          throw new Error("event is not in picking state")
-        }
-        const dates = event.dates
-        args.votes.forEach(vote => {
-          const dateIndex = dates.findIndex(date => date.date === vote.date)
-          const olderVote = dates[dateIndex].votes.findIndex(vote => vote.voter === currentUser.username)
-          if(olderVote !== -1){
-            dates[dateIndex].votes[olderVote].vote = vote.vote
-          } else {
-            dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
-          }
-        })
-
-        const getVotes = (date) => {
-          const votes = date.votes.reduce((object, vote) => {
-            console.log(vote.vote)
-            object[vote.vote] = object[vote.vote] || 0
-            object[vote.vote] += 1
-            return object
-          }, {})
-          return votes
-        }
-
-        const compareDates = (a, b) => {
-          const aVotes = getVotes(a)
-          const bVotes = getVotes(b)
-          if(bVotes.red>aVotes.red){
-            return -1
-          }
-          if(aVotes.red>bVotes.red){
-            return 1
-          }
-          if(bVotes.green > aVotes.green){
-            return 1
-          }
-          if(aVotes.green > bVotes.green){
-            return 1
-          }
-          return 0
-        }
-
-        event.dates = dates
-        await event.populate("group").execPopulate()
-        const userCount = event.group.users.length
-        if(userCount === event.dates[0].votes.length){
-          const copyDates = [...dates]
-          copyDates.sort((a,b) => {
-            return compareDates(a,b)
-          })
-          if(copyDates.length === 1){
-            event.status = "done"
-          }else{
-            if(compareDates(copyDates[0], copyDates[1])=== -1){
-              event.status = "done"
-            }
-          }
-        }
-        await event.save()
-        return event
-      } catch(error) {
-        console.log(error)
+      const currentUser = context.currentUser
+      if(!currentUser){
+        throw new AuthenticationError("user needs to be logged in")
       }
+      const event = await Event.findById(args.id)
+      if(event.status !== "picking"){
+        throw new ForbiddenError("event is not in picking state")
+      }
+      const dates = event.dates
+      args.votes.forEach(vote => {
+        const dateIndex = dates.findIndex(date => date.date === vote.date)
+        const olderVote = dates[dateIndex].votes.findIndex(vote => vote.voter === currentUser.username)
+        if(olderVote !== -1){
+          dates[dateIndex].votes[olderVote].vote = vote.vote
+        } else {
+          dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
+        }
+      })
+
+      const getVotes = (date) => {
+        const votes = date.votes.reduce((object, vote) => {
+          console.log(vote.vote)
+          object[vote.vote] = object[vote.vote] || 0
+          object[vote.vote] += 1
+          return object
+        }, {})
+        return votes
+      }
+
+      const compareDates = (a, b) => {
+        const aVotes = getVotes(a)
+        const bVotes = getVotes(b)
+        if(bVotes.red>aVotes.red){
+          return -1
+        }
+        if(aVotes.red>bVotes.red){
+          return 1
+        }
+        if(bVotes.green > aVotes.green){
+          return 1
+        }
+        if(aVotes.green > bVotes.green){
+          return 1
+        }
+        return 0
+      }
+
+      event.dates = dates
+      await event.populate("group").execPopulate()
+      const userCount = event.group.users.length
+      if(userCount === event.dates[0].votes.length){
+        const copyDates = [...dates]
+        copyDates.sort((a,b) => {
+          return compareDates(a,b)
+        })
+        if(copyDates.length === 1){
+          event.status = "done"
+          event.finalDate = copyDates[0].date
+        }else{
+          if(compareDates(copyDates[0], copyDates[1])=== -1){
+            event.status = "done"
+          } else{
+            event.status = "voting"
+          }
+        }
+      }
+      await event.save()
+      return event
     }
   },
 }

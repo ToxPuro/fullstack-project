@@ -24,7 +24,8 @@ const userSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "picking"
-  }
+  },
+  finalDate: String
 },
 { minimize: false })
 

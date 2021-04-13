@@ -7,16 +7,24 @@ import { VOTE_EVENT } from "../graphql/mutations"
 
 const Event = () => {
   const [ votes, setVotes ] = useState([])
-  const [ vote, response ] = useMutation(VOTE_EVENT)
+  const [ vote, response ] = useMutation(VOTE_EVENT, {
+    onError : (error) => {
+      console.log(error)
+    }
+  })
   console.log(response)
   const id = useParams().id
   const user= useQuery(ME)
   const event = useQuery(EVENT, { variables: { id } })
   useEffect(() => {
     if(event.data && user.data){
+      console.log(event.data.event.status)
       console.log(event.data.event.dates)
       console.log(user.data.me.username)
-      const initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
+      let initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: "blue" }))
+      if(event.data.event.dates[0].votes.length !== 0){
+        initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
+      }
       setVotes(initialVotes)
     }
   },[event.data])

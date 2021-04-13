@@ -37,6 +37,7 @@ query event($id: ID!){
   event(id: $id){
     name
     id
+    status
     dates{
       date
       votes{
