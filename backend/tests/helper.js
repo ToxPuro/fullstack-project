@@ -11,7 +11,7 @@ const groupObject = { name: "TestGroup" }
 const eventObject = { name: "TestiName", group: "TestGroup", dates: [ "TestiDate" ] }
 
 const login = async (setOptions, mutate, username, password) => {
-  const token = await mutate(LOGIN, { variables: username, password })
+  const token = await mutate(LOGIN, { variables: { username, password } })
   setOptions({
     request: {
       headers: {
