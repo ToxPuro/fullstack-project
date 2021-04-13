@@ -118,6 +118,7 @@ const resolvers = {
       return group.save()
     },
     voteEvent: async (root, args, context ) => {
+      console.log("voting")
       const currentUser = context.currentUser
       if(!currentUser){
         throw new AuthenticationError("user needs to be logged in")
@@ -168,6 +169,7 @@ const resolvers = {
       event.dates = dates
       await event.populate("group").execPopulate()
       const userCount = event.group.users.length
+      console.log(userCount)
       if(userCount === event.dates[0].votes.length){
         const copyDates = [...dates]
         copyDates.sort((a,b) => {
@@ -177,7 +179,9 @@ const resolvers = {
           event.status = "done"
           event.finalDate = copyDates[0].date
         }else{
+          console.log(compareDates(copyDates[0], copyDates[1]))
           if(compareDates(copyDates[0], copyDates[1])=== -1){
+            console.log("found best one")
             event.status = "done"
             event.finalDate = copyDates[0].date
           } else{

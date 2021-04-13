@@ -18,7 +18,7 @@ const Event = () => {
   const event = useQuery(EVENT, { variables: { id } })
   useEffect(() => {
     if(event.data && user.data){
-      console.log(event.data.event.status)
+      console.log(event.data.event)
       console.log(event.data.event.dates)
       console.log(user.data.me.username)
       let initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: "blue" }))
