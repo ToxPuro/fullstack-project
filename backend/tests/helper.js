@@ -34,7 +34,13 @@ const createUser = async() => {
   return user
 }
 
+const createSecondUser = async() => {
+  const secondUser = new User(secondUserObject)
+  await secondUser.save()
+  return secondUser
+}
 
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser }
+
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser }

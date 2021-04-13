@@ -180,11 +180,10 @@ describe("when event has already been voted on", () => {
 describe("multiple voters", () => {
   beforeEach(async () => {
     await helper.erase()
-    const user = helper.createUser()
-    const secondUser = new User(helper.secondUserObject)
+    const user = await helper.createUser()
+    const secondUser = await helper.createSecondUser()
     const group = new Group({ name: helper.groupObject.name, users: [user._id, secondUser] })
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: "SecondTestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
-    await secondUser.save()
     await group.save()
     await event.save()
   })
