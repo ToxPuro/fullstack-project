@@ -4,15 +4,12 @@ const Notification= ({ notification }) => {
   if(notification===null){
     return null
   }
-  if(!notification.error){
-    return(
-      <div className="success">
-        {notification.message}
-      </div>
-    )
+  let style = "success"
+  if(notification.error){
+    style="error"
   }
   return(
-    <div className="error">
+    <div id="notification"className={style}>
       {notification.message}
     </div>
   )

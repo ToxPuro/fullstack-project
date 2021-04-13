@@ -26,6 +26,9 @@ describe("SignIn", function () {
     cy.get("#name").type("ABC")
     cy.get("#password").type("Salainen")
     cy.get("#submit-button").click()
+    cy.get("#notification")
+      .contains("Username needs to be unique")
+      .should("have.css", "color", "rgb(255, 0, 0)")
   })
 })
 
