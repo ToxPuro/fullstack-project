@@ -128,7 +128,12 @@ const resolvers = {
         const dates = event.dates
         args.votes.forEach(vote => {
           const dateIndex = dates.findIndex(date => date.date === vote.date)
-          dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
+          const olderVote = dates[dateIndex].votes.findIndex(vote => vote.voter === currentUser.username)
+          if(olderVote !== -1){
+            dates[dateIndex].votes[olderVote].vote = vote.vote
+          } else {
+            dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
+          }
         })
         event.dates = dates
         await event.save()

@@ -150,7 +150,7 @@ describe("when event has already been voted on", () => {
     console.log(result.data.voteEvent.dates[0].votes)
     const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
     expect(eventInDBBack.dates[0].votes[0].voter).toStrictEqual(helper.userObject.username)
-    expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("red")
+    expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("blue")
     expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "blue" }])
   })
 
