@@ -91,7 +91,7 @@ const resolvers = {
       const group = await Group.findOne({ name: args.group })
       const dates = args.dates.map(date => ( { date: date, votes: []  } ))
       const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
-      await User.updateMany({ _id:{ $in:[group.users] } }, { $push: { events: event } })
+      await User.updateMany({ _id:{ $in: group.users  } }, { $push: { events: event } })
       return event.save()
     },
     createGroup: async(root, args, context) => {
@@ -160,7 +160,7 @@ const resolvers = {
           return 1
         }
         if(aVotes.green > bVotes.green){
-          return 1
+          return -1
         }
         return 0
       }
@@ -179,6 +179,7 @@ const resolvers = {
         }else{
           if(compareDates(copyDates[0], copyDates[1])=== -1){
             event.status = "done"
+            event.finalDate = copyDates[0].date
           } else{
             event.status = "voting"
           }

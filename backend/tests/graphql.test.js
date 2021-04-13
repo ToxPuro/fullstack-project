@@ -6,6 +6,7 @@ const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
 const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT } = require("./queries")
 const helper = require("./helper")
+const { TestScheduler } = require("@jest/core")
 
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 
@@ -22,7 +23,7 @@ describe("login", () => {
     await user.save()
   })
   test("can login and query me works", async () => {
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const user = await query(ME)
     expect(user.data.me.username).toBe(helper.userObject.username)
 
@@ -46,7 +47,7 @@ describe("adding group", () => {
   })
 
   test("logged in user is in the group if no users are passed in ", async() => {
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
 
     const result = await mutate( ADD_GROUP)
     const group = await Group.findOne({ name: helper.groupObject.name })
@@ -57,7 +58,7 @@ describe("adding group", () => {
   })
 
   test("can get users groups", async () => {
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
 
     const groups = await query(USER_GROUPS)
 
@@ -84,7 +85,7 @@ describe("adding event", () => {
   })
 
   test("can add event if logged in", async () => {
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const events = await mutate( ADD_EVENT)
     console.log(events)
     expect(events.data.addEvent.name).toBe(helper.eventObject.name)
@@ -109,7 +110,7 @@ describe("when there is event", () => {
     await event.save()
   })
   test("can get users events", async () => {
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const events = await query(USER_EVENTS)
     expect(events.data.userEvents).toBeDefined()
   })
@@ -122,7 +123,7 @@ describe("when there is event", () => {
   test("can vote event", async() => {
     const eventInDB = await Event.findOne({ name: helper.eventObject.name })
     console.log(eventInDB)
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "red" }] } })
     console.log(result.data.voteEvent.dates[0].votes)
     const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
@@ -146,7 +147,7 @@ describe("when event has already been voted on", () => {
   test("can change vote", async () => {
     const eventInDB = await Event.findOne({ name: helper.eventObject.name })
     console.log(eventInDB)
-    await helper.login(setOptions, mutate)
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "blue" }] } })
     console.log(result.data.voteEvent.dates[0].votes)
     const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
@@ -155,6 +156,27 @@ describe("when event has already been voted on", () => {
     expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "blue" }])
   })
 
+})
+
+describe("multiple voters", () => {
+  beforeAll(async () => {
+    await helper.erase()
+    const user = new User(helper.userObject)
+    const secondUser = new User(helper.secondUserObject)
+    const group = new Group({ name: helper.groupObject.name, users: [user, secondUser] })
+    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
+    await user.save()
+    await secondUser.save()
+    await group.save()
+    await event.save()
+  })
+
+  test("algorithm picks correct finalDate", async () => {
+    const eventInDB = await Event.findOne({ name: helper.eventObject.name })
+    console.log(eventInDB)
+    await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+
+  })
 })
 
 

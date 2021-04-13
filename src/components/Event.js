@@ -22,7 +22,7 @@ const Event = () => {
       console.log(event.data.event.dates)
       console.log(user.data.me.username)
       let initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: "blue" }))
-      if(event.data.event.dates[0].votes.length !== 0){
+      if(event.data.event.dates[0].votes.filter(vote => vote.voter === user.data.me.username).length !== 0){
         initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
       }
       setVotes(initialVotes)

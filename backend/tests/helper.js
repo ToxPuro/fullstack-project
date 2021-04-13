@@ -6,11 +6,12 @@ const Group = require("../models/Group")
 // passwordHash is encrypted from 'salainen'
 const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0Ok2"
 const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash }
+const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
 const eventObject = { name: "TestiName", group: "TestGroup", dates: [ "TestiDate" ] }
 
-const login = async (setOptions, mutate) => {
-  const token = await mutate(LOGIN)
+const login = async (setOptions, mutate, username, password) => {
+  const token = await mutate(LOGIN, { variables: username, password })
   setOptions({
     request: {
       headers: {
@@ -30,4 +31,4 @@ const erase = async() => {
 
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject }
