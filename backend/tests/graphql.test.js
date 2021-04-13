@@ -98,12 +98,12 @@ describe("adding event", () => {
   })
 })
 
-describe("querying events", () => {
+describe("when there is event", () => {
   beforeAll(async () => {
     await helper.erase()
     const user = new User(helper.userObject)
     const group = new Group({ name: helper.groupObject.name, users: [user] })
-    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiString", votes: [] }] })
+    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
     await user.save()
     await group.save()
     await event.save()
@@ -126,10 +126,34 @@ describe("querying events", () => {
     const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "red" }] } })
     console.log(result.data.voteEvent.dates[0].votes)
     const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
-    expect(eventInDBBack.dates[0].votes[0].voter).toStrictEqual("TestiUsername")
+    expect(eventInDBBack.dates[0].votes[0].voter).toStrictEqual(helper.userObject.username)
     expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("red")
-    expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "red" }])
+    expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: helper.userObject.username, vote: "red" }])
   })
+})
+
+describe("when event has already been voted on", () => {
+  beforeAll(async () => {
+    await helper.erase()
+    const user = new User(helper.userObject)
+    const group = new Group({ name: helper.groupObject.name, users: [user] })
+    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }] })
+    await user.save()
+    await group.save()
+    await event.save()
+  })
+  test("can change vote", async () => {
+    const eventInDB = await Event.findOne({ name: helper.eventObject.name })
+    console.log(eventInDB)
+    await helper.login(setOptions, mutate)
+    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "blue" }] } })
+    console.log(result.data.voteEvent.dates[0].votes)
+    const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
+    expect(eventInDBBack.dates[0].votes[0].voter).toStrictEqual(helper.userObject.username)
+    expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("red")
+    expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "blue" }])
+  })
+
 })
 
 

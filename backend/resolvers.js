@@ -121,22 +121,17 @@ const resolvers = {
     voteEvent: async (root, args, context ) => {
       try{
         const currentUser = context.currentUser
-        console.log(args)
         if(!currentUser){
           throw new AuthenticationError("user needs to be logged in")
         }
         const event = await Event.findById(args.id)
         const dates = event.dates
-        console.log(dates)
-        console.log(dates.find(date => date.date === "TestiDate"))
         args.votes.forEach(vote => {
           const dateIndex = dates.findIndex(date => date.date === vote.date)
           dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
         })
-        console.log(dates[0].votes)
         event.dates = dates
         await event.save()
-        console.log(event.dates[0].votes)
         return event
       } catch(error) {
         console.log(error)
