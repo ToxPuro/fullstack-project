@@ -1,21 +1,18 @@
 import React from "react"
 import { Formik } from "formik"
-import { useMutation } from "@apollo/client"
-import { SIGN_IN } from "../graphql/mutations"
 
-const SignIn = ({ login }) => {
+const SignIn = ({ login, signIn }) => {
   const onSubmit = async ({ username, name, password }, { resetForm }) => {
-    await signIn({ variables: { username, name,  password } })
-    await login({ username, password })
+    const signInSuccessful = await signIn(username, name, password)
+    if(signInSuccessful){
+      await login({ username, password })
+    }
+
     resetForm({ values: { username: "", password: "", name: "" } })
   }
 
 
-  const [ signIn ] = useMutation(SIGN_IN, {
-    onError: (error) => {
-      console.log(error.graphQLErrors[0].message)
-    }
-  })
+
 
 
 

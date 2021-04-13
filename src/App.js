@@ -19,8 +19,6 @@ import useLogin from "./hooks/useLogin"
 
 const App = () => {
   const [ notification, setNotification ] = useState(null)
-  const [token, setToken] = useState(localStorage.getItem("user-token"))
-  const { logout, login } = useLogin(setToken, setNotification)
 
 
 
@@ -28,41 +26,49 @@ const App = () => {
     <div>
       <Notification notification={notification}/>
       <Router>
-        <Switch>
-          <Route path="/joinGroup">
-            {token ? <JoinGroup/> : <Redirect to="/login"/> }
-          </Route>
-          <Route path="/users/:id">
-            {token ? <User/>: <Redirect to="/login"/>}
-          </Route>
-          <Route path ="/groups/:id">
-            { token ? <Group/>: <Redirect to="/login"/>}
-          </Route>
-          <Route path="/groups">
-            {token ? <Groups/> : <Redirect to="/login"/> }
-          </Route>
-          <Route path="/addGroup">
-            { token ? <AddGroup/> : <Redirect to="/login"/> }
-          </Route>
-          <Route path="/SignIn">
-            <SignIn login = {login}/>
-          </Route>
-          <Route path="/login">
-            <Login login = {login} />
-          </Route>
-          <Route path="/events/:id">
-            {token ? <Event/> : <Redirect to="/login"/> }
-          </Route>
-          <Route path="/addevent">
-            {token ? <AddEvent setNotification={setNotification}/> : <Redirect to="/login"/>}
-          </Route>
-          <Route path="/">
-            {token ? <HomePage logout={logout}/> : <Redirect to="/login"/>}
-          </Route>
-        </Switch>
+        <AppRouter setNotification={setNotification}/>
       </Router>
     </div>
 
+  )
+}
+
+const AppRouter = ({ setNotification }) => {
+  const [token, setToken] = useState(localStorage.getItem("user-token"))
+  const { logout, login, signIn } = useLogin(setToken, setNotification)
+  return(
+    <Switch>
+      <Route path="/joinGroup">
+        {token ? <JoinGroup/> : <Redirect to="/login"/> }
+      </Route>
+      <Route path="/users/:id">
+        {token ? <User/>: <Redirect to="/login"/>}
+      </Route>
+      <Route path ="/groups/:id">
+        { token ? <Group/>: <Redirect to="/login"/>}
+      </Route>
+      <Route path="/groups">
+        {token ? <Groups/> : <Redirect to="/login"/> }
+      </Route>
+      <Route path="/addGroup">
+        { token ? <AddGroup/> : <Redirect to="/login"/> }
+      </Route>
+      <Route path="/SignIn">
+        <SignIn login = {login} signIn = {signIn}/>
+      </Route>
+      <Route path="/login">
+        <Login login = {login} />
+      </Route>
+      <Route path="/events/:id">
+        {token ? <Event/> : <Redirect to="/login"/> }
+      </Route>
+      <Route path="/addevent">
+        {token ? <AddEvent setNotification={setNotification}/> : <Redirect to="/login"/>}
+      </Route>
+      <Route path="/">
+        {token ? <HomePage logout={logout}/> : <Redirect to="/login"/>}
+      </Route>
+    </Switch>
   )
 }
 
