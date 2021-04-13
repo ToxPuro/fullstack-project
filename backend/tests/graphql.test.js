@@ -4,7 +4,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP } = require("./queries")
 const helper = require("./helper")
 
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
@@ -65,6 +65,29 @@ describe("adding group", () => {
     expect(groups.data.userGroups[0].name).toBe(helper.groupObject.name)
   })
 
+})
+
+describe("joining group", () => {
+  beforeAll(async () => {
+    await helper.erase()
+    const user = new User(helper.userObject)
+    const secondUser = new User(helper.secondUserObject)
+    const group = new Group({ name: helper.groupObject.name, users: [user], events: [] })
+    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
+    await event.save()
+    group.events = [event._id]
+    await user.save()
+    await secondUser.save()
+    await group.save()
+  })
+  test("can join group", async () => {
+    await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+    const group = await Group.findOne({ name: helper.groupObject.name })
+    await mutate(JOIN_GROUP, { variables: { id: group._id.toString() } })
+    const userINDB = await User.findOne({ username: helper.secondUserObject.username } )
+    expect(userINDB.groups).toContainEqual(group._id)
+
+  })
 })
 
 describe("adding event", () => {

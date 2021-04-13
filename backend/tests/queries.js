@@ -40,4 +40,9 @@ mutation voteEvent($id: ID!, $votes: [VoteInput]!){
   voteEvent(id: $id, votes: $votes){ status dates{votes{voter vote}}}
 }`
 
-module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT }
+const JOIN_GROUP = gql`
+mutation joinGroup($id: ID!){
+  joinGroup(id: $id){name}
+}`
+
+module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP }
