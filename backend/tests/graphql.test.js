@@ -76,11 +76,11 @@ describe("joining group", () => {
   })
   test("can join group", async () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
-    const group = await Group.findOne({ name: helper.groupObject.name })
+    const group = await helper.groupInDB()
     console.log("group events", group.events)
     await mutate(JOIN_GROUP, { variables: { id: group._id.toString() } })
     const secondUserInDB = await helper.secondUserInDB()
-    const event = await Event.findOne({ name: helper.eventObject.name })
+    const event = await helper.eventInDB()
     expect(secondUserInDB.groups).toContainEqual(group._id)
     expect(secondUserInDB.events).toContainEqual(event._id)
 
@@ -105,8 +105,8 @@ describe("adding event", () => {
     const events = await mutate( ADD_EVENT)
     expect(events.data.addEvent.name).toBe(helper.eventObject.name)
     expect(events.data.addEvent.dates[0].date).toEqual(helper.eventObject.dates[0].date)
-    const user = await User.findOne({ username: helper.userObject.username })
-    const group = await Group.findOne({ name: helper.groupObject.name })
+    const user = await helper.userInDB()
+    const group = await helper.groupInDB()
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
     expect(events.data.addEvent.group).toStrictEqual(group._id.toString())
 
@@ -158,7 +158,7 @@ describe("when event has already been voted on", () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "blue" }] } })
     console.log(result.data.voteEvent.dates[0].votes)
-    const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
+    const eventInDBBack = await helper.eventInDB()
     expect(eventInDBBack.dates[0].votes[0].voter).toStrictEqual(helper.userObject.username)
     expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("blue")
     expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "blue" }])
