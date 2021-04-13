@@ -38,6 +38,14 @@ describe("Login", function() {
     cy.contains("Login")
   })
 
+  it("login fails with incorrect credentials", function() {
+    cy.visit("http://localhost:4000")
+    cy.get("#username").type("WrongUsername")
+    cy.get("#password").type("WrongPassword")
+    cy.get("#login-button").click()
+    cy.contains("wrong credentials")
+  })
+
   describe("when logged in", function () {
     before(function() {
 
@@ -76,14 +84,13 @@ describe("Login", function() {
       cy.contains("Login")
     })
 
-    it("user can add event", function () {
+    it("can't add event if no dates are picked", function () {
       cy.get("#addEvent-button").click()
       cy.contains("New Event")
       cy.get("#name").type("EventTestName")
       cy.get("#group-options").type("TestGroup{enter}")
       cy.get("#submit-button").click()
-      cy.get("#homepage-button").click()
-      cy.contains("EventTestName")
+      cy.contains("pick possible dates")
     })
   })
 })
