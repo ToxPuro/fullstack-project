@@ -13,9 +13,12 @@ const HomePage = ({ logout }) => {
     console.log(user.data.me.events)
   }
   useEffect(() => {
-    if(user.error.message==="user needs to be logged in"){
-      logout()
+    if(user.error){
+      if(user.error.message==="user needs to be logged in"){
+        logout()
+      }
     }
+
   },[user])
   if(!user.data){
     return(
