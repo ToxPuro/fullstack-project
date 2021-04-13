@@ -117,10 +117,8 @@ describe("when there is event", () => {
   beforeAll(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    const group = new Group({ name: helper.groupObject.name, users: [user._id] })
-    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
-    await group.save()
-    await event.save()
+    const group = await helper.createGroup(user._id)
+    await helper.createEvent(group._id)
   })
   test("can get users events", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
@@ -180,7 +178,7 @@ describe("multiple voters", () => {
   })
 
   test("algorithm picks correct finalDate", async () => {
-    const eventInDB = await Event.findOne({ name: helper.eventObject.name })
+    const eventInDB = await helper.eventInDB()
     console.log(eventInDB)
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
     const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "green" }, { date: "SecondTestiDate", vote: "red" }] } })
