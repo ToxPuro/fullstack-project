@@ -68,12 +68,11 @@ describe("joining group", () => {
   beforeAll(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    const secondUser = new User(helper.secondUserObject)
-    const group = new Group({ name: helper.groupObject.name, users: [user._id], events: [] })
+    await helper.createSecondUser()
+    const group = await helper.createGroup([user._id])
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
     await event.save()
     group.events = [event._id]
-    await secondUser.save()
     await group.save()
   })
   test("can join group", async () => {

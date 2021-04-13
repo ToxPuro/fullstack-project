@@ -40,7 +40,12 @@ const createSecondUser = async() => {
   return secondUser
 }
 
+const createGroup = async (users) => {
+  const group = new Group({ name: groupObject.name, users: users, events: [] })
+  await group.save()
+  return group
+}
 
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup }
