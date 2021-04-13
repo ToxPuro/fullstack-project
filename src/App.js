@@ -26,19 +26,19 @@ const App = () => {
     <Router>
       <Switch>
         <Route path="/joinGroup">
-          <JoinGroup/>
+          {token ? <JoinGroup/> : <Redirect to="/login"/> }
         </Route>
         <Route path="/users/:id">
-          <User/>
+          {token ? <User/>: <Redirect to="/login"/>}
         </Route>
         <Route path ="/groups/:id">
-          <Group/>
+          { token ? <Group/>: <Redirect to="/login"/>}
         </Route>
         <Route path="/groups">
-          <Groups/>
+          {token ? <Groups/> : <Redirect to="/login"/> }
         </Route>
         <Route path="/addGroup">
-          <AddGroup/>
+          { token ? <AddGroup/> : <Redirect to="/login"/> }
         </Route>
         <Route path="/SignIn">
           <SignIn setToken= {setToken}/>
@@ -47,10 +47,10 @@ const App = () => {
           <Login setToken = {setToken} />
         </Route>
         <Route path="/events/:id">
-          <Event/>
+          {token ? <Event/> : <Redirect to="/login"/> }
         </Route>
         <Route path="/addevent">
-          <AddEvent/>
+          {token ? <AddEvent/> : <Redirect to="/login"/>}
         </Route>
         <Route path="/">
           {token ? <HomePage logout={logout}/> : <Redirect to="/login"/>}
