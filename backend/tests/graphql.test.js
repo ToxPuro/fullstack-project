@@ -6,7 +6,6 @@ const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
 const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT } = require("./queries")
 const helper = require("./helper")
-const { TestScheduler } = require("@jest/core")
 
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 
@@ -159,7 +158,7 @@ describe("when event has already been voted on", () => {
 })
 
 describe("multiple voters", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await helper.erase()
     const user = new User(helper.userObject)
     const secondUser = new User(helper.secondUserObject)
@@ -179,9 +178,6 @@ describe("multiple voters", () => {
     expect(result.data.voteEvent.status).toBe("done")
     const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
     expect(eventInDBBack.status).toBe("done")
-
-
-
   })
 })
 

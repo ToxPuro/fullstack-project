@@ -67,7 +67,7 @@ type Mutation {
   addEvent(
     name: String!
     group: String!
-    dates: [String]!
+    dates: [String!]!
   ): Event
   createGroup(
     name: String!

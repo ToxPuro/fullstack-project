@@ -6,7 +6,7 @@ import { ME, USER_GROUPS } from "../graphql/queries"
 import Select from "react-select"
 import ChoiceCalendar from "./ChoiceCalendar"
 import { Link } from "react-router-dom"
-const AddEvent = () => {
+const AddEvent = ({ setNotification }) => {
   const [ dates, setDates] = useState([])
   const [choice, setChoice] = useState(null)
   const handleChoice = selectedOption => {
@@ -44,8 +44,17 @@ const AddEvent = () => {
       <Formik
         initialValues={{ name: "" }}
         onSubmit={({ name }, { resetForm }) => {
-          addEvent({ variables:{ name, group: choice, dates } })
-          resetForm({})
+          if(dates.length === 0){
+            setNotification({ message: "pick possible dates", error: true })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+          }
+          else{
+            addEvent({ variables:{ name, group: choice, dates } })
+            resetForm({})
+          }
+
         }}
       >
         {({
