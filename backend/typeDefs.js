@@ -6,6 +6,7 @@ type Event {
   group: String!
   dates: [Date!]!
   id: ID!
+  status: String!
 }
 type User {
   name: String!

@@ -4,7 +4,6 @@ const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
 const { UserInputError, AuthenticationError } = require("apollo-server-express")
-
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -91,7 +90,7 @@ const resolvers = {
       }
       const group = await Group.findOne({ name: args.group })
       const dates = args.dates.map(date => ( { date: date, votes: []  } ))
-      const event = new Event({ name: args.name, group: group._id, dates: dates })
+      const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
       await User.updateMany({ _id:{ $in:[group.users] } }, { $push: { events: event } })
       return event.save()
     },
@@ -135,14 +134,46 @@ const resolvers = {
             dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
           }
         })
+
+        const getVotes = (date) => {
+          const votes = date.votes.reduce((object, vote) => {
+            console.log(vote.vote)
+            object[vote.vote] = object[vote.vote] || 0
+            object[vote.vote] += 1
+            return object
+          }, {})
+          return votes
+        }
+
         event.dates = dates
+        await event.populate("group").execPopulate()
+        const userCount = event.group.users.length
+        if(userCount === event.dates[0].votes.length){
+          const copyDates = [...dates]
+          copyDates.sort((a,b) => {
+            const aVotes = getVotes(a)
+            const bVotes = getVotes(b)
+            if(bVotes.red>aVotes.red){
+              return -1
+            }
+            if(aVotes.red>bVotes.red){
+              return 1
+            }
+            if(bVotes.green > aVotes.green){
+              return 1
+            }
+            return -1
+          })
+          console.log(copyDates)
+          event.status = "done"
+        }
         await event.save()
         return event
       } catch(error) {
         console.log(error)
       }
     }
-  }
+  },
 }
 
 module.exports = resolvers
