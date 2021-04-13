@@ -103,21 +103,17 @@ const CalendarDate = ({ formattedDate, day, monthStart,setDates, dates }) => {
     setDates(dates.concat(dateFns.format(day, "DDD")))
   }
 
+  let className = "col cell"
+  if(!dateFns.isSameMonth(day, monthStart)){
+    className ="col cell disabled"
+  }
   if(clicked){
-    return(
-      <div
-        className={"col cell green"}
-        key={day}
-        onClick = {() => onDateClick(day)}
-      >
-        <span className="number">{formattedDate}</span>
-        <span className="bg">{formattedDate}</span>
-      </div>
-    )
+    className = "col cell green"
   }
   return(
     <div
-      className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : ""}`}
+      id={`date/${formattedDate}`}
+      className={className}
       key={day}
       onClick = {() => onDateClick(day)}
     >
