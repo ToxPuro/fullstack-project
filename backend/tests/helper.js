@@ -28,7 +28,13 @@ const erase = async() => {
   await Group.deleteMany({})
 }
 
+const createUser = async() => {
+  const user = new User(userObject)
+  await user.save()
+  return user
+}
 
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject }
+
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser }

@@ -33,11 +33,8 @@ describe("login", () => {
 describe("adding group", () => {
 
   beforeAll( async () => {
-    await User.deleteMany({})
-    await Event.deleteMany({})
-    await Group.deleteMany({})
-    const user = new User(helper.userObject)
-    await user.save()
+    await helper.erase()
+    await helper.createUser()
   })
   test("can't add group if not logged in", async () => {
     const group = await mutate( ADD_GROUP)
