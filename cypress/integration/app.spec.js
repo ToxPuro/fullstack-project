@@ -1,16 +1,21 @@
 describe("SignIn", function () {
   before(function (){
     cy.request("POST", "http://localhost:4000/testing/reset")
+    const mutation = `mutation{
+      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
+    }`
+
+    cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
   })
   it("User can sign in with unique username", function() {
     cy.visit("http://localhost:4000")
     cy.get("#signIn-button").click()
     cy.contains("Sign In")
-    cy.get("#username").type("TestUsername")
-    cy.get("#name").type("TestName")
+    cy.get("#username").type("UniqueUsername")
+    cy.get("#name").type("ABC")
     cy.get("#password").type("Salainen")
     cy.get("#submit-button").click()
-    cy.contains("Hello TestName")
+    cy.contains("Hello ABC")
   })
 })
 
