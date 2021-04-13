@@ -17,6 +17,16 @@ describe("SignIn", function () {
     cy.get("#submit-button").click()
     cy.contains("Hello ABC")
   })
+
+  it("User can't sign in with username that has been already been taken", function () {
+    cy.visit("http://localhost:4000")
+    cy.get("#signIn-button").click()
+    cy.contains("Sign In")
+    cy.get("#username").type("TestUsername")
+    cy.get("#name").type("ABC")
+    cy.get("#password").type("Salainen")
+    cy.get("#submit-button").click()
+  })
 })
 
 describe("Login", function() {

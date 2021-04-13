@@ -9,7 +9,11 @@ const useLogin = (setToken, setNotification) => {
   console.log("history", history)
   const [ signInMutation] = useMutation(SIGN_IN, {
     onError: (error) => {
-      setNotification({ message: error.graphQLErrors[0].message })
+      let message = error.graphQLErrors[0].message
+      if(message.startsWith("User validation failed: username: Error, expected `username` to be unique")){
+        message = "Username needs to be unique"
+      }
+      setNotification({ message, error: true })
       setTimeout(() => {
         setNotification(null)
       }, 5000)
