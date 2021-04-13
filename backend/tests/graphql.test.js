@@ -90,12 +90,9 @@ describe("joining group", () => {
 
 describe("adding event", () => {
   beforeAll(async () => {
-    await User.deleteMany({})
-    await Event.deleteMany({})
-    await Group.deleteMany({})
+    await helper.erase()
     const user = await helper.createUser()
-    const group = new Group({ name: helper.groupObject.name , users: [user._id] })
-    await group.save()
+    await helper.createGroup([user._id])
   })
   test("can't add event if not logged in", async () => {
 
@@ -107,10 +104,8 @@ describe("adding event", () => {
   test("can add event if logged in", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const events = await mutate( ADD_EVENT)
-    console.log(events)
     expect(events.data.addEvent.name).toBe(helper.eventObject.name)
-    console.log(events.data.addEvent.dates)
-    expect(events.data.addEvent.dates[0].date).toEqual(helper.eventObject.dates[0])
+    expect(events.data.addEvent.dates[0].date).toEqual(helper.eventObject.dates[0].date)
     const user = await User.findOne({ username: helper.userObject.username })
     const group = await Group.findOne({ name: helper.groupObject.name })
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
@@ -157,9 +152,8 @@ describe("when event has already been voted on", () => {
   beforeAll(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    const group = new Group({ name: helper.groupObject.name, users: [user._id] })
+    const group = await helper.createGroup([user._id])
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
-    await group.save()
     await event.save()
   })
   test("can change vote", async () => {
@@ -181,9 +175,8 @@ describe("multiple voters", () => {
     await helper.erase()
     const user = await helper.createUser()
     const secondUser = await helper.createSecondUser()
-    const group = new Group({ name: helper.groupObject.name, users: [user._id, secondUser] })
+    const group = await helper.createGroup([user._id, secondUser._id])
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: "SecondTestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
-    await group.save()
     await event.save()
   })
 

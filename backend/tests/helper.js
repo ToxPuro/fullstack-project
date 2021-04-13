@@ -8,7 +8,7 @@ const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0O
 const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [] }
 const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
-const eventObject = { name: "TestiName", group: "TestGroup", dates: [ "TestiDate" ] }
+const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: "TestiDate", votes: [] } ] }
 
 const login = async (setOptions, mutate, username, password) => {
   const token = await mutate(LOGIN, { variables: { username, password } })
