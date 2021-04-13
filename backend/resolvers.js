@@ -126,6 +126,7 @@ const resolvers = {
       const group = await Group.findById(args.id)
       group.users = group.users.concat(currentUser)
       currentUser.groups = currentUser.groups.concat(group._id)
+      currentUser.events = currentUser.events.concat(group.events)
       await currentUser.save()
       return group.save()
     },
