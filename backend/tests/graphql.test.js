@@ -96,7 +96,18 @@ describe("adding event", () => {
     expect(events.data.addEvent.group).toStrictEqual(group._id.toString())
 
   })
+})
 
+describe("querying events", () => {
+  beforeAll(async () => {
+    await helper.erase()
+    const user = new User(helper.userObject)
+    const group = new Group({ name: helper.groupObject.name, users: [user] })
+    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiString", votes: [] }] })
+    await user.save()
+    await group.save()
+    await event.save()
+  })
   test("can get users events", async () => {
     await helper.login(setOptions, mutate)
     const events = await query(USER_EVENTS)
@@ -106,9 +117,8 @@ describe("adding event", () => {
   test("can get event with id", async() => {
     const eventInDB = await Event.findOne({ name: helper.eventObject.name })
     const event = await query(GET_EVENT, { variables: { id: eventInDB._id.toString() } })
-    expect(event.data.event).toBeDefined()
+    expect(event.data.event.name).toBe(helper.eventObject.name)
   })
-
   test("can vote event", async() => {
     const eventInDB = await Event.findOne({ name: helper.eventObject.name })
     console.log(eventInDB)
@@ -121,6 +131,12 @@ describe("adding event", () => {
     expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "red" }])
   })
 })
+
+
+
+
+
+
 
 
 afterAll(() => {
