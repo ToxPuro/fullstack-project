@@ -112,7 +112,7 @@ const CalendarDate = ({ formattedDate, day, monthStart,setDates, dates }) => {
   }
   return(
     <div
-      id={`date/${formattedDate}`}
+      id={`dates-${formattedDate}`}
       className={className}
       key={day}
       onClick = {() => onDateClick(day)}

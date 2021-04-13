@@ -110,6 +110,16 @@ describe("Login", function() {
       cy.get("#submit-button").click()
       cy.contains("pick possible dates")
     })
+
+    it("can add event if dates are picked", function () {
+      cy.get("#addEvent-button").click()
+      cy.contains("New Event")
+      cy.get("#name").type("EventTestName")
+      cy.get("#dates-14").click()
+      cy.get("#dates-15").click()
+      cy.get("#group-options").type("TestGroup{enter}")
+      cy.get("#submit-button").click()
+    })
   })
 })
 

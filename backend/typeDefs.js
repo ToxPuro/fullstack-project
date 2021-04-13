@@ -14,6 +14,7 @@ type User {
   username: String!
   id: ID!
   events: [Event]
+  groups: [Group]
 }
 
 type Token {

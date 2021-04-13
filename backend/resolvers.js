@@ -203,6 +203,12 @@ const resolvers = {
       return event
     }
   },
+  User: {
+    groups: (root) => {
+      console.log(root)
+      return Group.find({ users: root._id }).populate("users")
+    }
+  }
 }
 
 module.exports = resolvers
