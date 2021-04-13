@@ -164,7 +164,7 @@ describe("multiple voters", () => {
     const user = new User(helper.userObject)
     const secondUser = new User(helper.secondUserObject)
     const group = new Group({ name: helper.groupObject.name, users: [user, secondUser] })
-    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
+    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: "SecondTestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
     await user.save()
     await secondUser.save()
     await group.save()
@@ -175,6 +175,8 @@ describe("multiple voters", () => {
     const eventInDB = await Event.findOne({ name: helper.eventObject.name })
     console.log(eventInDB)
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "green" }, { date: "SecondTestiDate", vote: "red" }] } })
+    expect(result.data.voteEvent.status).toBe("done")
 
   })
 })
