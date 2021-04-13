@@ -67,13 +67,12 @@ describe("adding group", () => {
 describe("joining group", () => {
   beforeAll(async () => {
     await helper.erase()
-    const user = new User(helper.userObject)
+    const user = await helper.createUser()
     const secondUser = new User(helper.secondUserObject)
-    const group = new Group({ name: helper.groupObject.name, users: [user], events: [] })
+    const group = new Group({ name: helper.groupObject.name, users: [user._id], events: [] })
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
     await event.save()
     group.events = [event._id]
-    await user.save()
     await secondUser.save()
     await group.save()
   })
@@ -95,9 +94,8 @@ describe("adding event", () => {
     await User.deleteMany({})
     await Event.deleteMany({})
     await Group.deleteMany({})
-    const user = new User(helper.userObject)
-    const group = new Group({ name: helper.groupObject.name , users: [user] })
-    await user.save()
+    const user = await helper.createUser()
+    const group = new Group({ name: helper.groupObject.name , users: [user._id] })
     await group.save()
   })
   test("can't add event if not logged in", async () => {
@@ -125,10 +123,9 @@ describe("adding event", () => {
 describe("when there is event", () => {
   beforeAll(async () => {
     await helper.erase()
-    const user = new User(helper.userObject)
-    const group = new Group({ name: helper.groupObject.name, users: [user] })
+    const user = await helper.createUser()
+    const group = new Group({ name: helper.groupObject.name, users: [user._id] })
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
-    await user.save()
     await group.save()
     await event.save()
   })
@@ -160,10 +157,9 @@ describe("when there is event", () => {
 describe("when event has already been voted on", () => {
   beforeAll(async () => {
     await helper.erase()
-    const user = new User(helper.userObject)
-    const group = new Group({ name: helper.groupObject.name, users: [user] })
+    const user = await helper.createUser()
+    const group = new Group({ name: helper.groupObject.name, users: [user._id] })
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
-    await user.save()
     await group.save()
     await event.save()
   })
@@ -184,11 +180,10 @@ describe("when event has already been voted on", () => {
 describe("multiple voters", () => {
   beforeEach(async () => {
     await helper.erase()
-    const user = new User(helper.userObject)
+    const user = helper.createUser()
     const secondUser = new User(helper.secondUserObject)
-    const group = new Group({ name: helper.groupObject.name, users: [user, secondUser] })
+    const group = new Group({ name: helper.groupObject.name, users: [user._id, secondUser] })
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: "SecondTestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
-    await user.save()
     await secondUser.save()
     await group.save()
     await event.save()
