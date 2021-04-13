@@ -219,6 +219,10 @@ main {
   background-color: darkred;
 }
 
+.calendar .body .default {
+  background-color: white;
+}
+
 .calendar .body .cell .bg {
   font-weight: 700;
   line-height: 1;

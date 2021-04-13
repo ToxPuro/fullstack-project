@@ -103,7 +103,7 @@ const CalendarDate = ({ formattedDate, day, monthStart,setDates, dates }) => {
     setDates(dates.concat(dateFns.format(day, "DDD")))
   }
 
-  let className = "col cell"
+  let className = "col cell default"
   if(!dateFns.isSameMonth(day, monthStart)){
     className ="col cell disabled"
   }
