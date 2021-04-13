@@ -45,7 +45,13 @@ const createGroup = async (users) => {
   await group.save()
   return group
 }
+const createEvent = async (group) => {
+  const event = new Event({ name: eventObject.name, group: group, dates: eventObject.dates })
+  await event.save()
+  return event
+}
 
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup }
+
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent }

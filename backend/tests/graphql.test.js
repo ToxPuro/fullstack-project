@@ -70,8 +70,7 @@ describe("joining group", () => {
     const user = await helper.createUser()
     await helper.createSecondUser()
     const group = await helper.createGroup([user._id])
-    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [] }] })
-    await event.save()
+    const event = await helper.createEvent(group._id)
     group.events = [event._id]
     await group.save()
   })
