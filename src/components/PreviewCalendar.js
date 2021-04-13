@@ -107,7 +107,7 @@ const CalendarDate = ({ formattedDate, day, monthStart }) => {
   if(clicked){
     return(
       <div
-        className={"col cell clicked"}
+        className={"col cell green"}
         key={day}
         onClick = {() => onDateClick(day)}
       >
