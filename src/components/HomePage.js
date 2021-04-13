@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PreviewCalendar from "./PreviewCalendar"
 import Events from "./Events"
 import Button from "react-bootstrap/Button"
@@ -12,8 +12,11 @@ const HomePage = ({ logout }) => {
   if(user.data){
     console.log(user.data.me.events)
   }
-  console.log(user)
-
+  useEffect(() => {
+    if(user.error.message==="user needs to be logged in"){
+      logout()
+    }
+  },[user])
   if(!user.data){
     return(
       <div>

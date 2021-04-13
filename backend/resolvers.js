@@ -26,6 +26,10 @@ const resolvers = {
     },
     me: async (root, args, context) => {
       const currentUser =  context.currentUser
+      if(!currentUser){
+        console.log("user needs to be logged in")
+        throw new AuthenticationError("user needs to be logged in")
+      }
       await currentUser.populate("events").execPopulate()
       return currentUser
 

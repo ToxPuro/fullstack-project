@@ -2,6 +2,7 @@ import React from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import { ALL_GROUPS } from "../graphql/queries"
 import { JOIN_GROUP } from "../graphql/mutations"
+import { Link } from "react-router-dom"
 
 const JoinGroupElement = ({ group }) => {
   const [ join ] = useMutation(JOIN_GROUP)
@@ -23,6 +24,7 @@ const JoinGroup = () => {
       <ul>
         {groups.data ? groups.data.allGroups.map(group => (<JoinGroupElement key = {group.id} group={group}/>)) : null }
       </ul>
+      <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )
 }

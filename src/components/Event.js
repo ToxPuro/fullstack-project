@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { ME, EVENT } from "../graphql/queries"
 import EventCalendar from "./EventCalendar"
 import { VOTE_EVENT } from "../graphql/mutations"
+import { Link } from "react-router-dom"
 
 const Event = () => {
   const [ votes, setVotes ] = useState([])
@@ -42,6 +43,7 @@ const Event = () => {
       {event.data.event.name}
       <EventCalendar dates = {event.data.event.dates.map(date => date.date)} setVotes={setVotes} votes={votes}/>
       <button onClick={() => vote({ variables: { id: event.data.event.id, votes } })}>Vote</button>
+      <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )
 }
