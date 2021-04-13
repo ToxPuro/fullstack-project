@@ -1,3 +1,4 @@
+import * as dateFns from "date-fns"
 describe("SignIn", function () {
   before(function (){
     cy.request("POST", "http://localhost:4000/testing/reset")
@@ -152,8 +153,10 @@ describe("when there are events", function () {
             Authorization: `bearer ${token}`
           }
         }).then(() => {
+          const date = new Date()
+          const formattedDate = dateFns.format(date, "DDD")
           const addEvent = `mutation{
-            addEvent(name: "EventTestName", group: "TestGroup", dates: []){name}
+            addEvent(name: "EventTestName", group: "TestGroup", dates: ["${formattedDate}"]){name}
           }`
           cy.request({
             method: "POST",
@@ -176,6 +179,8 @@ describe("when there are events", function () {
   it("Event View", function() {
     cy.contains("EventTestName").click()
     cy.contains("EventTestName")
+    const formattedDate = dateFns.format(new Date(), "d")
+    cy.get(`#dates-${formattedDate}`).should("have.css", "background-color", "rgb(0, 0, 255)")
   })
 
 })

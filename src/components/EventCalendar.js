@@ -133,8 +133,10 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
       setVotes(cloneVotes)
     }
   }
+  console.log(`dates-${formattedDate}`)
   return(
     <div onClick={() => onClick(vote)}
+      id={`dates-${formattedDate}`}
       className={`col cell ${vote}`}
       key={day}>
       <span className="number">{formattedDate}</span>
