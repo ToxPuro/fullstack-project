@@ -4,6 +4,7 @@ export const ME = gql`
 query{
   me{
     name
+    username
     events{
       name
       id
@@ -38,6 +39,10 @@ query event($id: ID!){
     id
     dates{
       date
+      votes{
+        voter
+        vote
+      }
     }
   }
 }`

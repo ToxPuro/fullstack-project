@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
 
@@ -98,12 +98,17 @@ const Cells = ({ month, dates, setVotes, votes }) => {
 }
 
 const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
-  const [vote, setVote] = useState("blue")
+  const [vote, setVote] = useState("")
+  const cloneVotes = [...votes]
+  const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
+  useEffect(() => {
+    if(cloneVotes[dayIndex]){
+      setVote(cloneVotes[dayIndex].vote)
+    }
+  }, [dayIndex])
   const onClick = (vote) => {
     if(vote==="blue"){
       setVote("green")
-      const cloneVotes = [...votes]
-      const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
       cloneVotes[dayIndex].vote = "green"
       console.log(day)
       console.log(dayIndex)
@@ -113,8 +118,6 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
     }
     else if(vote === "green"){
       setVote("red")
-      const cloneVotes = [...votes]
-      const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
       cloneVotes[dayIndex].vote = "red"
       console.log(day)
       console.log(dayIndex)
@@ -123,8 +126,6 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
     }
     else{
       setVote("blue")
-      const cloneVotes = [...votes]
-      const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
       cloneVotes[dayIndex].vote = "blue"
       console.log(day)
       console.log(dayIndex)
