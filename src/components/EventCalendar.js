@@ -97,16 +97,34 @@ const Cells = ({ month, dates }) => {
 
 }
 
+const ChoiceDate = ({ day, formattedDate }) => {
+  const [vote, setVote] = useState("blue")
+  const onClick = (vote) => {
+    if(vote==="blue"){
+      setVote("green")
+    }
+    else if(vote === "green"){
+      setVote("red")
+    }
+    else{
+      setVote("blue")
+    }
+  }
+  return(
+    <div onClick={() => onClick(vote)}
+      className={`col cell ${vote}`}
+      key={day}>
+      <span className="number">{formattedDate}</span>
+      <span className="bg">{formattedDate}</span>
+    </div>
+  )
+}
+
 const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
   if(dates.includes(dateFns.format(day, "DDD"))){
     return(
-      <div
-        className={"col cell clicked"}
-        key={day}
-      >
-        <span className="number">{formattedDate}</span>
-        <span className="bg">{formattedDate}</span>
-      </div>
+      <ChoiceDate/>
+
     )
   }
 

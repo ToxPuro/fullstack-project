@@ -7,6 +7,7 @@ import EventCalendar from "./EventCalendar"
 const Event = () => {
   const id = useParams().id
   const event = useQuery(EVENT, { variables: { id } })
+  console.log(event)
 
   if(!event.data){
     return(
@@ -19,7 +20,7 @@ const Event = () => {
   return(
     <div>
       {event.data.event.name}
-      <EventCalendar dates = {event.data.event.dates}/>
+      <EventCalendar dates = {event.data.event.dates.map(date => date.date)}/>
     </div>
   )
 }

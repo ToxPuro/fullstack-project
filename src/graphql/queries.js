@@ -36,7 +36,9 @@ query event($id: ID!){
   event(id: $id){
     name
     id
-    dates
+    dates{
+      date
+    }
   }
 }`
 
