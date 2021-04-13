@@ -13,6 +13,13 @@ const groupSchema = new mongoose.Schema({
       unique: true
     }
   ],
+  events: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event",
+      unique: true
+    }
+  ],
 })
 
 groupSchema.plugin(uniqueValidator)

@@ -83,9 +83,12 @@ describe("joining group", () => {
   test("can join group", async () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
     const group = await Group.findOne({ name: helper.groupObject.name })
+    console.log("group events", group.events)
     await mutate(JOIN_GROUP, { variables: { id: group._id.toString() } })
     const userINDB = await User.findOne({ username: helper.secondUserObject.username } )
+    const event = await Event.findOne({ name: helper.eventObject.name })
     expect(userINDB.groups).toContainEqual(group._id)
+    expect(userINDB.events).toContainEqual(event._id)
 
   })
 })
