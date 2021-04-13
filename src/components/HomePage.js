@@ -13,11 +13,20 @@ const HomePage = ({ logout }) => {
     console.log(user.data.me.events)
   }
   console.log(user)
+
+  if(!user.data){
+    return(
+      <div>
+        loading...
+      </div>
+    )
+  }
+
   return(
     <div>
-      {user.data ? <h2>Hello {user.data.me.name} </h2>: null}
-      { user.data ? <PreviewCalendar events={user.data.me.events} /> : null }
-      {user.data ? <Events events={user.data.me.events}/> : null }
+      <h2>Hello {user.data.me.name} </h2>
+      <PreviewCalendar events={user.data.me.events} />
+      <Events events={user.data.me.events}/>
       <Button id="addEvent-button"><Link to="/addevent">add event</Link></Button>
       <button id="logout-button"onClick={logout}>Log Out</button>
       <button id="addGroup-button"><Link to="/addGroup">add group</Link></button>
