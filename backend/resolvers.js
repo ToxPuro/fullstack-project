@@ -141,16 +141,21 @@ const resolvers = {
       const getVotes = (date) => {
         const votes = date.votes.reduce((object, vote) => {
           console.log(vote.vote)
-          object[vote.vote] = object[vote.vote] || 0
           object[vote.vote] += 1
           return object
-        }, {})
+        }, {
+          red: 0,
+          blue: 0,
+          green: 0
+        })
         return votes
       }
 
       const compareDates = (a, b) => {
         const aVotes = getVotes(a)
         const bVotes = getVotes(b)
+        console.log("aVotes", aVotes)
+        console.log("bVotes", bVotes)
         if(bVotes.red>aVotes.red){
           return -1
         }
@@ -179,6 +184,11 @@ const resolvers = {
           event.status = "done"
           event.finalDate = copyDates[0].date
         }else{
+          console.log("picking date")
+          console.log("first date")
+          console.log(copyDates[0])
+          console.log("second date")
+          console.log(copyDates[1])
           console.log(compareDates(copyDates[0], copyDates[1]))
           if(compareDates(copyDates[0], copyDates[1])=== -1){
             console.log("found best one")
