@@ -20,7 +20,7 @@ import useLogin from "./hooks/useLogin"
 const App = () => {
   const [ notification, setNotification ] = useState(null)
   const [token, setToken] = useState(localStorage.getItem("user-token"))
-  const { logout } = useLogin(setToken)
+  const { logout, login } = useLogin(setToken, setNotification)
 
 
 
@@ -45,10 +45,10 @@ const App = () => {
             { token ? <AddGroup/> : <Redirect to="/login"/> }
           </Route>
           <Route path="/SignIn">
-            <SignIn setToken= {setToken}/>
+            <SignIn login = {login}/>
           </Route>
           <Route path="/login">
-            <Login setToken = {setToken} />
+            <Login login = {login} />
           </Route>
           <Route path="/events/:id">
             {token ? <Event/> : <Redirect to="/login"/> }

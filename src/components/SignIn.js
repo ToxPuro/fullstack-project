@@ -2,10 +2,8 @@ import React from "react"
 import { Formik } from "formik"
 import { useMutation } from "@apollo/client"
 import { SIGN_IN } from "../graphql/mutations"
-import useLogin from "../hooks/useLogin"
 
-const SignIn = ({ setToken }) => {
-  const { login } = useLogin(setToken)
+const SignIn = ({ login }) => {
   const onSubmit = async ({ username, name, password }, { resetForm }) => {
     await signIn({ variables: { username, name,  password } })
     await login({ username, password })

@@ -1,10 +1,8 @@
 import { Formik } from "formik"
 import { Link } from "react-router-dom"
-import useLogin from "../hooks/useLogin"
 import React from "react"
 
-const Login = ({ setToken }) => {
-  const { login } = useLogin(setToken)
+const Login = ({ login }) => {
   return(
     <div>
       <h1>Login</h1>

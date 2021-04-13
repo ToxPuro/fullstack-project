@@ -3,21 +3,27 @@ import { LOGIN } from "../graphql/mutations"
 import { useHistory } from "react-router-dom"
 
 
-const useLogin = (setToken) => {
+const useLogin = (setToken, setNotification) => {
   const client = useApolloClient()
   const history = useHistory()
   const [ loginMutation ] = useMutation(LOGIN, {
     onError: (error) => {
-      console.log(error)
+      setNotification({ message: error.graphQLErrors[0].message, error: true })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     }
   })
 
   const login = async ({ username, password }) => {
     console.log(username, password)
     const result = await loginMutation({ variables: { username, password } })
-    setToken(result.data.login.value)
-    localStorage.setItem("user-token", result.data.login.value)
-    history.push("/")
+    if(result.data.login.value){
+      setToken(result.data.login.value)
+      localStorage.setItem("user-token", result.data.login.value)
+      history.push("/")
+    }
+
   }
 
   const logout =  () => {
