@@ -177,6 +177,10 @@ describe("multiple voters", () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
     const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: "TestiDate", vote: "green" }, { date: "SecondTestiDate", vote: "red" }] } })
     expect(result.data.voteEvent.status).toBe("done")
+    const eventInDBBack = await Event.findOne({ name: helper.eventObject.name })
+    expect(eventInDBBack.status).toBe("done")
+
+
 
   })
 })
