@@ -124,6 +124,9 @@ const resolvers = {
           throw new AuthenticationError("user needs to be logged in")
         }
         const event = await Event.findById(args.id)
+        if(event.status !== "picking"){
+          throw new Error("event is not in picking state")
+        }
         const dates = event.dates
         args.votes.forEach(vote => {
           const dateIndex = dates.findIndex(date => date.date === vote.date)
@@ -145,27 +148,39 @@ const resolvers = {
           return votes
         }
 
+        const compareDates = (a, b) => {
+          const aVotes = getVotes(a)
+          const bVotes = getVotes(b)
+          if(bVotes.red>aVotes.red){
+            return -1
+          }
+          if(aVotes.red>bVotes.red){
+            return 1
+          }
+          if(bVotes.green > aVotes.green){
+            return 1
+          }
+          if(aVotes.green > bVotes.green){
+            return 1
+          }
+          return 0
+        }
+
         event.dates = dates
         await event.populate("group").execPopulate()
         const userCount = event.group.users.length
         if(userCount === event.dates[0].votes.length){
           const copyDates = [...dates]
           copyDates.sort((a,b) => {
-            const aVotes = getVotes(a)
-            const bVotes = getVotes(b)
-            if(bVotes.red>aVotes.red){
-              return -1
-            }
-            if(aVotes.red>bVotes.red){
-              return 1
-            }
-            if(bVotes.green > aVotes.green){
-              return 1
-            }
-            return -1
+            return compareDates(a,b)
           })
-          console.log(copyDates)
-          event.status = "done"
+          if(copyDates.length === 1){
+            event.status = "done"
+          }else{
+            if(compareDates(copyDates[0], copyDates[1])=== -1){
+              event.status = "done"
+            }
+          }
         }
         await event.save()
         return event
