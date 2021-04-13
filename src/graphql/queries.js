@@ -8,6 +8,8 @@ query{
     events{
       name
       id
+      status
+      finalDate
     }
   }
 }`

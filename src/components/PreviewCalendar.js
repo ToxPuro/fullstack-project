@@ -2,15 +2,16 @@ import React, { useState } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
 
-const PreviewCalendar = () => {
-
-
+const PreviewCalendar = ({ events }) => {
+  console.log(events)
+  const dates = events.filter(event => event.status === "done").map(event => ({ date: event.finalDate, name: event.name }))
+  console.log(dates)
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
       <Header month={month} setMonth={setMonth}/>
       <Days month={month}/>
-      <Cells month={month}/>
+      <Cells month={month} dates={dates}/>
     </div>
   )
 }
@@ -59,7 +60,7 @@ const Days = ({ month }) => {
   )
 }
 
-const Cells = ({ month }) => {
+const Cells = ({ month, dates }) => {
 
   const monthStart = dateFns.startOfMonth(month)
   const monthEnd = dateFns.endOfMonth(monthStart)
@@ -78,7 +79,7 @@ const Cells = ({ month }) => {
       formattedDate = dateFns.format(day, dateFormat)
       const cloneDay = day
       days.push(
-        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart}/>
+        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} dates={dates}/>
       )
       day = dateFns.addDays(day, 1)
     }
@@ -96,34 +97,19 @@ const Cells = ({ month }) => {
 
 }
 
-const CalendarDate = ({ formattedDate, day, monthStart }) => {
-
-  const [ clicked, setClicked ] = useState(false)
-
-  const onDateClick = () => {
-    setClicked(!clicked)
-  }
-
-  if(clicked){
-    return(
-      <div
-        className={"col cell green"}
-        key={day}
-        onClick = {() => onDateClick(day)}
-      >
-        <span className="number">{formattedDate}</span>
-        <span className="bg">{formattedDate}</span>
-      </div>
-    )
-  }
+const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
+  const event = dates.find(date => date.date === dateFns.format(day, "DDD"))
+  console.log(event)
   return(
     <div
       className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : ""}`}
       key={day}
-      onClick = {() => onDateClick()}
     >
       <span className="number">{formattedDate}</span>
       <span className="bg">{formattedDate}</span>
+      <div>
+        {event ? event.name : null}
+      </div>
     </div>
   )
 }

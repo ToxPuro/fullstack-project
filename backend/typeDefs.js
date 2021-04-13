@@ -7,6 +7,7 @@ type Event {
   dates: [Date!]!
   id: ID!
   status: String!
+  finalDate: String
 }
 type User {
   name: String!
