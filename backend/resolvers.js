@@ -4,6 +4,7 @@ const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
 const { UserInputError, AuthenticationError, ForbiddenError } = require("apollo-server-express")
+const { useEffect } = require("react")
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -29,12 +30,13 @@ const resolvers = {
       return currentUser
 
     },
-    userGroups: (root, args, context) => {
+    userGroups: async (root, args, context) => {
       const currentUser = context.currentUser
       if(!currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
-      return Group.find({ users: currentUser._id }).populate("users")
+      await currentUser.populate("groups").execPopulate()
+      return currentUser.groups
     },
     userEvents: async (root, args, context) => {
       const currentUser = context.currentUser
@@ -59,7 +61,8 @@ const resolvers = {
         username,
         name,
         passwordHash,
-        events: []
+        events: [],
+        groups: []
       })
       return user.save()
         .catch(error => {
@@ -95,15 +98,22 @@ const resolvers = {
       return event.save()
     },
     createGroup: async(root, args, context) => {
+      console.log("currenUser", context.currentUser)
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
-      const users = await User.find({ username: { $in: args.users } })
-      console.log(users)
+      let users = await User.find({ username: { $in: args.users } })
+      users = users.concat(context.currentUser)
+      console.log("users", users)
+      const usersID = users.map(user => user._id)
       if(users.length < args.users.length){
         throw new UserInputError("Couldn't find any users with given usernames")
       }
-      const group = new Group({ name: args.name, users: [...users, context.currentUser._id], events: [] })
+      const group = new Group({ name: args.name, users: [usersID], events: [] })
+      for(const i in users){
+        users[i].groups = users[i].groups.concat(group._id)
+        await users[i].save()
+      }
       await group.save()
       await group.populate("users").execPopulate()
       return group
@@ -115,6 +125,8 @@ const resolvers = {
       }
       const group = await Group.findById(args.id)
       group.users = group.users.concat(currentUser)
+      currentUser.group = currentUser.group.concat(group)
+      await currentUser.save()
       return group.save()
     },
     voteEvent: async (root, args, context ) => {

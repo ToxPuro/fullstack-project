@@ -22,7 +22,14 @@ const userSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event"
     }
-  ]
+  ],
+  groups:{
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group"
+    }],
+    default: []
+  }
 })
 
 userSchema.plugin(uniqueValidator)

@@ -60,6 +60,7 @@ describe("adding group", () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
 
     const groups = await query(USER_GROUPS)
+    console.log(groups)
 
     expect(groups.data.userGroups[0].name).toBe(helper.groupObject.name)
   })
