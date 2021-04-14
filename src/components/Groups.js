@@ -4,7 +4,7 @@ import { USER_GROUPS } from "../graphql/queries"
 import { Link } from "react-router-dom"
 const Groups = () => {
   const groups = useQuery(USER_GROUPS)
-  const displayGroups = groups.data ? groups.data.userGroups.map(group => (<li key={group.name}><Link to ={`/groups/${group.id}`}>{group.name}</Link></li>)) : []
+  const displayGroups = groups.data ? groups.data.me.groups.map(group => (<li key={group.name}><Link to ={`/groups/${group.id}`}>{group.name}</Link></li>)) : []
   if(displayGroups.length === 0 && groups.data){
     return(
       <div>

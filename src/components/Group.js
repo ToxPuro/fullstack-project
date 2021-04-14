@@ -7,11 +7,20 @@ import Users from "./Users"
 const Group = () => {
   const id= useParams().id
   const group = useQuery(GET_GROUP, { variables: { id } })
-  console.log(group.data)
+  if(!group.data){
+    return(
+      <div>
+        ...loading
+      </div>
+    )
+  }
   return(
     <div>
-      {group.data ? group.data.group.name : null}
-      {group.data ? <Users users = {group.data.group.users}/> : null}
+      <span>
+        { group.data.group.name }
+        <button>leave</button>
+      </span>
+      <Users users = {group.data.group.users}/>
     </div>
   )
 }
