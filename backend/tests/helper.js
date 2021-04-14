@@ -62,6 +62,9 @@ const createEvent = async (group) => {
   const event = new Event({ name: eventObject.name, group: group, dates: eventObject.dates })
   await event.save()
   await group.updateOne({ $addToSet: { events: event } })
+  for(const user in group.users){
+    await group.users[user].updateOne({ $addToSet: { events: event } })
+  }
   return event
 }
 

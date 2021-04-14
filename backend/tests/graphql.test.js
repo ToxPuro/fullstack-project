@@ -110,7 +110,8 @@ describe("when there is event", () => {
   test("can get users events", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const events = await query(USER_EVENTS)
-    expect(events.data.userEvents).toBeDefined()
+    console.log(events)
+    expect(events.data.me.events[0].name).toBe(helper.eventObject.name)
   })
 
   test("can get event with id", async() => {

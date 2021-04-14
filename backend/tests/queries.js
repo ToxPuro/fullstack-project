@@ -31,7 +31,11 @@ query{
 
 const USER_EVENTS = gql`
 query{
-  userEvents{name}
+  me{
+    events{
+      name
+    }
+  }
 }`
 
 const GET_EVENT = gql`
