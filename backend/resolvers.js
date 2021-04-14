@@ -135,11 +135,11 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findById(args.id)
-      group.users = group.users.concat(currentUser)
-      currentUser.groups = currentUser.groups.concat(group._id)
-      currentUser.events = currentUser.events.concat(group.events)
+      await group.update({ $addToSet: { users: currentUser._id } })
+      await currentUser.update({ $addToSet: { groups: group._id } })
+      
       await currentUser.save()
-      return group.save()
+      return group
     },
     voteEvent: async (root, args, context ) => {
       console.log("voting")
