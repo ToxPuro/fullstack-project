@@ -47,3 +47,18 @@ Cypress.Commands.add("createUser", ({ username, name, password }) => {
 Cypress.Commands.add("resetDB", () => {
   cy.request("POST", "http://localhost:4000/testing/reset")
 })
+
+Cypress.Commands.add("createGroup", ({ name, users }) => {
+  const token = localStorage.getItem("user-token")
+  const addGroup = `mutation{
+    createGroup(name: "${name}", users: [${users}]){name}
+  }`
+  cy.request({
+    method: "POST",
+    url: "http://localhost:4000/graphql",
+    body: { query: addGroup },
+    headers: {
+      Authorization: `bearer ${token}`
+    }
+  })
+})

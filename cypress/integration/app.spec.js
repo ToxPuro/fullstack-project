@@ -32,6 +32,7 @@ describe("SignIn", function () {
 describe("Login", function() {
 
   beforeEach(function() {
+    cy.resetDB()
     cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" })
   })
 
@@ -56,26 +57,12 @@ describe("Login", function() {
 
 })
 
-describe("when logged in", function () {
+describe("When logged in", function () {
   beforeEach(function() {
     cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" }).then(() => {
       cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
-        const token = localStorage.getItem("user-token")
-        const addGroup = `mutation{
-        createGroup(name: "TestGroup", users: []){name}
-      }`
-        cy.request({
-          method: "POST",
-          url: "http://localhost:4000/graphql",
-          body: { query: addGroup },
-          headers: {
-            Authorization: `bearer ${token}`
-          }
-        }).then((res) => {
-          cy.log(JSON.stringify(res))
-        })
+        cy.createGroup({ name: "TestGroup", users: [] })
       })
-
     })
   })
   it("user can logout", function () {
