@@ -35,3 +35,11 @@ Cypress.Commands.add("login", ({ username, password }) => {
       cy.visit("http://localhost:4000")
     })
 })
+
+
+Cypress.Commands.add("creatUser", ({ username, name, password }) => {
+  const mutation = `mutation{
+    createUser(username: "${username}", name: "${name}" password: "${password}"){id}
+  }`
+  cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
+})
