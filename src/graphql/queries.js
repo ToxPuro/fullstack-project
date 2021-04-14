@@ -23,7 +23,12 @@ query{
 
 export const USER_GROUPS = gql`
 query{
-  userGroups{name id}
+  me{
+    groups{
+      name
+      id
+    }
+  }
 }`
 
 export const USER_EVENTS = gql`

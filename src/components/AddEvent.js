@@ -15,7 +15,7 @@ const AddEvent = ({ setNotification }) => {
   const groups = useQuery(USER_GROUPS)
   let options = []
   if(groups.data){
-    options = groups.data.userGroups.map(group => (
+    options = groups.data.me.groups.map(group => (
       { value: group.name, label: group.name }
     ))
   }
