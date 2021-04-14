@@ -1,6 +1,6 @@
 import * as dateFns from "date-fns"
 describe("SignIn", function () {
-  before(function (){
+  beforeEach(function (){
     cy.resetDB()
     cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" })
   })
@@ -31,7 +31,7 @@ describe("SignIn", function () {
 
 describe("Login", function() {
 
-  before( function() {
+  beforeEach(function() {
     cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" })
   })
 
@@ -54,61 +54,58 @@ describe("Login", function() {
     cy.contains("wrong credentials")
   })
 
-  describe("when logged in", function () {
-    before(function() {
-      cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" }).then(() => {
-        cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
-          const token = localStorage.getItem("user-token")
-          const addGroup = `mutation{
-          createGroup(name: "TestGroup", users: []){name}
-        }`
-          cy.request({
-            method: "POST",
-            url: "http://localhost:4000/graphql",
-            body: { query: addGroup },
-            headers: {
-              Authorization: `bearer ${token}`
-            }
-          }).then((res) => {
-            cy.log(JSON.stringify(res))
-          })
+})
+
+describe("when logged in", function () {
+  beforeEach(function() {
+    cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" }).then(() => {
+      cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
+        const token = localStorage.getItem("user-token")
+        const addGroup = `mutation{
+        createGroup(name: "TestGroup", users: []){name}
+      }`
+        cy.request({
+          method: "POST",
+          url: "http://localhost:4000/graphql",
+          body: { query: addGroup },
+          headers: {
+            Authorization: `bearer ${token}`
+          }
+        }).then((res) => {
+          cy.log(JSON.stringify(res))
         })
-
       })
-    })
 
-    beforeEach(function() {
-      cy.login({ username: "TestUsername", password: "salainen" })
     })
-    it("user can logout", function () {
-      cy.get("#logout-button").click()
-      cy.contains("Login")
-    })
+  })
+  it("user can logout", function () {
+    cy.get("#logout-button").click()
+    cy.contains("Login")
+  })
 
-    it("can't add event if no dates are picked", function () {
-      cy.get("#addEvent-button").click()
-      cy.contains("New Event")
-      cy.get("#name").type("EventTestName")
-      cy.get("#group-options").type("TestGroup{enter}")
-      cy.get("#submit-button").click()
-      cy.contains("pick possible dates")
-    })
+  it("can't add event if no dates are picked", function () {
+    cy.get("#addEvent-button").click()
+    cy.contains("New Event")
+    cy.get("#name").type("EventTestName")
+    cy.get("#group-options").type("TestGroup{enter}")
+    cy.get("#submit-button").click()
+    cy.contains("pick possible dates")
+  })
 
-    it("can add event if dates are picked", function () {
-      cy.get("#addEvent-button").click()
-      cy.contains("New Event")
-      cy.get("#name").type("EventTestName")
-      cy.get("#dates-14").should("have.css", "background-color", "rgb(255, 255, 255)" )
-      cy.get("#dates-14").click()
-      cy.get("#dates-14").should("have.css", "background-color", "rgb(127, 255, 0)" )
-      cy.get("#dates-15").should("have.css", "background-color", "rgb(255, 255, 255)" )
-      cy.get("#dates-15").click()
-      cy.get("#dates-15").should("have.css", "background-color", "rgb(127, 255, 0)" )
-      cy.get("#group-options").type("TestGroup{enter}")
-      cy.get("#submit-button").click()
-      cy.get("#homepage-button").click()
-      cy.contains("EventTestName")
-    })
+  it("can add event if dates are picked", function () {
+    cy.get("#addEvent-button").click()
+    cy.contains("New Event")
+    cy.get("#name").type("EventTestName")
+    cy.get("#dates-14").should("have.css", "background-color", "rgb(255, 255, 255)" )
+    cy.get("#dates-14").click()
+    cy.get("#dates-14").should("have.css", "background-color", "rgb(127, 255, 0)" )
+    cy.get("#dates-15").should("have.css", "background-color", "rgb(255, 255, 255)" )
+    cy.get("#dates-15").click()
+    cy.get("#dates-15").should("have.css", "background-color", "rgb(127, 255, 0)" )
+    cy.get("#group-options").type("TestGroup{enter}")
+    cy.get("#submit-button").click()
+    cy.get("#homepage-button").click()
+    cy.contains("EventTestName")
   })
 })
 
