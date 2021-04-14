@@ -109,21 +109,18 @@ const resolvers = {
       return event.save()
     },
     createGroup: async(root, args, context) => {
-      console.log("currenUser", context.currentUser)
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
       let users = await User.find({ username: { $in: args.users } })
       users = users.concat(context.currentUser)
-      console.log("users", users)
       const usersID = users.map(user => user._id)
       if(users.length < args.users.length){
         throw new UserInputError("Couldn't find any users with given usernames")
       }
       const group = new Group({ name: args.name, users: [usersID], events: [] })
       for(const i in users){
-        users[i].groups = users[i].groups.concat(group._id)
-        await users[i].save()
+        await users[i].update({ $addToSet: { groups: group._id } })
       }
       await group.save()
       await group.populate("users").execPopulate()
@@ -136,9 +133,7 @@ const resolvers = {
       }
       const group = await Group.findById(args.id)
       await group.update({ $addToSet: { users: currentUser._id } })
-      await currentUser.update({ $addToSet: { groups: group._id } })
-      
-      await currentUser.save()
+      await currentUser.update({ $addToSet: { groups: group._id, events: group.events } })
       return group
     },
     voteEvent: async (root, args, context ) => {
