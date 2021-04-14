@@ -105,7 +105,7 @@ const resolvers = {
       const group = await Group.findOne({ name: args.group })
       const dates = args.dates.map(date => ( { date: date, votes: []  } ))
       const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
-      await User.updateMany({ _id:{ $in: group.users  } }, { $push: { events: event } })
+      await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
       return event.save()
     },
     createGroup: async(root, args, context) => {
@@ -120,7 +120,7 @@ const resolvers = {
       }
       const group = new Group({ name: args.name, users: [usersID], events: [] })
       for(const i in users){
-        await users[i].update({ $addToSet: { groups: group._id } })
+        await users[i].updateOne({ $addToSet: { groups: group._id } })
       }
       await group.save()
       await group.populate("users").execPopulate()
@@ -132,8 +132,8 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findById(args.id)
-      await group.update({ $addToSet: { users: currentUser._id } })
-      await currentUser.update({ $addToSet: { groups: group._id, events: group.events } })
+      await group.updateOne({ $addToSet: { users: currentUser._id } })
+      await currentUser.updateOne({ $addToSet: { groups: group._id, events: group.events } })
       return group
     },
     voteEvent: async (root, args, context ) => {
