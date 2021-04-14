@@ -15,6 +15,7 @@ type User {
   id: ID!
   events: [Event]
   groups: [Group]
+  groupsUserNotIn: [Group]
 }
 
 type Token {
@@ -45,8 +46,6 @@ type Group {
 type Query {
   allEvents: [Event]!
   me: User
-  userGroups: [Group]!
-  userEvents: [Event]!
   event(id: ID!): Event! 
   group(id: ID!): Group!
   user(username: String!): User!

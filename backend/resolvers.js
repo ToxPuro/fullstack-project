@@ -214,7 +214,10 @@ const resolvers = {
     events: async (root) => {
       await root.populate("events").execPopulate()
       return root.events
-    }
+    },
+    groupsUserNotIn: (root) => {
+      return Group.find({ users: { $not: { $all: [root._id] } } })
+    },
   }
 }
 
