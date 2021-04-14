@@ -58,8 +58,7 @@ describe("joining group", () => {
     const user = await helper.createUser()
     await helper.createSecondUser()
     const group = await helper.createGroup([user])
-    const event = await helper.createEvent(group._id)
-    group.events = [event._id]
+    await helper.createEvent(group)
     await group.save()
   })
   test("can join group", async () => {
@@ -106,7 +105,7 @@ describe("when there is event", () => {
     await helper.erase()
     const user = await helper.createUser()
     const group = await helper.createGroup([user])
-    await helper.createEvent(group._id)
+    await helper.createEvent(group)
   })
   test("can get users events", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
@@ -158,9 +157,7 @@ describe("when user is part of groups", () => {
   beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    const group = await helper.createGroup([user])
-    user.groups = [group._id]
-    await user.save()
+    await helper.createGroup([user])
     await helper.createSecondGroup()
   })
 

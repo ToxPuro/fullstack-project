@@ -52,12 +52,16 @@ const createGroup = async (users) => {
 
 const createSecondGroup = async (users) => {
   const group = new Group({ name: secondGroupObject.name, users: users, events: [] })
+  for(const i in users){
+    await users[i].updateOne({ $addToSet: { groups: group } })
+  }
   await group.save()
   return group
 }
 const createEvent = async (group) => {
   const event = new Event({ name: eventObject.name, group: group, dates: eventObject.dates })
   await event.save()
+  await group.updateOne({ $addToSet: {events: event } })
   return event
 }
 
