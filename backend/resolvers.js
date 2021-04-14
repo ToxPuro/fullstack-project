@@ -4,7 +4,6 @@ const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
 const { UserInputError, AuthenticationError, ForbiddenError } = require("apollo-server-express")
-const { useEffect } = require("react")
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -16,7 +15,7 @@ const resolvers = {
       return Group.find({})
     },
     user: (root, args) => {
-      return User.findById(args.id)
+      return User.findOne({ username: args.username })
     },
     group: (root, args) => {
       return Group.findById(args.id).populate("users")

@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom"
 import { GET_USER } from "../graphql/queries"
 
 const Event = () => {
-  const name = useParams().name
-  const user = useQuery(GET_USER, { variables: { name } })
+  const username = useParams().username
+  const user = useQuery(GET_USER, { variables: { username } })
 
   if(!user.data){
     return(

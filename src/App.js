@@ -41,7 +41,7 @@ const AppRouter = ({ setNotification }) => {
       <Route path="/joinGroup">
         {token ? <JoinGroup/> : <Redirect to="/login"/> }
       </Route>
-      <Route path="/users/:name">
+      <Route path="/users/:username">
         {token ? <User/>: <Redirect to="/login"/>}
       </Route>
       <Route path ="/groups/:id">
