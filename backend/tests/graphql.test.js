@@ -183,7 +183,10 @@ describe("when user is part of groups", () => {
     const groupInDB = await helper.groupInDB()
     const result = await mutate(LEAVE_GROUP, { variables: { id: groupInDB.id } })
     console.log(result)
-    expect(result.data.leaveGroup.users).toContainEqual(helper.userObject.name)
+    expect(result.data.leaveGroup.users).toStrictEqual([])
+    const userInDB = await helper.userInDB()
+    expect(userInDB.groups.length).toBe(0)
+    expect(userInDB.events.length).toBe(0)
   })
 })
 

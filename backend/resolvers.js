@@ -120,8 +120,10 @@ const resolvers = {
       try{
         console.log("currentUserid", currentUser._id)
         const group = await Group.findOneAndUpdate({ _id: args.id }, { $pullAll: { users: [currentUser._id] } }, { new: true } )
-        const groupEventIDs = group.events.map(event => event._id)
-        await currentUser.updateOne({ $pull: { groups: group._id, events: groupEventIDs } })
+        console.log("group events",group.events)
+        console.log("currentUserEvents", currentUser.events)
+        await currentUser.updateOne({ $pull: { groups: group._id } })
+        await currentUser.updateOne({ $pullAll: { events: [group.events] } })
         return group
       }catch(error){
         console.log(error)
