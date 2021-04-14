@@ -42,7 +42,7 @@ const Event = () => {
     <div>
       {event.data.event.name}
       <EventCalendar dates = {event.data.event.dates.map(date => date.date)} setVotes={setVotes} votes={votes}/>
-      <button onClick={() => vote({ variables: { id: event.data.event.id, votes } })}>Vote</button>
+      <button id="voting-button" onClick={() => vote({ variables: { id: event.data.event.id, votes } })}>Vote</button>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )

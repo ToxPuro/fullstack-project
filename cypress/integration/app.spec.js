@@ -146,11 +146,14 @@ describe("when there are events", function () {
     cy.contains("EventTestName").click()
     cy.contains("EventTestName")
     const formattedDate = dateFns.format(new Date(), "d")
-    cy.get(`#dates-${formattedDate}`).should("have.css", "background-color", "rgb(0, 0, 255)")
-    cy.get(`#dates-${formattedDate}`).click()
-    cy.get(`#dates-${formattedDate}`).should("have.css", "background-color", "rgb(127, 255, 0)")
-    cy.get(`#dates-${formattedDate}`).click()
-    cy.get(`#dates-${formattedDate}`).should("have.css", "background-color", "rgb(139, 0, 0)")
+    cy.get(`#dates-${formattedDate}`)
+      .should("have.css", "background-color", "rgb(0, 0, 255)")
+      .click()
+      .should("have.css", "background-color", "rgb(127, 255, 0)")
+      .click()
+      .should("have.css", "background-color", "rgb(139, 0, 0)")
+
+    cy.get("#voting-button").click()
 
 
   })
