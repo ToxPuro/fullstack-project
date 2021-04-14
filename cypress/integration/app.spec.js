@@ -183,34 +183,4 @@ describe("when there are events", function () {
     cy.get(`#dates-${formattedDate}`).should("have.css", "background-color", "rgb(0, 0, 255)")
   })
 
-  describe("when there are groups", () => {
-    before(function() {
-      cy.request("POST", "http://localhost:4000/testing/reset")
-
-      const mutation = `mutation{
-      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
-    }`
-      cy.request("POST", "http://localhost:4000/graphql",{ query: mutation }).then(() => {
-        cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
-          const token = localStorage.getItem("user-token")
-          const addGroup = `mutation{
-          createGroup(name: "TestGroup", users: []){name}
-        }`
-          cy.request({
-            method: "POST",
-            url: "http://localhost:4000/graphql",
-            body: { query: addGroup },
-            headers: {
-              Authorization: `bearer ${token}`
-            }
-          })
-        })
-      })
-    })
-
-    it("can join group", function() {
-      cy.contains("Hello ABC")
-    })
-
-  })
 })
