@@ -51,6 +51,7 @@ type Query {
   group(id: ID!): Group!
   user(username: String!): User!
   allGroups: [Group]!
+  groupsUserNotIn: [Group]!
 }
 
 

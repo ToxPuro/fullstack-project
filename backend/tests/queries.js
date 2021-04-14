@@ -46,7 +46,7 @@ mutation joinGroup($id: ID!){
 }`
 
 const GROUPS_THAT_USER_IS_NOT_IN = gql`
-mutation{
+query{
   groupsUserNotIn{name}
 }`
 

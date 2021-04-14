@@ -174,7 +174,7 @@ describe("when user is part of groups", () => {
   })
 
   test("can get groups that user is not part of", async () => {
-    await helper.login(setOptions, mutate, helper.secondUserObject, "salainen")
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     await query(GROUPS_THAT_USER_IS_NOT_IN)
 
   })
