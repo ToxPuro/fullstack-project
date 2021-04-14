@@ -37,7 +37,6 @@ const resolvers = {
         console.log("user needs to be logged in")
         throw new AuthenticationError("user needs to be logged in")
       }
-      await currentUser.populate("events").execPopulate()
       return currentUser
 
     },
@@ -227,6 +226,10 @@ const resolvers = {
       console.log(root)
       await root.populate("groups").execPopulate()
       return root.groups
+    },
+    events: async (root) => {
+      await root.populate("events").execPopulate()
+      return root.events
     }
   }
 }
