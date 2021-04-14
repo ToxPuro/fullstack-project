@@ -43,3 +43,7 @@ Cypress.Commands.add("createUser", ({ username, name, password }) => {
   }`
   cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
 })
+
+Cypress.Commands.add("resetDB", () => {
+  cy.request("POST", "http://localhost:4000/testing/reset")
+})

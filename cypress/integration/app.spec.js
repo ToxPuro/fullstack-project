@@ -1,6 +1,7 @@
 import * as dateFns from "date-fns"
 describe("SignIn", function () {
   before(function (){
+    cy.resetDB()
     cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" })
   })
   it("User can sign in with unique username", function() {
@@ -114,7 +115,7 @@ describe("Login", function() {
 describe("when there are events", function () {
   before(function() {
 
-    cy.request("POST", "http://localhost:4000/testing/reset")
+    cy.resetDB()
 
     const mutation = `mutation{
     createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
