@@ -43,6 +43,9 @@ const createSecondUser = async() => {
 
 const createGroup = async (users) => {
   const group = new Group({ name: groupObject.name, users: users, events: [] })
+  for(const i in users){
+    await users[i].updateOne({ $addToSet: { groups: group } })
+  }
   await group.save()
   return group
 }
@@ -71,7 +74,7 @@ const groupInDB = async () => {
 }
 
 const secondUserInDB = async () => {
-  return await User.findOne({ username: secondUserObject.username})
+  return await User.findOne({ username: secondUserObject.username })
 }
 
 
