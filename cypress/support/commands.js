@@ -37,7 +37,7 @@ Cypress.Commands.add("login", ({ username, password }) => {
 })
 
 
-Cypress.Commands.add("creatUser", ({ username, name, password }) => {
+Cypress.Commands.add("createUser", ({ username, name, password }) => {
   const mutation = `mutation{
     createUser(username: "${username}", name: "${name}" password: "${password}"){id}
   }`

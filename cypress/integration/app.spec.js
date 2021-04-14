@@ -1,12 +1,7 @@
 import * as dateFns from "date-fns"
 describe("SignIn", function () {
   before(function (){
-    cy.request("POST", "http://localhost:4000/testing/reset")
-    const mutation = `mutation{
-      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
-    }`
-
-    cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
+    cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" })
   })
   it("User can sign in with unique username", function() {
     cy.visit("http://localhost:4000")
@@ -36,14 +31,7 @@ describe("SignIn", function () {
 describe("Login", function() {
 
   before( function() {
-
-    cy.request("POST", "http://localhost:4000/testing/reset")
-
-    const mutation = `mutation{
-      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
-    }`
-
-    cy.request("POST", "http://localhost:4000/graphql",{ query: mutation })
+    cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" })
   })
 
   it("user can login with correct credentials", function() {
@@ -67,14 +55,7 @@ describe("Login", function() {
 
   describe("when logged in", function () {
     before(function() {
-
-      cy.request("POST", "http://localhost:4000/testing/reset")
-
-      const mutation = `mutation{
-      createUser(username: "TestUsername", name: "ABC" password: "salainen"){id}
-    }`
-
-      cy.request("POST", "http://localhost:4000/graphql",{ query: mutation }).then(() => {
+      cy.createUser({ username: "TestUsername", name: "ABC", password: "salainen" }).then(() => {
         cy.login({ username: "TestUsername", password: "salainen" }).then(() => {
           const token = localStorage.getItem("user-token")
           const addGroup = `mutation{
