@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button"
 import { Link } from "react-router-dom"
 import { useQuery } from "@apollo/client"
 import { ME } from "../graphql/queries"
+import Loader from "./Loader"
 
 
 const HomePage = ({ logout }) => {
@@ -22,9 +23,7 @@ const HomePage = ({ logout }) => {
   },[user])
   if(!user.data){
     return(
-      <div>
-        loading...
-      </div>
+      <Loader/>
     )
   }
 

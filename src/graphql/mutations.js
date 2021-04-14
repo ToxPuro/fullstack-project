@@ -30,5 +30,10 @@ mutation voteEvent($id: ID!, $votes: [VoteInput]!){
   voteEvent(id: $id, votes: $votes){dates{votes{voter vote}}}
 }`
 
+export const LEAVE_GROUP = gql`
+mutation leaveGroup($id: ID!){
+  leaveGroup(id: $id){name}
+}`
+
 
 

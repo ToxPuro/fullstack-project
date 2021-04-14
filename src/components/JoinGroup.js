@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@apollo/client"
 import { GROUPS_THAT_USER_IS_NOT_IN } from "../graphql/queries"
 import { JOIN_GROUP } from "../graphql/mutations"
 import { Link } from "react-router-dom"
+import Loader from "./Loader"
 
 const JoinGroupElement = ({ group }) => {
   const [ join ] = useMutation(JOIN_GROUP)
@@ -18,6 +19,11 @@ const JoinGroupElement = ({ group }) => {
 
 const JoinGroup = () => {
   const groups = useQuery(GROUPS_THAT_USER_IS_NOT_IN)
+  if(!groups.data){
+    return(
+      <Loader/>
+    )
+  }
   return (
     <div>
       Hello World

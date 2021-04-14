@@ -5,6 +5,7 @@ query{
   me{
     name
     username
+    id
     events{
       name
       id
@@ -24,6 +25,7 @@ query{
 export const USER_GROUPS = gql`
 query{
   me{
+    id
     groups{
       name
       id
@@ -71,6 +73,7 @@ query group($id: ID!){
 export const GROUPS_THAT_USER_IS_NOT_IN = gql`
 query{
   me{
+    id
     groupsUserNotIn{
       name
       id

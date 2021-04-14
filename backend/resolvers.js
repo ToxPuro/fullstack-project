@@ -113,6 +113,7 @@ const resolvers = {
       return group
     },
     leaveGroup: async (root, args, context) => {
+      console.log("leaving ")
       const currentUser = context.currentUser
       if(!currentUser){
         throw new AuthenticationError("user needs to be logged in")

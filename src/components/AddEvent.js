@@ -6,6 +6,7 @@ import { ME, USER_GROUPS } from "../graphql/queries"
 import Select from "react-select"
 import ChoiceCalendar from "./ChoiceCalendar"
 import { Link } from "react-router-dom"
+import Loader from "./Loader"
 const AddEvent = ({ setNotification }) => {
   const [ dates, setDates] = useState([])
   const [choice, setChoice] = useState(null)
@@ -38,6 +39,19 @@ const AddEvent = ({ setNotification }) => {
       })
     }
   })
+  if(!groups.data){
+    return(
+      <Loader/>
+    )
+  }
+  if(options.length === 0 && groups.data){
+    return(
+      <div>
+        <h2>{"You need to be part of group to add events"}</h2>
+        <h2><Link to="/joinGroup">Join Here</Link></h2>
+      </div>
+    )
+  }
   return(
     <div>
       <h1>New Event</h1>
