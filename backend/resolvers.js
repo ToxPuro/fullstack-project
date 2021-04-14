@@ -119,7 +119,7 @@ const resolvers = {
       }
       try{
         console.log("currentUserid", currentUser._id)
-        const group = await Group.findOneAndUpdate({ _id: args.id }, { $pullAll: { users: [currentUser._id] } } )
+        const group = await Group.findOneAndUpdate({ _id: args.id }, { $pullAll: { users: [currentUser._id] } }, { new: true } )
         console.log("group at start", group)
         const groupEventIDs = group.events.map(event => event._id)
         await currentUser.updateOne({ $pull: { groups: group._id, events: groupEventIDs } })
@@ -228,6 +228,12 @@ const resolvers = {
     groupsUserNotIn: (root) => {
       return Group.find({ users: { $not: { $all: [root._id] } } })
     },
+  },
+  Group: {
+    users: async(root) => {
+      await root.populate("users").execPopulate()
+      return root.users
+    }
   }
 }
 
