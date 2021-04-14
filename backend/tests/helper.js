@@ -8,6 +8,7 @@ const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0O
 const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [] }
 const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
+const secondGroupObject = { name: "SecondTestGroup" }
 const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: "TestiDate", votes: [] } ] }
 
 const login = async (setOptions, mutate, username, password) => {
@@ -45,6 +46,12 @@ const createGroup = async (users) => {
   await group.save()
   return group
 }
+
+const createSecondGroup = async (users) => {
+  const group = new Group({ name: secondGroupObject.name, users: users, events: [] })
+  await group.save()
+  return group
+}
 const createEvent = async (group) => {
   const event = new Event({ name: eventObject.name, group: group, dates: eventObject.dates })
   await event.save()
@@ -68,4 +75,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject }

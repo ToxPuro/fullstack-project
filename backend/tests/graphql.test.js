@@ -18,8 +18,7 @@ beforeAll( async () => {
 describe("login", () => {
   beforeAll( async () => {
     await helper.erase()
-    const user = new User(helper.userObject)
-    await user.save()
+    await helper.createUser()
   })
   test("can login and query me works", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
@@ -166,13 +165,28 @@ describe("when event has already been voted on", () => {
 
 })
 
+describe("when user is part of groups", () => {
+  beforeAll(async () => {
+    await helper.erase()
+    const user = await helper.createUser()
+    await helper.createGroup([user._id])
+    await helper.createSecondGroup()
+  })
+
+  test("can get groups that user is not part of", async () => {
+    await helper.login(setOptions, mutate, helper.secondUserObject, "salainen")
+    await query(GROUPS_THAT_USER_IS_NOT_IN)
+
+  })
+})
+
 describe("multiple voters", () => {
   beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
     const secondUser = await helper.createSecondUser()
     const group = await helper.createGroup([user._id, secondUser._id])
-    const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: "SecondTestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
+    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: "SecondTestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
     await event.save()
   })
 
