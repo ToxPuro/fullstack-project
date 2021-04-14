@@ -40,22 +40,6 @@ const resolvers = {
       return currentUser
 
     },
-    userGroups: async (root, args, context) => {
-      const currentUser = context.currentUser
-      if(!currentUser){
-        throw new AuthenticationError("user needs to be logged in")
-      }
-      await currentUser.populate("groups").execPopulate()
-      return currentUser.groups
-    },
-    userEvents: async (root, args, context) => {
-      const currentUser = context.currentUser
-      if(!currentUser){
-        return []
-      }
-      await currentUser.populate("events").execPopulate()
-      return currentUser.events
-    },
     event: async(root, args) => {
       return Event.findById(args.id)
     }
