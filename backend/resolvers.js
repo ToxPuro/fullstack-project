@@ -15,6 +15,7 @@ const resolvers = {
       return Group.find({})
     },
     user: (root, args) => {
+      console.log(args.username)
       return User.findOne({ username: args.username })
     },
     group: (root, args) => {
