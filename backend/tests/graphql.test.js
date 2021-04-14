@@ -187,6 +187,8 @@ describe("when user is part of groups", () => {
     const userInDB = await helper.userInDB()
     expect(userInDB.groups.length).toBe(0)
     expect(userInDB.events.length).toBe(0)
+    const groupInDBBack = await helper.groupInDB()
+    expect(groupInDBBack.users.length).toBe(0)
   })
 })
 
