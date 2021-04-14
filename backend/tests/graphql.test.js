@@ -6,7 +6,6 @@ const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
 const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN } = require("./queries")
 const helper = require("./helper")
-
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 
 
@@ -51,16 +50,6 @@ describe("adding group", () => {
     expect(result.data.createGroup.name).toBe(helper.groupObject.name)
     expect(result.data.createGroup.users[0].name).toBe(helper.userObject.name)
   })
-
-  test("can get users groups", async () => {
-    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
-
-    const groups = await query(USER_GROUPS)
-    console.log(groups)
-
-    expect(groups.data.userGroups[0].name).toBe(helper.groupObject.name)
-  })
-
 })
 
 describe("joining group", () => {
@@ -148,6 +137,8 @@ describe("when event has already been voted on", () => {
     await helper.erase()
     const user = await helper.createUser()
     const group = await helper.createGroup([user._id])
+    user.groups = [group._id]
+    await user.save()
     const event = new Event({ name: helper.eventObject.name, group: group, dates: [{ date: "TestiDate", votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
     await event.save()
   })
@@ -166,17 +157,29 @@ describe("when event has already been voted on", () => {
 })
 
 describe("when user is part of groups", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    await helper.createGroup([user._id])
+    const group = await helper.createGroup([user._id])
+    user.groups = [group._id]
+    await user.save()
     await helper.createSecondGroup()
+  })
+
+  test("can get users groups", async () => {
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+
+    const groups = await query(USER_GROUPS)
+
+    expect(groups.data.me.groups[0].name).toBe(helper.groupObject.name)
   })
 
   test("can get groups that user is not part of", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     await query(GROUPS_THAT_USER_IS_NOT_IN)
+
   })
+})
 
 describe("multiple voters", () => {
   beforeEach(async () => {

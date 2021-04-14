@@ -22,7 +22,11 @@ query{
 
 const USER_GROUPS = gql`
 query{
-  userGroups{name}
+  me{
+    groups{
+      name
+    }
+  }
 }`
 
 const USER_EVENTS = gql`

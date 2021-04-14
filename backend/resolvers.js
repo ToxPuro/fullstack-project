@@ -224,6 +224,7 @@ const resolvers = {
   },
   User: {
     groups: async (root) => {
+      console.log(root)
       await root.populate("groups").execPopulate()
       return root.groups
     }
