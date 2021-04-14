@@ -70,9 +70,11 @@ query group($id: ID!){
 
 export const GROUPS_THAT_USER_IS_NOT_IN = gql`
 query{
-  groupsUserNotIn{
-    name
-    id
+  me{
+    groupsUserNotIn{
+      name
+      id
+    }
   }
 }`
 

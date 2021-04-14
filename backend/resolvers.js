@@ -11,13 +11,6 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 const resolvers = {
   Query: {
-    groupsUserNotIn: (root, args, context) => {
-      const currentUser = context.currentUser
-      if(!currentUser){
-        throw new AuthenticationError("user needs to be logged in")
-      }
-      return Group.find({ users: { $not: { $all: [currentUser._id] } } })
-    },
     allGroups: () => {
       return Group.find({})
     },

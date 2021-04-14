@@ -22,7 +22,7 @@ const JoinGroup = () => {
     <div>
       Hello World
       <ul>
-        {groups.data ? groups.data.groupsUserNotIn.map(group => (<JoinGroupElement key = {group.id} group={group}/>)) : null }
+        {groups.data ? groups.data.me.groupsUserNotIn.map(group => (<JoinGroupElement key = {group.id} group={group}/>)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
