@@ -1,6 +1,6 @@
 import React from "react"
 import { useQuery, useMutation } from "@apollo/client"
-import { ALL_GROUPS } from "../graphql/queries"
+import { GROUPS_THAT_USER_IS_NOT_IN } from "../graphql/queries"
 import { JOIN_GROUP } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 
@@ -17,12 +17,12 @@ const JoinGroupElement = ({ group }) => {
 }
 
 const JoinGroup = () => {
-  const groups = useQuery(ALL_GROUPS)
+  const groups = useQuery(GROUPS_THAT_USER_IS_NOT_IN)
   return (
     <div>
       Hello World
       <ul>
-        {groups.data ? groups.data.allGroups.map(group => (<JoinGroupElement key = {group.id} group={group}/>)) : null }
+        {groups.data ? groups.data.groupsUserNotIn.map(group => (<JoinGroupElement key = {group.id} group={group}/>)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>

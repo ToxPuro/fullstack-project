@@ -63,6 +63,14 @@ query group($id: ID!){
   }
 }`
 
+export const GROUPS_THAT_USER_IS_NOT_IN = gql`
+query{
+  groupsUserNotIn{
+    name
+    id
+  }
+}`
+
 export const GET_USER = gql`
 query user($username: String!){
   user(username: $username){
