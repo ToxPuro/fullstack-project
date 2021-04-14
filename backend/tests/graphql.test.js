@@ -4,7 +4,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 
@@ -158,7 +158,8 @@ describe("when user is part of groups", () => {
   beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    await helper.createGroup([user])
+    const group = await helper.createGroup([user])
+    await helper.createEvent(group)
     await helper.createSecondGroup()
   })
 
@@ -175,6 +176,14 @@ describe("when user is part of groups", () => {
     const result = await query(GROUPS_THAT_USER_IS_NOT_IN)
     expect(result.data.me.groupsUserNotIn[0].name).toBe(helper.secondGroupObject.name)
 
+  })
+
+  test("user can leave groups", async() => {
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+    const groupInDB = await helper.groupInDB()
+    const result = await mutate(LEAVE_GROUP, { variables: { id: groupInDB.id } })
+    console.log(result)
+    expect(result.data.leaveGroup.users).toContainEqual(helper.userObject.name)
   })
 })
 

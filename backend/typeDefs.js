@@ -80,6 +80,9 @@ type Mutation {
     id: ID!
     votes: [VoteInput]!
   ): Event
+  leaveGroup(
+    id: ID!
+  ): Group
 }
 `
 

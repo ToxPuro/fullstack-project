@@ -6,12 +6,13 @@ const groupSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  users: [
-    {
+  users: {
+    type: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
-    }
-  ],
+    }],
+    default: []
+  },
   events: {
     type: [{
       type: mongoose.Schema.Types.ObjectId,

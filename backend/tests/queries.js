@@ -62,4 +62,9 @@ query{
   }
 }`
 
-module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN }
+const LEAVE_GROUP = gql`
+mutation leaveGroup($id: ID!){
+  leaveGroup(id: $id){users{name}}
+}`
+
+module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP }

@@ -112,6 +112,23 @@ const resolvers = {
       await currentUser.updateOne({ $addToSet: { groups: group._id, events: group.events } })
       return group
     },
+    leaveGroup: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if(!currentUser){
+        throw new AuthenticationError("user needs to be logged in")
+      }
+      try{
+        console.log("currentUserid", currentUser._id)
+        const group = await Group.findOneAndUpdate({ _id: args.id }, { $pullAll: { users: [currentUser._id] } } )
+        console.log("group at start", group)
+        const groupEventIDs = group.events.map(event => event._id)
+        await currentUser.updateOne({ $pull: { groups: group._id, events: groupEventIDs } })
+        console.log("group at end", group)
+        return group
+      }catch(error){
+        console.log(error)
+      }
+    },
     voteEvent: async (root, args, context ) => {
       console.log("voting")
       const currentUser = context.currentUser
