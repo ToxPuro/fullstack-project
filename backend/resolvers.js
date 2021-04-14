@@ -82,6 +82,7 @@ const resolvers = {
       const dates = args.dates.map(date => ( { date: date, votes: []  } ))
       const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
+      await group.updateOne({ $addToSet: { events: event } })
       return event.save()
     },
     createGroup: async(root, args, context) => {
@@ -107,8 +108,7 @@ const resolvers = {
       if(!currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
-      const group = await Group.findById(args.id)
-      await group.updateOne({ $addToSet: { users: currentUser._id } })
+      const group = await Group.findOneAndUpdate({ _id: args.id }, { $addToSet: { users: currentUser._id } }, { new: true } )
       await currentUser.updateOne({ $addToSet: { groups: group._id, events: group.events } })
       return group
     },
@@ -120,10 +120,8 @@ const resolvers = {
       try{
         console.log("currentUserid", currentUser._id)
         const group = await Group.findOneAndUpdate({ _id: args.id }, { $pullAll: { users: [currentUser._id] } }, { new: true } )
-        console.log("group at start", group)
         const groupEventIDs = group.events.map(event => event._id)
         await currentUser.updateOne({ $pull: { groups: group._id, events: groupEventIDs } })
-        console.log("group at end", group)
         return group
       }catch(error){
         console.log(error)
