@@ -100,7 +100,7 @@ const CalendarDate = ({ formattedDate, day, monthStart,setDates, dates }) => {
 
   const onDateClick = day => {
     setClicked(!clicked)
-    setDates(dates.concat(dateFns.format(day, "DDD")))
+    setDates(dates.concat(day))
   }
 
   let className = "col cell default"
