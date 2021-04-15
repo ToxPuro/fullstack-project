@@ -5,13 +5,10 @@ import { ME, EVENT } from "../graphql/queries"
 import EventCalendar from "./EventCalendar"
 import { VOTE_EVENT } from "../graphql/mutations"
 import { Link } from "react-router-dom"
-import * as dateFns from "date-fns"
 
 const parseDate = (date) => {
   console.log(date)
   let result = new Date(date)
-  console.log(result)
-  result = dateFns.format(result, "DDD")
   return result
 
 }
@@ -26,6 +23,7 @@ const Event = () => {
   const id = useParams().id
   const user= useQuery(ME)
   const event = useQuery(EVENT, { variables: { id } })
+  console.log(event)
   useEffect(() => {
     if(event.data && user.data){
       console.log(event.data.event)
@@ -33,7 +31,7 @@ const Event = () => {
       console.log(user.data.me.username)
       let initialVotes = event.data.event.dates.map(date => ({ date: parseDate(date.date), vote: "blue" }))
       if(event.data.event.dates[0].votes.filter(vote => vote.voter === user.data.me.username).length !== 0){
-        initialVotes = event.data.event.dates.map(date => ({ date: date.date, vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
+        initialVotes = event.data.event.dates.map(date => ({ date: parseDate(date.date), vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
       }
       setVotes(initialVotes)
     }

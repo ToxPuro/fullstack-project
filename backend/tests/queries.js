@@ -12,7 +12,7 @@ mutation login($username: String!, $password: String!){
 
 const ADD_EVENT = gql`
 mutation {
-  addEvent(name: "TestiName", group: "TestGroup", dates: ["TestiDate"]){name dates{date} id group}
+  addEvent(name: "TestiName", group: "TestGroup", dates: ["${new Date()}"]){name dates{date} id group}
 }
 `
 const ME = gql`

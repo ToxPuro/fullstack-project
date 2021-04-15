@@ -10,7 +10,6 @@ const EventCalendar = ({ dates, setVotes, votes }) => {
       <Header month={month} setMonth={setMonth}/>
       <Days month={month}/>
       <Cells month={month} dates={dates} setVotes={setVotes} votes={votes}/>
-      <ul>{dates}</ul>
     </div>
   )
 }
@@ -99,7 +98,7 @@ const Cells = ({ month, dates, setVotes, votes }) => {
 const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
   const [vote, setVote] = useState("")
   const cloneVotes = [...votes]
-  const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
+  const dayIndex = cloneVotes.findIndex(vote => dateFns.format(vote.date, "DDD") === dateFns.format(day, "DDD"))
   useEffect(() => {
     if(cloneVotes[dayIndex]){
       setVote(cloneVotes[dayIndex].vote)
@@ -109,30 +108,20 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
     if(vote==="blue"){
       setVote("green")
       cloneVotes[dayIndex].vote = "green"
-      console.log(day)
-      console.log(dayIndex)
-      console.log(cloneVotes)
       setVotes(cloneVotes)
 
     }
     else if(vote === "green"){
       setVote("red")
       cloneVotes[dayIndex].vote = "red"
-      console.log(day)
-      console.log(dayIndex)
-      console.log(cloneVotes)
       setVotes(cloneVotes)
     }
     else{
       setVote("blue")
       cloneVotes[dayIndex].vote = "blue"
-      console.log(day)
-      console.log(dayIndex)
-      console.log(cloneVotes)
       setVotes(cloneVotes)
     }
   }
-  console.log(`dates-${formattedDate}`)
   return(
     <div onClick={() => onClick(vote)}
       id={`dates-${formattedDate}`}
@@ -145,7 +134,9 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
 }
 
 const CalendarDate = ({ formattedDate, day, monthStart, dates, setVotes, votes }) => {
-  if(dates.includes(dateFns.format(day, "DDD"))){
+  const checkDates = dates.map(date => dateFns.format(date, "d"))
+  if(checkDates.includes(dateFns.format(day, "d"))){
+    console.log("FOUND")
     return(
       <ChoiceDate setVotes={setVotes} votes={votes} day={day} formattedDate = {formattedDate}/>
 

@@ -155,13 +155,17 @@ const resolvers = {
         throw new ForbiddenError("event is not in picking state")
       }
       const dates = event.dates
+      console.log(args.votes.map(vote => vote.date))
+      console.log(event.dates.map(date => date.date.toISOString()))
       args.votes.forEach(vote => {
-        const dateIndex = dates.findIndex(date => date.date === vote.date)
+        console.log(vote)
+        const dateIndex = event.dates.findIndex(date => date.date.toISOString() === vote.date)
+        console.log("dateIndex", dateIndex)
         const olderVote = dates[dateIndex].votes.findIndex(vote => vote.voter === currentUser.username)
         if(olderVote !== -1){
-          dates[dateIndex].votes[olderVote].vote = vote.vote
+          event.dates[dateIndex].votes[olderVote].vote = vote.vote
         } else {
-          dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
+          event.dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
         }
       })
 
@@ -198,12 +202,11 @@ const resolvers = {
         return 0
       }
 
-      event.dates = dates
       await event.populate("group").execPopulate()
       const userCount = event.group.users.length
       console.log(userCount)
       if(userCount === event.dates[0].votes.length){
-        const copyDates = [...dates]
+        const copyDates = [...event.dates]
         copyDates.sort((a,b) => {
           return compareDates(a,b)
         })
@@ -252,7 +255,6 @@ const resolvers = {
   },
   Date: {
     date: async(root) => {
-      console.log(root)
       return new Date(root.date).toISOString()
     }
   }
