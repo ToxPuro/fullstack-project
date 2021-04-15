@@ -94,7 +94,10 @@ const resolvers = {
       const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
       await group.updateOne({ $addToSet: { events: event } })
-      return event.save()
+      return event.save().
+        catch(error => {
+          console.log(error)
+        })
     },
     createGroup: async(root, args, context) => {
       if(!context.currentUser){

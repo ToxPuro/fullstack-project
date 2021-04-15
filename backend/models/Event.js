@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   dates: [
     {
-      date: String,
+      date: Date,
       votes: [
         {
           voter: String,
