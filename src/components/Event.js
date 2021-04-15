@@ -8,7 +8,9 @@ import { Link } from "react-router-dom"
 import * as dateFns from "date-fns"
 
 const parseDate = (date) => {
+  console.log(date)
   let result = new Date(date)
+  console.log(result)
   result = dateFns.format(result, "DDD")
   return result
 

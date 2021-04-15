@@ -249,6 +249,12 @@ const resolvers = {
       await root.populate("users").execPopulate()
       return root.users
     }
+  },
+  Date: {
+    date: async(root) => {
+      console.log(root)
+      return new Date(root.date).toISOString()
+    }
   }
 }
 
