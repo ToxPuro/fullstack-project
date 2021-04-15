@@ -4,7 +4,6 @@ import "../App.css"
 
 const EventCalendar = ({ dates, setVotes, votes }) => {
 
-
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
@@ -100,7 +99,7 @@ const Cells = ({ month, dates, setVotes, votes }) => {
 const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
   const [vote, setVote] = useState("")
   const cloneVotes = [...votes]
-  const dayIndex = cloneVotes.findIndex(vote => dateFns.format(vote.date, "DDD") === dateFns.format(day, "DDD"))
+  const dayIndex = cloneVotes.findIndex(vote => vote.date === dateFns.format(day, "DDD"))
   useEffect(() => {
     if(cloneVotes[dayIndex]){
       setVote(cloneVotes[dayIndex].vote)
