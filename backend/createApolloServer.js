@@ -2,6 +2,7 @@ const express = require("express")
 const apolloServer = require("./apolloServer")
 const mongoDB = require("./mongoDB")
 const testingRouter = require("./controllers/testing")
+const path = require("path")
 
 
 
@@ -11,6 +12,14 @@ async function createApolloServer() {
   const app = express()
 
   await apolloServer.start()
+
+  app.get(["/", "/login", "/signIn", "/joinGroup", "/groups", "/addGroup", "/events/:id", "/groups/:id", "/user/:username"], function(req, res) {
+    res.sendFile(path.join(__dirname, "/build", "index.html"), function(err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  })
 
   app.use(express.static("build"))
   app.use("/testing", testingRouter)
