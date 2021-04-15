@@ -75,11 +75,22 @@ const resolvers = {
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
     addEvent: async (root, args, context) => {
+
+      const parseDate = (date) => {
+        return new Date(date)
+      }
+
+      const finalDate = (dates) => {
+        return new Date (dates.reduce((a,b) => (a>b ? a : b )))
+      }
+
+      console.log("adding Date")
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name: args.group })
-      const dates = args.dates.map(date => ( { date: date, votes: []  } ))
+      console.log(args.dates)
+      const dates = args.dates.map(date => ( { date: parseDate(date), votes: []  } ))
       const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
       await group.updateOne({ $addToSet: { events: event } })

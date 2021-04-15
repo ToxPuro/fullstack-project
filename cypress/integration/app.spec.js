@@ -120,9 +120,8 @@ describe("when there are events", function () {
           }
         }).then(() => {
           const date = new Date()
-          const formattedDate = dateFns.format(date, "DDD")
           const addEvent = `mutation{
-            addEvent(name: "EventTestName", group: "TestGroup", dates: ["${formattedDate}"]){name}
+            addEvent(name: "EventTestName", group: "TestGroup", dates: ["${date}"]){name}
           }`
           cy.request({
             method: "POST",
