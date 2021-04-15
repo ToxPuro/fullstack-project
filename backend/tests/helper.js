@@ -2,14 +2,16 @@ const { LOGIN } = require("./queries")
 const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
-
+const dateFns = require("date-fns")
 // passwordHash is encrypted from 'salainen'
 const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0Ok2"
 const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [] }
 const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }
-const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: new Date(), votes: [] } ] }
+const currentDate = new Date()
+const nextDate = dateFns.addDays(currentDate, 1)
+const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: currentDate, votes: [] } ] }
 
 const login = async (setOptions, mutate, username, password) => {
   const token = await mutate(LOGIN, { variables: { username, password } })
@@ -85,4 +87,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate }
