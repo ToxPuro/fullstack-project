@@ -11,7 +11,8 @@ const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }
 const currentDate = new Date()
 const nextDate = dateFns.addDays(currentDate, 1)
-const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: currentDate, votes: [] } ] }
+const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: currentDate, votes: [] } ], finalDate: currentDate }
+const secondEventObject = { name: "SecondTestiName", group: "TestGroup", dates: [ { date: nextDate, votes: [] } ], finalDate: nextDate }
 
 const login = async (setOptions, mutate, username, password) => {
   const token = await mutate(LOGIN, { variables: { username, password } })
@@ -61,7 +62,17 @@ const createSecondGroup = async (users) => {
   return group
 }
 const createEvent = async (group) => {
-  const event = new Event({ name: eventObject.name, group: group, dates: eventObject.dates })
+  const event = new Event({ name: eventObject.name, group: group, dates: eventObject.dates, finalDate: eventObject.finalDate })
+  await event.save()
+  await group.updateOne({ $addToSet: { events: event } })
+  for(const user in group.users){
+    await group.users[user].updateOne({ $addToSet: { events: event } })
+  }
+  return event
+}
+
+const createSecondEvent = async (group) => {
+  const event = new Event({ name: secondEventObject.name, group: group, dates: secondEventObject.dates, finalDate: secondEventObject.finalDate })
   await event.save()
   await group.updateOne({ $addToSet: { events: event } })
   for(const user in group.users){
@@ -87,4 +98,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent }

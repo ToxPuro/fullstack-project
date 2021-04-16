@@ -7,7 +7,7 @@ const scheduledJob = async () => {
   for(const i in events){
     console.log(events[i])
     if(events[i].finalDate < new Date()){
-      console.log("need to be removed")
+      await Event.deleteOne({ _id : events[i]._id })
     }
   }
   mongoDB.close()
