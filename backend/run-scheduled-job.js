@@ -1,6 +1,10 @@
 const scheduledJob = require("./scheduled-job")
 const mongoDB = require("./mongoDB")
 
-mongoDB.connect()
-scheduledJob()
-mongoDB.close()
+const run = async () => {
+  await mongoDB.connect()
+  await scheduledJob()
+  await mongoDB.close()
+}
+
+run()

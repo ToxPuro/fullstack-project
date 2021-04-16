@@ -10,7 +10,7 @@ const scheduledJob = require("../scheduled-job")
 
 
 beforeAll( async () => {
-  mongoDB.connect()
+  await mongoDB.connect()
   await helper.erase()
 })
 
@@ -239,6 +239,10 @@ describe("tests for scheduled-job", () => {
     expect(eventInDB).toBe(null)
     const secondEventInDB = await helper.secondEventInDB()
     expect(secondEventInDB.name).toBe(helper.secondEventObject.name)
+    const userInDB = await helper.userInDB()
+    const groupInDB = await helper.groupInDB()
+    expect(userInDB.events.length).toBe(1)
+    expect(groupInDB.events.length).toBe(1)
 
   })
 })
