@@ -92,7 +92,7 @@ const resolvers = {
       console.log(args.dates)
       const dates = args.dates.map(date => ( { date: parseDate(date), votes: []  } ))
       const finDate = finalDate(args.dates)
-      const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking", finalDate: finDate })
+      const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking", finalDate: finDate, expireAt: finDate })
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
       await group.updateOne({ $addToSet: { events: event } })
       return event.save().
@@ -225,6 +225,7 @@ const resolvers = {
             console.log("found best one")
             event.status = "done"
             event.finalDate = copyDates[0].date
+            event.expireAt = copyDates[0].date
           } else{
             event.status = "voting"
           }
