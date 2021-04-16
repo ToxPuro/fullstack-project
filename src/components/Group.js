@@ -5,9 +5,10 @@ import { GET_GROUP, GROUPS_THAT_USER_IS_NOT_IN, ME } from "../graphql/queries"
 import Users from "./Users"
 import Loader from "./Loader"
 import { LEAVE_GROUP } from "../graphql/mutations"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
-const Group = () => {
+const Group = ({ setNotification }) => {
+  const history = useHistory()
   const user = useQuery(ME)
   console.log(user.data)
   const [leaveGroup] = useMutation(LEAVE_GROUP, {
@@ -39,8 +40,12 @@ const Group = () => {
   const id= useParams().id
   const group = useQuery(GET_GROUP, { variables: { id } })
   const leave = async () => {
-    const response = await leaveGroup({ variables: { id: group.data.group.id } })
-    console.log(response)
+    await leaveGroup({ variables: { id: group.data.group.id } })
+    setNotification({ message: `Left group ${group.data.group.name} successfully`, error: false })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+    history.push("/")
   }
   if(!group.data){
     return(
