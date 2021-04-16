@@ -56,7 +56,7 @@ const SignIn = ({ login, signIn }) => {
 
            password: <input
               id="password"
-              type= "password"
+              type= "text"
               name="password"
               onChange={handleChange}
               onBlur={handleBlur}

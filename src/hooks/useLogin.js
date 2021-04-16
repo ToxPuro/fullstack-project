@@ -10,8 +10,13 @@ const useLogin = (setToken, setNotification) => {
   const [ signInMutation] = useMutation(SIGN_IN, {
     onError: (error) => {
       let message = error.graphQLErrors[0].message
-      if(message.startsWith("User validation failed: username: Error, expected `username` to be unique")){
-        message = "Username needs to be unique"
+      if(message.startsWith("User validation failed: username:")){
+        if(message.includes("unique")){
+          message = "Username needs to be unique"
+        }
+        if(message.includes("shorter")){
+          message="Username is too short"
+        }
       }
       setNotification({ message, error: true })
       setTimeout(() => {
