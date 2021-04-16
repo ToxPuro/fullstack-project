@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import Loader from "./Loader"
 const Groups = () => {
   const groups = useQuery(USER_GROUPS)
-  const displayGroups = groups.data ? groups.data.me.groups.map(group => (<li key={group.name}><Link to ={`/groups/${group.id}`}>{group.name}</Link></li>)) : []
+  const displayGroups = groups.data ? groups.data.me.groups.map(group => (<Link key={group.id} id={group.name} to ={`/groups/${group.id}`}>{group.name}</Link>)) : []
   if(!groups.data){
     return(
       <Loader/>

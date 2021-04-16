@@ -56,7 +56,7 @@ const Group = ({ setNotification }) => {
     <div>
       <span>
         { group.data.group.name }
-        <button onClick={ leave }>leave</button>
+        <button id="leave-button" onClick={ leave }>leave</button>
       </span>
       <Users users = {group.data.group.users}/>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>

@@ -94,8 +94,6 @@ describe("When logged in", function () {
     cy.get(`#dates-${nextDate}`).should("have.css", "background-color", "rgb(127, 255, 0)" )
     cy.get("#submit-button").click()
     cy.get("#notification").contains("pick group to add event")
-
-
   })
 
   it("can add event if dates are picked", function () {
@@ -116,6 +114,16 @@ describe("When logged in", function () {
     cy.get("#homepage-button").click()
     cy.contains("EventTestName")
   })
+
+  it("can leave group", function() {
+    cy.get("#groups-button").click()
+    cy.get("#TestGroup").click()
+    cy.get("#leave-button").click()
+    cy.get("#notification")
+      .should("have.css", "color", "rgb(0, 128, 0)")
+      .contains("Left group TestGroup")
+  })
+
 })
 
 describe("when there are events", function () {
