@@ -24,19 +24,23 @@ const AddEvent = ({ setNotification }) => {
     update: (store, response) => {
       console.log("dataInStore:")
       const dataInStore = store.readQuery({ query: ME })
-      const eventsInStore = dataInStore.me.events
-      console.log(dataInStore.me)
-      console.log(eventsInStore)
-      console.log(response)
-      store.writeQuery({
-        query: ME,
-        data: {
-          me: {
-            ...dataInStore.me,
-            events: eventsInStore.concat(response.data.addEvent)
+      if(dataInStore){
+        const eventsInStore = dataInStore.me.events
+        console.log(dataInStore.me)
+        console.log(eventsInStore)
+        console.log(response)
+        store.writeQuery({
+          query: ME,
+          data: {
+            me: {
+              ...dataInStore.me,
+              events: eventsInStore.concat(response.data.addEvent)
+            }
           }
-        }
-      })
+        })
+
+      }
+
     }
   })
   if(!groups.data){
