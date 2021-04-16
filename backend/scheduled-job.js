@@ -1,8 +1,6 @@
-const mongoDB = require("./mongoDB")
 const Event = require("./models/Event")
 
 const scheduledJob = async () => {
-  mongoDB.connect()
   const events = await Event.find({})
   for(const i in events){
     console.log(events[i])
@@ -10,9 +8,6 @@ const scheduledJob = async () => {
       await Event.deleteOne({ _id : events[i]._id })
     }
   }
-  mongoDB.close()
 }
-
-scheduledJob()
 
 module.exports = scheduledJob

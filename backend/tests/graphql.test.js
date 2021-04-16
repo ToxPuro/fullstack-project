@@ -6,6 +6,7 @@ const dateFns = require("date-fns")
 const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
+const scheduledJob = require("../scheduled-job")
 
 
 beforeAll( async () => {
@@ -58,7 +59,6 @@ describe("joining group", () => {
     await helper.createSecondUser()
     const group = await helper.createGroup([user])
     await helper.createEvent(group)
-    await group.save()
   })
   test("can join group", async () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
@@ -224,6 +224,24 @@ describe("multiple voters", () => {
   })
 })
 
+describe("tests for scheduled-job", () => {
+  beforeEach( async () => {
+    await helper.erase()
+    const user = await helper.createUser()
+    const group = await helper.createGroup([user])
+    await helper.createEvent(group)
+    await helper.createSecondEvent(group)
+  } )
+
+  test("scheduled-job removes events which finalDates are less than new Date", async() => {
+    await scheduledJob()
+    const eventInDB = await helper.eventInDB()
+    expect(eventInDB).toBe(null)
+    const secondEventInDB = await helper.secondEventInDB()
+    expect(secondEventInDB.name).toBe(helper.secondEventObject.name)
+
+  })
+})
 
 
 
