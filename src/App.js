@@ -39,7 +39,7 @@ const AppRouter = ({ setNotification }) => {
   return(
     <Switch>
       <Route path="/joinGroup">
-        {token ? <JoinGroup/> : <Redirect to="/login"/> }
+        {token ? <JoinGroup setNotification = {setNotification}/> : <Redirect to="/login"/> }
       </Route>
       <Route path="/users/:username">
         {token ? <User/>: <Redirect to="/login"/>}
@@ -48,10 +48,10 @@ const AppRouter = ({ setNotification }) => {
         { token ? <Group setNotification={setNotification}/>: <Redirect to="/login"/>}
       </Route>
       <Route path="/groups">
-        {token ? <Groups/> : <Redirect to="/login"/> }
+        {token ? <Groups setNotification= {setNotification}/> : <Redirect to="/login"/> }
       </Route>
       <Route path="/addGroup">
-        { token ? <AddGroup/> : <Redirect to="/login"/> }
+        { token ? <AddGroup setNotification = {setNotification}/> : <Redirect to="/login"/> }
       </Route>
       <Route path="/SignIn">
         <SignIn login = {login} signIn = {signIn}/>

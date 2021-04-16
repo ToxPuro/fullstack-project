@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 import Loader from "./Loader"
 import { USER_GROUPS, USER_ID } from "../graphql/queries"
 
-const JoinGroupElement = ({ group, user }) => {
+const JoinGroupElement = ({ group, user, setNotification }) => {
   const [ join ] = useMutation(JOIN_GROUP, {
     update: (store, response) => {
       const dataInStore = store.readQuery({ query: USER_GROUPS })
@@ -35,17 +35,25 @@ const JoinGroupElement = ({ group, user }) => {
     }
   })
 
+  const Join = () => {
+    join({ variables: { id: group.id } })
+    setNotification({ message: `Joined group ${group.name}`, error: false })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   return(
     <li>
       <span>
         {group.name}
-        <button onClick={() => join({ variables: { id: group.id } })}>Join</button>
+        <button onClick={Join}>Join</button>
       </span>
     </li>
   )
 }
 
-const JoinGroup = () => {
+const JoinGroup = ({ setNotification }) => {
   const groups = useQuery(GROUPS_THAT_USER_IS_NOT_IN)
   const user = useQuery(USER_ID)
   if(!groups.data || !user.data){
@@ -57,7 +65,7 @@ const JoinGroup = () => {
     <div>
       Hello World
       <ul>
-        {groups.data ? groups.data.me.groupsUserNotIn.map(group => (<JoinGroupElement key = {group.id} group={group} user= {user.data.me}/>)) : null }
+        {groups.data ? groups.data.me.groupsUserNotIn.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} user= {user.data.me}/>)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
