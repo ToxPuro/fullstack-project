@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const userSchema = new mongoose.Schema({
+const eventSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -28,10 +28,10 @@ const userSchema = new mongoose.Schema({
   finalDate: Date,
   expireAt: {
     type: Date,
-    expires: 3600
   }
 },
 { minimize: false })
 
+eventSchema.index({ "expireAt": 1 }, { expireAfterSeconds: 0 })
 
-module.exports = mongoose.model("Event", userSchema)
+module.exports = mongoose.model("Event", eventSchema)
