@@ -7,17 +7,22 @@ const useLogin = (setToken, setNotification) => {
   const history = useHistory()
   const client = useApolloClient()
   console.log("history", history)
+  const getErrorMessage = (message) => {
+    if(message.startsWith("User validation failed: username:")){
+      if(message.includes("unique")){
+        message = "Username needs to be unique"
+      }
+      if(message.includes("shorter")){
+        const minlength = message.match(/\d+/)[0]
+        message=`Username needs to be longer than ${minlength} characters`
+      }
+    }
+
+    return message
+  }
   const [ signInMutation] = useMutation(SIGN_IN, {
     onError: (error) => {
-      let message = error.graphQLErrors[0].message
-      if(message.startsWith("User validation failed: username:")){
-        if(message.includes("unique")){
-          message = "Username needs to be unique"
-        }
-        if(message.includes("shorter")){
-          message="Username is too short"
-        }
-      }
+      let message = getErrorMessage(error.graphQLErrors[0].message)
       setNotification({ message, error: true })
       setTimeout(() => {
         setNotification(null)
