@@ -98,8 +98,10 @@ const Cells = ({ month, dates }) => {
 }
 
 const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
-  const event = dates.find(date => date.date === dateFns.format(day, "DDD"))
-  console.log(event)
+  const event = dates.find(date => dateFns.format( new Date(date.date), "DDD") === dateFns.format(day, "DDD"))
+  if(event){
+    console.log("FOUND EVENT")
+  }
   return(
     <div
       className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : ""}`}

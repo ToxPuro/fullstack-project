@@ -60,7 +60,7 @@ const AppRouter = ({ setNotification }) => {
         <Login login = {login} />
       </Route>
       <Route path="/events/:id">
-        {token ? <Event/> : <Redirect to="/login"/> }
+        {token ? <Event setNotification={setNotification}/> : <Redirect to="/login"/> }
       </Route>
       <Route path="/addevent">
         {token ? <AddEvent setNotification={setNotification}/> : <Redirect to="/login"/>}

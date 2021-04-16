@@ -27,7 +27,16 @@ mutation joinGroup($id: ID!){
 
 export const VOTE_EVENT = gql`
 mutation voteEvent($id: ID!, $votes: [VoteInput]!){
-  voteEvent(id: $id, votes: $votes){dates{votes{voter vote}}}
+  voteEvent(id: $id, votes: $votes){
+    name 
+    id
+    status 
+    dates{
+      votes{
+        voter 
+        vote}
+      }
+    }
 }`
 
 export const LEAVE_GROUP = gql`

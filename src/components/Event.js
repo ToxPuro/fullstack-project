@@ -12,13 +12,20 @@ const parseDate = (date) => {
   return result
 
 }
-const Event = () => {
+const Event = ({ setNotification }) => {
   const [ votes, setVotes ] = useState([])
   const [ vote, response ] = useMutation(VOTE_EVENT, {
     onError : (error) => {
       console.log(error)
     }
   })
+  const onClick = async () => {
+    await vote({ variables: { id: event.data.event.id, votes } })
+    setNotification({ message: "Voted successfully", error: false })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
   console.log(response)
   const id = useParams().id
   const user= useQuery(ME)
@@ -49,7 +56,7 @@ const Event = () => {
     <div>
       {event.data.event.name}
       <EventCalendar dates = {event.data.event.dates.map(date => parseDate(date.date))} setVotes={setVotes} votes={votes}/>
-      <button id="voting-button" onClick={() => vote({ variables: { id: event.data.event.id, votes } })}>Vote</button>
+      <button id="voting-button" onClick={onClick}>Vote</button>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )
