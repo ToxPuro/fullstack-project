@@ -98,6 +98,7 @@ const Cells = ({ month, dates, setVotes, votes }) => {
 const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
   const [vote, setVote] = useState("")
   const cloneVotes = [...votes]
+  console.log(cloneVotes)
   const dayIndex = cloneVotes.findIndex(vote => dateFns.format(vote.date, "DDD") === dateFns.format(day, "DDD"))
   useEffect(() => {
     if(cloneVotes[dayIndex]){
@@ -122,6 +123,7 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
       setVotes(cloneVotes)
     }
   }
+  console.log(vote)
   return(
     <div onClick={() => onClick(vote)}
       id={`dates-${formattedDate}`}

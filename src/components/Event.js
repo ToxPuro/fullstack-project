@@ -29,20 +29,21 @@ const Event = ({ setNotification }) => {
   console.log(response)
   const id = useParams().id
   const user= useQuery(ME)
+  console.log(user)
   const event = useQuery(EVENT, { variables: { id } })
   console.log(event)
   useEffect(() => {
     if(event.data && user.data){
       console.log(event.data.event)
       console.log(event.data.event.dates)
-      console.log(user.data.me.username)
+      console.log("User", user.data.me.username)
       let initialVotes = event.data.event.dates.map(date => ({ date: parseDate(date.date), vote: "blue" }))
       if(event.data.event.dates[0].votes.filter(vote => vote.voter === user.data.me.username).length !== 0){
         initialVotes = event.data.event.dates.map(date => ({ date: parseDate(date.date), vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
       }
       setVotes(initialVotes)
     }
-  },[event.data])
+  },[event.data, user.data])
 
   if(!event.data){
     return(
