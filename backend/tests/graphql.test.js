@@ -101,6 +101,14 @@ describe("adding event", () => {
   })
 })
 
+describe("fucking around", () => {
+  test("hihi", async () => {
+    const group = await helper.createGroup()
+    const event = Event({ name: helper.eventObject.name, group: group,dates: [], status: "picking", expireAt: new Date() })
+    await event.save()
+  })
+})
+
 describe("when there is event", () => {
   beforeAll(async () => {
     await helper.erase()
