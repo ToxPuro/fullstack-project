@@ -66,6 +66,10 @@ const AddEvent = ({ setNotification }) => {
           }
           else{
             addEvent({ variables:{ name, group: choice, dates } })
+            setNotification({ message: `added event ${name} to group ${choice}`, error: false })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
             resetForm({})
           }
 
