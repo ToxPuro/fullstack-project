@@ -1,5 +1,19 @@
 import React from "react"
 import { Formik } from "formik"
+import * as yup from "yup"
+
+const validationSchema = yup.object().shape({
+  username: yup
+    .string()
+    .required("Username is required"),
+  name: yup
+    .string()
+    .required("Name is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+
+})
 
 const SignIn = ({ login, signIn }) => {
   const onSubmit = async ({ username, name, password }, { resetForm }) => {
@@ -23,12 +37,15 @@ const SignIn = ({ login, signIn }) => {
       <Formik
         initialValues={{ username: "", password: "", name: "" }}
         onSubmit={onSubmit}
+        validationSchema = {validationSchema}
       >
         {({
           values,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          isValid,
+          dirty
           /* and other goodies */
         }) => (
           <form onSubmit={handleSubmit}>
@@ -63,9 +80,9 @@ const SignIn = ({ login, signIn }) => {
               value={values.password}
             />
             <br/>
-            <button type="submit" id="submit-button">
+            { (isValid && dirty) ?             <button type="submit" id="submit-button">
              Sign In
-            </button>
+            </button> : null}
           </form>
         )}
       </Formik>

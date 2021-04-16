@@ -1,6 +1,17 @@
 import { Formik } from "formik"
 import { Link } from "react-router-dom"
 import React from "react"
+import * as yup from "yup"
+
+const validationSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+
+})
 
 const Login = ({ login }) => {
   return(
@@ -12,12 +23,15 @@ const Login = ({ login }) => {
           await login({ username, password })
           resetForm({ values: { username: "", password: "" } })
         }}
+        validationSchema={validationSchema}
       >
         {({
           values,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          isValid,
+          dirty
           /* and other goodies */
         }) => (
           <form onSubmit={handleSubmit}>
@@ -41,9 +55,9 @@ const Login = ({ login }) => {
               value={values.password}
             />
             <br/>
-            <button type="submit" id="login-button">
-             Login
-            </button>
+            {(isValid && dirty) ?  <button type="submit" id="login-button">
+              Login
+            </button> : null }
           </form>
         )}
       </Formik>

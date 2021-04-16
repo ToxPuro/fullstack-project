@@ -10,14 +10,9 @@ const useLogin = (setToken, setNotification) => {
   const getErrorMessage = (message) => {
     if(message.startsWith("User validation failed: username:")){
       if(message.includes("unique")){
-        message = "Username needs to be unique"
-      }
-      if(message.includes("shorter")){
-        const minlength = message.match(/\d+/)[0]
-        message=`Username needs to be longer than ${minlength} characters`
+        return "Username needs to be unique"
       }
     }
-
     return message
   }
   const [ signInMutation] = useMutation(SIGN_IN, {
@@ -40,7 +35,6 @@ const useLogin = (setToken, setNotification) => {
   })
 
   const login = async ({ username, password }) => {
-    console.log(username, password)
     const result = await loginMutation({ variables: { username, password } })
     console.log(result)
     if(result.data.login.value){
