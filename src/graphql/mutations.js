@@ -22,7 +22,10 @@ mutation addGroup($name: String! $users: [String]!){
 
 export const JOIN_GROUP = gql`
 mutation joinGroup($id: ID!){
-  joinGroup(id: $id){name}
+  joinGroup(id: $id){
+    name 
+    id
+  }
 }`
 
 export const VOTE_EVENT = gql`

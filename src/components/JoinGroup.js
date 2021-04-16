@@ -4,9 +4,39 @@ import { GROUPS_THAT_USER_IS_NOT_IN } from "../graphql/queries"
 import { JOIN_GROUP } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 import Loader from "./Loader"
+import { USER_GROUPS } from "../graphql/queries"
 
 const JoinGroupElement = ({ group }) => {
-  const [ join ] = useMutation(JOIN_GROUP)
+  const [ join ] = useMutation(JOIN_GROUP, {
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: USER_GROUPS })
+      console.log(dataInStore)
+      console.log(response)
+      if(dataInStore){
+        store.writeQuery({
+          query: USER_GROUPS,
+          data: {
+            me:{
+              ...dataInStore.me,
+              groups: dataInStore.me.groups.concat(response.data.joinGroup)
+            }
+          }
+        })
+      }
+      const groupsUserNotInData = store.readQuery({ query: GROUPS_THAT_USER_IS_NOT_IN })
+      store.writeQuery({
+        query: GROUPS_THAT_USER_IS_NOT_IN,
+        data:{
+          me: {
+            ...groupsUserNotInData.me,
+            groupsUserNotIn: groupsUserNotInData.me.groupsUserNotIn.filter(group => group.id !== response.data.joinGroup.id)
+          }
+
+        }
+      })
+    }
+  })
+
   return(
     <li>
       <span>
