@@ -84,8 +84,6 @@ const resolvers = {
         return new Date (dates.reduce((a,b) => (a>b ? a : b )))
       }
 
-      console.log(finalDate)
-
       console.log("adding Date")
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
@@ -93,7 +91,8 @@ const resolvers = {
       const group = await Group.findOne({ name: args.group })
       console.log(args.dates)
       const dates = args.dates.map(date => ( { date: parseDate(date), votes: []  } ))
-      const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking" })
+      const finDate = finalDate(args.dates)
+      const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking", finalDate: finDate })
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
       await group.updateOne({ $addToSet: { events: event } })
       return event.save().

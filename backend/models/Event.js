@@ -25,7 +25,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "picking"
   },
-  finalDate: String
+  finalDate: Date,
+  expireAt: {
+    type: Date,
+    expires: 3600
+  }
 },
 { minimize: false })
 

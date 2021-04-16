@@ -93,6 +93,8 @@ describe("adding event", () => {
     expect(dateFns.format( new Date (events.data.addEvent.dates[0].date), "DDD")).toEqual(dateFns.format(helper.eventObject.dates[0].date, "DDD"))
     const user = await helper.userInDB()
     const group = await helper.groupInDB()
+    const eventInDB = await helper.eventInDB()
+    expect(dateFns.format( new Date ( eventInDB.finalDate) ,"DDD")).toBe(dateFns.format( new Date( helper.eventObject.dates[0].date) ,"DDD"))
     expect(user.events[0].toString()).toStrictEqual(events.data.addEvent.id)
     expect(events.data.addEvent.group).toStrictEqual(group._id.toString())
 
@@ -131,22 +133,6 @@ describe("when there is event", () => {
   })
 })
 
-describe("fucking around", () => {
-  beforeAll(async () => {
-    await helper.erase()
-    const user = await helper.createUser()
-    const group = await helper.createGroup([user])
-    await helper.createEvent(group)
-    await Event.deleteMany({})
-  })
-  test("hihi", async() => {
-    const user = await (await helper.userInDB()).populate("events").execPopulate()
-    console.log(user)
-    const events = await Event.find({})
-    console.log(events)
-  })
-
-})
 
 describe("when event has already been voted on", () => {
   beforeAll(async () => {
