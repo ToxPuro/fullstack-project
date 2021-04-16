@@ -83,6 +83,9 @@ type Mutation {
   leaveGroup(
     id: ID!
   ): Group
+  deleteEvent(
+    id: ID!
+  ): User
 }
 `
 

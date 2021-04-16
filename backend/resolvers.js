@@ -100,6 +100,10 @@ const resolvers = {
           console.log(error)
         })
     },
+    deleteEvent: async(root, args, context) => {
+      await Event.deleteMany({})
+      return context.currentUser
+    },
     createGroup: async(root, args, context) => {
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")

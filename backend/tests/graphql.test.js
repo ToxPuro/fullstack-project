@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 
@@ -138,6 +138,15 @@ describe("when there is event", () => {
     expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("red")
     expect(eventInDBBack.status).toBe("done")
     expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: helper.userObject.username, vote: "red" }])
+  })
+  test("can delete event", async() => {
+    const eventInDB = await helper.eventInDB()
+    await mutate(DELETE_EVENT, { variables: { id: eventInDB._id.toString() } })
+    const userInDB = await helper.userInDB()
+    const eventInDBBack = await helper.eventInDB()
+    expect(eventInDBBack).toBe(null)
+    expect(userInDB.events.length).toBe(0)
+
   })
 })
 
