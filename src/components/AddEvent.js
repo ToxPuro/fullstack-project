@@ -68,7 +68,7 @@ const AddEvent = ({ setNotification }) => {
               setNotification(null)
             }, 5000)
           }
-          if(!choice){
+          else if(!choice){
             setNotification({ message: "pick group to add event", error: true })
             setTimeout(() => {
               setNotification(null)

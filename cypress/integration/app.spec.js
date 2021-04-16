@@ -52,7 +52,7 @@ describe("Login", function() {
     cy.get("#username").type("WrongUsername")
     cy.get("#password").type("WrongPassword")
     cy.get("#login-button").click()
-    cy.contains("wrong credentials")
+    cy.get("#notification").contains("wrong credentials")
   })
 
 })
@@ -76,9 +76,27 @@ describe("When logged in", function () {
     cy.get("#name").type("EventTestName")
     cy.get("#group-options").type("TestGroup{enter}")
     cy.get("#submit-button").click()
-    cy.contains("pick possible dates")
+    cy.get("#notification").contains("pick possible dates")
   })
 
+  it("can't add event if no group is picked", function () {
+    cy.get("#addEvent-button").click()
+    cy.contains("New Event")
+    cy.get("#name").type("EventTestName")
+    const currentDate = dateFns.format(new Date(), "d")
+    const nextDate = parseInt(currentDate) + 1
+    cy.log(nextDate)
+    cy.get(`#dates-${currentDate}`).should("have.css", "background-color", "rgb(255, 255, 255)" )
+    cy.get(`#dates-${currentDate}`).click()
+    cy.get(`#dates-${currentDate}`).should("have.css", "background-color", "rgb(127, 255, 0)" )
+    cy.get(`#dates-${nextDate}`).should("have.css", "background-color", "rgb(255, 255, 255)" )
+    cy.get(`#dates-${nextDate}`).click()
+    cy.get(`#dates-${nextDate}`).should("have.css", "background-color", "rgb(127, 255, 0)" )
+    cy.get("#submit-button").click()
+    cy.get("#notification").contains("pick group to add event")
+
+
+  })
 
   it("can add event if dates are picked", function () {
     cy.get("#addEvent-button").click()
