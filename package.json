@@ -44,7 +44,7 @@
     "fixlint": "eslint . --fix",
     "cypress:open": "cypress open",
     "test:e2e": "cypress run",
-    "scheduled-job": "node backend/scheduled-job"
+    "scheduled-job": "node backend/run-scheduled-job"
   },
   "eslintConfig": {
     "extends": [

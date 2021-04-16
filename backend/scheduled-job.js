@@ -14,3 +14,5 @@ const scheduledJob = async () => {
 }
 
 scheduledJob()
+
+module.exports = scheduledJob
