@@ -4,12 +4,14 @@ import React from "react"
 import * as yup from "yup"
 
 const validationSchema = yup.object().shape({
-  name: yup
+  username: yup
     .string()
-    .required("Name is required"),
+    .required("Username is required")
+    .min(3, "Username needs to be atleast 3 characters"),
   password: yup
     .string()
     .required("Password is required")
+    .min(8, "Password needs to be atleast 8 characters")
 
 })
 
