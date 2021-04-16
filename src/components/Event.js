@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useMutation, useQuery } from "@apollo/client"
 import { useParams } from "react-router-dom"
-import { ME, EVENT } from "../graphql/queries"
+import { USER_EVENTS, EVENT } from "../graphql/queries"
 import EventCalendar from "./EventCalendar"
 import { VOTE_EVENT } from "../graphql/mutations"
 import { Link } from "react-router-dom"
@@ -28,7 +28,7 @@ const Event = ({ setNotification }) => {
   }
   console.log(response)
   const id = useParams().id
-  const user= useQuery(ME)
+  const user= useQuery(USER_EVENTS)
   console.log(user)
   const event = useQuery(EVENT, { variables: { id } })
   console.log(event)

@@ -4,12 +4,12 @@ import Events from "./Events"
 import Button from "react-bootstrap/Button"
 import { Link } from "react-router-dom"
 import { useQuery } from "@apollo/client"
-import { ME } from "../graphql/queries"
+import { USER_EVENTS } from "../graphql/queries"
 import Loader from "./Loader"
 
 
 const HomePage = ({ logout }) => {
-  const user= useQuery(ME)
+  const user= useQuery(USER_EVENTS)
   if(user.data){
     console.log(user.data.me.events)
   }

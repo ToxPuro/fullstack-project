@@ -4,7 +4,7 @@ import { GROUPS_THAT_USER_IS_NOT_IN } from "../graphql/queries"
 import { JOIN_GROUP } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 import Loader from "./Loader"
-import { USER_GROUPS, ME } from "../graphql/queries"
+import { USER_GROUPS, USER_ID } from "../graphql/queries"
 
 const JoinGroupElement = ({ group, user }) => {
   const [ join ] = useMutation(JOIN_GROUP, {
@@ -47,7 +47,7 @@ const JoinGroupElement = ({ group, user }) => {
 
 const JoinGroup = () => {
   const groups = useQuery(GROUPS_THAT_USER_IS_NOT_IN)
-  const user = useQuery(ME)
+  const user = useQuery(USER_ID)
   if(!groups.data || !user.data){
     return(
       <Loader/>

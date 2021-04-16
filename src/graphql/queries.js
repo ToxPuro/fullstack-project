@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-export const ME = gql`
+export const USER_EVENTS = gql`
 query{
   me{
     name
@@ -12,6 +12,13 @@ query{
       status
       finalDate
     }
+  }
+}`
+
+export const USER_ID = gql`
+query{
+  me{
+    id
   }
 }`
 
@@ -30,14 +37,6 @@ query{
       name
       id
     }
-  }
-}`
-
-export const USER_EVENTS = gql`
-query{
-  userEvents{
-    name
-    id
   }
 }`
 
@@ -96,3 +95,5 @@ query{
     id
   }
 }`
+
+
