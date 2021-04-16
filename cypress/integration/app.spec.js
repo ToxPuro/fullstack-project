@@ -162,6 +162,7 @@ describe("when there are events", function () {
     cy.get(`#dates-${formattedDate}`)
       .should("have.css", "background-color", "rgb(127, 255, 0)")
     cy.get("#homepage-button").click()
+    cy.get(`#dates-${formattedDate}`).contains("EventTestName")
 
 
   })
