@@ -140,7 +140,7 @@ const resolvers = {
         console.log("group events",group.events)
         console.log("currentUserEvents", currentUser.events)
         await currentUser.updateOne({ $pull: { groups: group._id } })
-        await currentUser.updateOne({ $pullAll: { events: [group.events] } })
+        await currentUser.updateOne({ $pullAll: { events: group.events } })
         return group
       }catch(error){
         console.log(error)

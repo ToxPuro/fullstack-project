@@ -1,15 +1,18 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { useQuery, useMutation } from "@apollo/client"
-import { GET_GROUP, GROUPS_THAT_USER_IS_NOT_IN } from "../graphql/queries"
+import { GET_GROUP, GROUPS_THAT_USER_IS_NOT_IN, ME } from "../graphql/queries"
 import Users from "./Users"
 import Loader from "./Loader"
 import { LEAVE_GROUP } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 
 const Group = () => {
+  const user = useQuery(ME)
+  console.log(user.data)
   const [leaveGroup] = useMutation(LEAVE_GROUP, {
     update: (store, response) => {
+      console.log(response)
       const dataInStore = store.readQuery({ query: GROUPS_THAT_USER_IS_NOT_IN })
       if(dataInStore){
         store.writeQuery({
@@ -18,6 +21,15 @@ const Group = () => {
             me: {
               ...dataInStore.me,
               groupsUserNotIn: dataInStore.me.groupsUserNotIn.concat(response.data.leaveGroup)
+            }
+          }
+        })
+        console.log(response.data)
+        store.modify({
+          id: `User:${user.data.me.id}`,
+          fields: {
+            groups(listInCache){
+              return listInCache.filter(group => group.__ref !== `Group:${response.data.leaveGroup.id}`)
             }
           }
         })
