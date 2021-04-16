@@ -79,16 +79,20 @@ describe("When logged in", function () {
     cy.contains("pick possible dates")
   })
 
+
   it("can add event if dates are picked", function () {
     cy.get("#addEvent-button").click()
     cy.contains("New Event")
     cy.get("#name").type("EventTestName")
-    cy.get("#dates-14").should("have.css", "background-color", "rgb(255, 255, 255)" )
-    cy.get("#dates-14").click()
-    cy.get("#dates-14").should("have.css", "background-color", "rgb(127, 255, 0)" )
-    cy.get("#dates-15").should("have.css", "background-color", "rgb(255, 255, 255)" )
-    cy.get("#dates-15").click()
-    cy.get("#dates-15").should("have.css", "background-color", "rgb(127, 255, 0)" )
+    const currentDate = dateFns.format(new Date(), "d")
+    const nextDate = parseInt(currentDate) + 1
+    cy.log(nextDate)
+    cy.get(`#dates-${currentDate}`).should("have.css", "background-color", "rgb(255, 255, 255)" )
+    cy.get(`#dates-${currentDate}`).click()
+    cy.get(`#dates-${currentDate}`).should("have.css", "background-color", "rgb(127, 255, 0)" )
+    cy.get(`#dates-${nextDate}`).should("have.css", "background-color", "rgb(255, 255, 255)" )
+    cy.get(`#dates-${nextDate}`).click()
+    cy.get(`#dates-${nextDate}`).should("have.css", "background-color", "rgb(127, 255, 0)" )
     cy.get("#group-options").type("TestGroup{enter}")
     cy.get("#submit-button").click()
     cy.get("#homepage-button").click()
