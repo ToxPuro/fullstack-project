@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
-const { UserInputError, AuthenticationError, ForbiddenError, attachConnectorsToContext } = require("apollo-server-express")
+const { UserInputError, AuthenticationError, ForbiddenError } = require("apollo-server-express")
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
