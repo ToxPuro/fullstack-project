@@ -102,10 +102,8 @@ const resolvers = {
     },
     deleteEvent: async(root, args, context) => {
       const event = await Event.findOneAndDelete({ _id: args.id }).populate("group")
-      console.log(event.group.users)
-      const users = await User.find({ _id:{ $in: event.group.users  } })
-      console.log(users)
       await User.updateMany({ _id:{ $in: event.group.users  } }, { $pull: { events: event._id } })
+      await Group.updateOne({ _id: event.group }, { $pull: { events: event._id } })
       return context.currentUser
     },
     createGroup: async(root, args, context) => {

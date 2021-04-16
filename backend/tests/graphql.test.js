@@ -144,8 +144,10 @@ describe("when there is event", () => {
     await mutate(DELETE_EVENT, { variables: { id: eventInDB._id.toString() } })
     const userInDB = await helper.userInDB()
     const eventInDBBack = await helper.eventInDB()
+    const groupInDB = await helper.groupInDB()
     expect(eventInDBBack).toBe(null)
     expect(userInDB.events.length).toBe(0)
+    expect(groupInDB.events.length).toBe(0)
 
   })
 })
