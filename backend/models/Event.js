@@ -26,10 +26,6 @@ const eventSchema = new mongoose.Schema({
     default: "picking"
   },
   finalDate: Date,
-  expireAt: {
-    type: Date
-  }
 },
 { minimize: false })
-eventSchema.index({ "expireAt": 1 }, { expireAfterSeconds: 0 })
 module.exports = mongoose.model("Event", eventSchema)
