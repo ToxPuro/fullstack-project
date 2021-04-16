@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
-const { UserInputError, AuthenticationError, ForbiddenError } = require("apollo-server-express")
+const { UserInputError, AuthenticationError, ForbiddenError, attachConnectorsToContext } = require("apollo-server-express")
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -101,7 +101,11 @@ const resolvers = {
         })
     },
     deleteEvent: async(root, args, context) => {
-      await Event.deleteMany({})
+      const event = await Event.findOneAndDelete({ _id: args.id }).populate("group")
+      console.log(event.group.users)
+      const users = await User.find({ _id:{ $in: event.group.users  } })
+      console.log(users)
+      await User.updateMany({ _id:{ $in: event.group.users  } }, { $pull: { events: event._id } })
       return context.currentUser
     },
     createGroup: async(root, args, context) => {
