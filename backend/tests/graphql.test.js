@@ -1,8 +1,6 @@
 const apolloServer = require("../apolloServer")
 const  { createTestClient } = require("apollo-server-integration-testing")
-const User = require("../models/User")
 const Event = require("../models/Event")
-const Group = require("../models/Group")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
 const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP } = require("./queries")

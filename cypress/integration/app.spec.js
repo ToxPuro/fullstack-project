@@ -151,8 +151,11 @@ describe("when there are events", function () {
       .should("have.css", "background-color", "rgb(127, 255, 0)")
       .click()
       .should("have.css", "background-color", "rgb(139, 0, 0)")
+      .click()
+      .click()
 
     cy.get("#voting-button").click()
+    cy.reload()
 
 
   })

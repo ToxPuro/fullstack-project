@@ -12,6 +12,7 @@ async function createApolloServer() {
   const app = express()
 
   await apolloServer.start()
+  app.use(express.static(path.join(__dirname, "build")))
 
   app.get(["/", "/login", "/signIn", "/joinGroup", "/groups", "/addGroup", "/events/:id", "/groups/:id", "/user/:username"], function(req, res) {
     res.sendFile(path.join(__dirname, "/build", "index.html"), function(err) {
@@ -21,7 +22,7 @@ async function createApolloServer() {
     })
   })
 
-  app.use(express.static("build"))
+
   app.use("/testing", testingRouter)
 
   apolloServer.applyMiddleware({ app })

@@ -84,6 +84,8 @@ const resolvers = {
         return new Date (dates.reduce((a,b) => (a>b ? a : b )))
       }
 
+      console.log(finalDate)
+
       console.log("adding Date")
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
