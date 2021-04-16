@@ -27,11 +27,9 @@ const eventSchema = new mongoose.Schema({
   },
   finalDate: Date,
   expireAt: {
-    type: Date,
-    expires: 0
+    type: Date
   }
 },
 { minimize: false })
-
-
+eventSchema.index({ "expireAt": 1 }, { expireAfterSeconds: 0 })
 module.exports = mongoose.model("Event", eventSchema)
