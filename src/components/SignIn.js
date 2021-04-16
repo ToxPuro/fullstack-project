@@ -45,7 +45,6 @@ const SignIn = ({ login, signIn }) => {
           handleBlur,
           handleSubmit,
           isValid,
-          dirty
           /* and other goodies */
         }) => (
           <form onSubmit={handleSubmit}>
@@ -80,7 +79,7 @@ const SignIn = ({ login, signIn }) => {
               value={values.password}
             />
             <br/>
-            { (isValid && dirty) ?             <button type="submit" id="submit-button">
+            { (isValid) ?             <button type="submit" id="submit-button">
              Sign In
             </button> : null}
           </form>

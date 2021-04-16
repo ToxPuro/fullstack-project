@@ -131,6 +131,23 @@ describe("when there is event", () => {
   })
 })
 
+describe("fucking around", () => {
+  beforeAll(async () => {
+    await helper.erase()
+    const user = await helper.createUser()
+    const group = await helper.createGroup([user])
+    await helper.createEvent(group)
+    await Event.deleteMany({})
+  })
+  test("hihi", async() => {
+    const user = await (await helper.userInDB()).populate("events").execPopulate()
+    console.log(user)
+    const events = await Event.find({})
+    console.log(events)
+  })
+
+})
+
 describe("when event has already been voted on", () => {
   beforeAll(async () => {
     await helper.erase()
