@@ -98,6 +98,12 @@ const Cells = ({ month, dates }) => {
 }
 
 const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
+  const test = dateFns.format(day, "DDD")
+  console.log(test)
+  if(dates[0]){
+    const secondTest = dateFns.format( new Date(dates[0].date), "DDD")
+    console.log(secondTest)
+  }
   const event = dates.find(date => dateFns.format( new Date(date.date), "DDD") === dateFns.format(day, "DDD"))
   return(
     <div

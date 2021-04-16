@@ -264,6 +264,12 @@ const resolvers = {
     date: async(root) => {
       return new Date(root.date).toISOString()
     }
+  },
+  Event: {
+    finalDate: async(root) => {
+      console.log("root",root.finalDate)
+      return new Date(root.finalDate).toISOString()
+    }
   }
 }
 
