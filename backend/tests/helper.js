@@ -5,7 +5,7 @@ const Group = require("../models/Group")
 const dateFns = require("date-fns")
 // passwordHash is encrypted from 'salainen'
 const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0Ok2"
-const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [] }
+const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [], messages: [{ content: "TestContent", read: false }] }
 const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }

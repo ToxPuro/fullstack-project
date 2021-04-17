@@ -30,6 +30,13 @@ const userSchema = new mongoose.Schema({
       ref: "Group"
     }],
     default: []
+  },
+  messages: {
+    type:[{
+      content: String,
+      read: Boolean
+    }],
+    default: []
   }
 })
 
