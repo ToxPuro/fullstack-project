@@ -1,8 +1,8 @@
 const { gql } = require("apollo-server-express")
 
 const ADD_GROUP = gql`
-mutation{
-  createGroup(name: "TestGroup", users: [] ){name id users{name}}
+mutation addGroup($users: [String]!){
+  createGroup(name: "TestGroup", users: $users ){name id users{name}}
 }`
 
 const LOGIN = gql`

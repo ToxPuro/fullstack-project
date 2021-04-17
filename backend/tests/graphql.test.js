@@ -46,9 +46,10 @@ describe("adding group", () => {
   beforeAll( async () => {
     await helper.erase()
     await helper.createUser()
+    await helper.createSecondUser()
   })
   test("can't add group if not logged in", async () => {
-    const group = await mutate( ADD_GROUP)
+    const group = await mutate( ADD_GROUP, { variables: { users: [helper.secondUserObject.username ] } })
 
     expect(group.errors[0].message).toEqual("user needs to be logged in")
   })
@@ -56,15 +57,15 @@ describe("adding group", () => {
   test("logged in user is in the group if no users are passed in ", async() => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
 
-    const result = await mutate( ADD_GROUP)
+    const result = await mutate( ADD_GROUP, { variables: { users: [helper.secondUserObject.username ] } })
     const groupInDB = await helper.groupInDB()
     await groupInDB.populate("users").execPopulate()
     await groupInDB.populate("admins").execPopulate()
 
     expect(groupInDB.name).toBe(helper.groupObject.name)
     expect(result.data.createGroup.name).toBe(helper.groupObject.name)
-    expect(groupInDB.users[0].name).toBe(helper.userObject.name)
-    expect(groupInDB.admins[0].name).toBe(helper.userObject.name)
+    expect(groupInDB.users.length).toBe(2)
+    expect(groupInDB.admins.length).toBe(1)
   })
 })
 

@@ -107,20 +107,25 @@ const resolvers = {
       return context.currentUser
     },
     createGroup: async(root, args, context) => {
+      console.log("args", args)
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
       let users = await User.find({ username: { $in: args.users } })
+      console.log(users)
       users = users.concat(context.currentUser)
       const usersID = users.map(user => user._id)
-      if(users.length < args.users.length){
-        throw new UserInputError("Couldn't find any users with given usernames")
+      console.log("usersID", usersID)
+      if(users.length-1 < args.users.length){
+        console.log("yeah")
+        throw new UserInputError("Couldn't find users")
       }
-      const group = new Group({ name: args.name, users: [usersID], events: [], admins: [context.currentUser.id] })
+      const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id] })
+      await group.save()
+      console.log("group", group)
       for(const i in users){
         await users[i].updateOne({ $addToSet: { groups: group._id } })
       }
-      await group.save()
       await group.populate("users").execPopulate()
       return group
     },
