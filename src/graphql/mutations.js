@@ -50,5 +50,9 @@ mutation leaveGroup($id: ID!){
   }
 }`
 
+export const REMOVE_FROM_GROUP = gql`
+mutation removeFromGroup($group: String!, $user: String!){
+  removeFromGroup(group: $group, user: $user){name}
+}`
 
 
