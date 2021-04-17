@@ -82,7 +82,7 @@ query{
 }`
 
 const ADD_TO_ADMINS = gql`
-mutate addToAdmins($group: String!, $user: String!){
+mutation addToAdmins($group: String!, $user: String!){
   addToAdmins(group: $group, user: $user){name}
 }`
 

@@ -92,6 +92,10 @@ type Mutation {
   deleteEvent(
     id: ID!
   ): User
+  addToAdmins(
+    group: String!
+    user: String!
+  ): Group
 }
 `
 
