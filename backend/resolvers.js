@@ -116,7 +116,7 @@ const resolvers = {
       if(users.length < args.users.length){
         throw new UserInputError("Couldn't find any users with given usernames")
       }
-      const group = new Group({ name: args.name, users: [usersID], events: [] })
+      const group = new Group({ name: args.name, users: [usersID], events: [], admins: [context.currentUser.id] })
       for(const i in users){
         await users[i].updateOne({ $addToSet: { groups: group._id } })
       }
@@ -141,7 +141,7 @@ const resolvers = {
       }
       try{
         console.log("currentUserid", currentUser._id)
-        const group = await Group.findOneAndUpdate({ _id: args.id }, { $pullAll: { users: [currentUser._id] } }, { new: true } )
+        const group = await Group.findOneAndUpdate({ _id: args.id }, { $pull: { users: currentUser._id, admins: currentUser._id } }, { new: true } )
         console.log("group events",group.events)
         console.log("currentUserEvents", currentUser.events)
         await currentUser.updateOne({ $pull: { groups: group._id } })
