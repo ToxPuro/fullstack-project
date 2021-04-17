@@ -28,6 +28,19 @@ describe("login", () => {
 
 })
 
+describe("messages", async() => {
+  beforeEach(async () => {
+    await helper.erase()
+    await helper.createUser()
+  })
+  test("can get users messages", async () =>{
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+    const user = await query(USER_MESSAGES)
+    expect(user.data.me.messages.length).toBe(1)
+    expect(user.data.me.messages[0].content).toBe(helper.userObject.messages[0].content)
+  })
+})
+
 describe("adding group", () => {
 
   beforeAll( async () => {
