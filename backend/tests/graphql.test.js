@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 const scheduledJob = require("../scheduled-job")
@@ -28,7 +28,7 @@ describe("login", () => {
 
 })
 
-describe("messages", async() => {
+describe("messages", () => {
   beforeEach(async () => {
     await helper.erase()
     await helper.createUser()

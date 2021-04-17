@@ -16,6 +16,12 @@ type User {
   events: [Event]
   groups: [Group]
   groupsUserNotIn: [Group]
+  messages: [Message]
+}
+
+type Message {
+  content: String!
+  read: Boolean!
 }
 
 type Token {

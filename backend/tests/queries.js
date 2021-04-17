@@ -72,4 +72,13 @@ mutation deleteEvent($id: ID!){
   deleteEvent(id: $id){id}
 }`
 
-module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT }
+const USER_MESSAGES = gql`
+query{
+  me{
+    messages{
+      content
+    }
+  }
+}`
+
+module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES }
