@@ -225,6 +225,8 @@ describe("when user is part of groups", () => {
   test("admin can add other users to admins", async() => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     await mutate(ADD_TO_ADMINS, { variables: { group: helper.groupObject.name, user: helper.secondUserObject.username } })
+    const groupInDB = await helper.groupInDB()
+    expect(groupInDB.admins.length).toBe(2)
   })
 })
 
