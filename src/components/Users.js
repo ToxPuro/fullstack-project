@@ -10,11 +10,12 @@ const Users = ({ users, admins }) => {
       <Loader/>
     )
   }
-  console.log("users", users)
-  console.log("admins", admins)
   const adminsIDs = admins.map(admin => admin.id)
   const filteredUsers = users.filter(user => !adminsIDs.includes(user.id))
-  const displayUsers = filteredUsers.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))
+  const normalUsersView = filteredUsers.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))
+  const adminUsersView = filteredUsers.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link> <button> remove </button></li>))
+  const displayUsers = adminsIDs.includes(userID.data.me.id) ? adminUsersView : normalUsersView
+
   const displayAdmins = admins.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))
 
   return(
