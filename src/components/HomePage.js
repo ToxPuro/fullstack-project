@@ -38,7 +38,7 @@ const HomePage = ({ logout }) => {
       <button id="addGroup-button"><Link to="/addGroup">add group</Link></button>
       <button id="groups-button"><Link to="/groups">groups</Link></button>
       <button id="join-group-button"><Link to="/joinGroup">join group</Link></button>
-      <button id="messages"><Link to="/joinGroup">messages</Link></button>
+      <button id="messages-button"><Link to="/messages">messages</Link></button>
     </div>
   )
 }

@@ -15,6 +15,16 @@ query{
   }
 }`
 
+export const USER_MESSAGES = gql`
+query{
+  me{
+    messages{
+      content
+      read
+    }
+  }
+}`
+
 export const USER_ID = gql`
 query{
   me{
