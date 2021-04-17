@@ -54,7 +54,7 @@ describe("adding group", () => {
     expect(group.errors[0].message).toEqual("user needs to be logged in")
   })
 
-  test("logged in user is in the group if no users are passed in ", async() => {
+  test("logged in user is admin", async() => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
 
     const result = await mutate( ADD_GROUP, { variables: { users: [helper.secondUserObject.username ] } })
@@ -186,7 +186,8 @@ describe("when user is part of groups", () => {
   beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
-    const group = await helper.createGroup([user])
+    const secondUser = await helper.createSecondUser()
+    const group = await helper.createGroup([user, secondUser])
     await helper.createEvent(group)
     await helper.createSecondGroup()
   })
@@ -209,14 +210,15 @@ describe("when user is part of groups", () => {
   test("user can leave groups", async() => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const groupInDB = await helper.groupInDB()
+    console.log(groupInDB)
     const result = await mutate(LEAVE_GROUP, { variables: { id: groupInDB.id } })
     console.log(result)
-    expect(result.data.leaveGroup.users).toStrictEqual([])
+    expect(result.data.leaveGroup.users.length).toBe(1)
     const userInDB = await helper.userInDB()
     expect(userInDB.groups.length).toBe(0)
     expect(userInDB.events.length).toBe(0)
     const groupInDBBack = await helper.groupInDB()
-    expect(groupInDBBack.users.length).toBe(0)
+    expect(groupInDBBack.users.length).toBe(1)
   })
 })
 
