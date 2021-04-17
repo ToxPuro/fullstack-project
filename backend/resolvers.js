@@ -162,8 +162,12 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name : args.group })
-      await group.populate("users").execPopulate()
-      await group.populate("admins").execPopulate()
+      console.log(group.admins)
+      console.log(currentUser._id)
+      if(group.admins.filter(admin => admin._id.toString() === currentUser._id.toString()).length === 0){
+        console.log("yeet")
+        throw new AuthenticationError("logged in user needs to be group admin")
+      }
       const user = await User.findOne({ username: args.user })
       await group.updateOne({ $addToSet: { admins: user._id } })
       return group

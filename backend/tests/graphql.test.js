@@ -228,6 +228,13 @@ describe("when user is part of groups", () => {
     const groupInDB = await helper.groupInDB()
     expect(groupInDB.admins.length).toBe(2)
   })
+
+  test("normal user can't add other users to admins", async() => {
+    await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+    await mutate(ADD_TO_ADMINS, { variables: { group: helper.groupObject.name, user: helper.secondUserObject.username } })
+    const groupInDB = await helper.groupInDB()
+    expect(groupInDB.admins.length).toBe(1)
+  })
 })
 
 describe("multiple voters", () => {
