@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { useMutation } from "@apollo/client"
 import { ADD_GROUP } from "../graphql/mutations"
 import { USER_GROUPS } from "../graphql/queries"
-const AddGroup = () => {
+const AddGroup = ({ setNotification }) => {
   const[addGroup]  = useMutation(ADD_GROUP, {
     update: (store, response) => {
       const dataInStore = store.readQuery({ query: USER_GROUPS })
@@ -29,10 +29,12 @@ const AddGroup = () => {
       <Formik
         initialValues={{ name: "", user: "" }}
         onSubmit={async ({ name }, { resetForm }) => {
-          console.log(name)
-          console.log(users)
-          const result = await addGroup({ variables: { name, users } })
-          console.log(result.data)
+          await addGroup({ variables: { name, users } })
+          setNotification({ message: `added group ${name}`, error: false })
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+          resetForm({})
           resetForm({})
         }}
       >
