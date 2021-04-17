@@ -156,6 +156,18 @@ const resolvers = {
         console.log(error)
       }
     },
+    addToAdmins: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if(!currentUser){
+        throw new AuthenticationError("user needs to be logged in")
+      }
+      const group = await Group.findOne({ name : args.group })
+      await group.populate("users").execPopulate()
+      await group.populate("admins").execPopulate()
+      const user = await User.findOne({ username: args.user })
+      await group.updateOne({ $addToSet: { admins: user._id } })
+      return group
+    },
     voteEvent: async (root, args, context ) => {
       console.log("voting")
       const currentUser = context.currentUser
