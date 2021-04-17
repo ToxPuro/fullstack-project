@@ -97,6 +97,10 @@ type Mutation {
     group: String!
     user: String!
   ): Group
+  removeFromGroup(
+    group: String!
+    user: String!
+  ): Group
 }
 `
 

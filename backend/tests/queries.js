@@ -86,4 +86,9 @@ mutation addToAdmins($group: String!, $user: String!){
   addToAdmins(group: $group, user: $user){name}
 }`
 
-module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS }
+const REMOVE_FROM_GROUP = gql`
+mutation removeFromGroup($group: String!, $user: String!){
+  removeFromGroup(group: $group, user: $user){name}
+}`
+
+module.exports = { ADD_EVENT, LOGIN, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP }
