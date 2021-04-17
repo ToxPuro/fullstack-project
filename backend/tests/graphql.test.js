@@ -232,6 +232,11 @@ describe("when user is part of groups", () => {
   test("admin can remove other users", async() => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     await mutate(REMOVE_FROM_GROUP, { variables: { group : helper.groupObject.name, user: helper.secondUserObject.username } })
+    const groupInDB = await helper.groupInDB()
+    expect(groupInDB.users.length).toBe(1)
+    const secondUserInDB = await helper.secondUserInDB()
+    expect(secondUserInDB.groups.length).toBe(0)
+    expect(secondUserInDB.events.length).toBe(0)
 
   })
 
