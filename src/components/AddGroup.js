@@ -3,8 +3,25 @@ import { Formik } from "formik"
 import { Link } from "react-router-dom"
 import { useMutation } from "@apollo/client"
 import { ADD_GROUP } from "../graphql/mutations"
+import { USER_GROUPS } from "../graphql/queries"
 const AddGroup = () => {
-  const[addGroup]  = useMutation(ADD_GROUP)
+  const[addGroup]  = useMutation(ADD_GROUP, {
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: USER_GROUPS })
+      if(dataInStore){
+        store.writeQuery({
+          query: USER_GROUPS,
+          data: {
+            me: {
+              ...dataInStore.me,
+              groups: dataInStore.me.groups.concat(response.data.createGroup)
+            }
+          }
+        })
+      }
+    }
+  })
+
   const [ users, setUsers] = useState([])
   return(
     <div>

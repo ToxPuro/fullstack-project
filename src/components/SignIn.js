@@ -5,13 +5,16 @@ import * as yup from "yup"
 const validationSchema = yup.object().shape({
   username: yup
     .string()
-    .required("Username is required"),
+    .required("Username is required")
+    .min(3),
   name: yup
     .string()
-    .required("Name is required"),
+    .required("Name is required")
+    .min(3),
   password: yup
     .string()
     .required("Password is required")
+    .min(8)
 
 })
 
