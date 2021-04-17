@@ -76,6 +76,11 @@ query group($id: ID!){
       username
       id
     }
+    admins{
+      name
+      username
+      id
+    }
   }
 }`
 

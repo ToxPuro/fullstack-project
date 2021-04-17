@@ -1,12 +1,20 @@
 import React from "react"
 import { Link } from "react-router-dom"
-const Users = ({ users }) => {
-  const displayUsers = users.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))
+const Users = ({ users, admins }) => {
+  console.log("users", users)
+  console.log("admins", admins)
+  const displayUsers = users.filter(user => !(admins.includes(user))).map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))
+  const displayAdmins = admins.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))
 
   return(
     <div>
+      <h2>Users</h2>
       <ul>
         {displayUsers}
+      </ul>
+      <h2>Admins</h2>
+      <ul>
+        {displayAdmins}
       </ul>
     </div>
   )

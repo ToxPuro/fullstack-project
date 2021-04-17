@@ -279,6 +279,10 @@ const resolvers = {
     users: async(root) => {
       await root.populate("users").execPopulate()
       return root.users
+    },
+    admins: async(root) => {
+      await root.populate("admins").execPopulate()
+      return root.admins
     }
   },
   Date: {

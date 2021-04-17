@@ -46,6 +46,7 @@ type Date {
 type Group {
   name: String!
   users: [User!]!
+  admins: [User]
   id: ID!
 }
 

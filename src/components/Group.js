@@ -52,13 +52,14 @@ const Group = ({ setNotification }) => {
       <Loader/>
     )
   }
+  console.log(group.data)
   return(
     <div>
       <span>
         { group.data.group.name }
         <button id="leave-button" onClick={ leave }>leave</button>
       </span>
-      <Users users = {group.data.group.users}/>
+      <Users users = {group.data.group.users} admins = {group.data.group.admins}/>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )

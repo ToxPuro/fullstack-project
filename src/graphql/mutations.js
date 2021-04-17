@@ -17,7 +17,7 @@ mutation createUser($name: String! $username: String! $password: String!){
 
 export const ADD_GROUP = gql`
 mutation addGroup($name: String! $users: [String]!){
-  createGroup(name: $name, users: $users){name}
+  createGroup(name: $name, users: $users){name id}
 }`
 
 export const JOIN_GROUP = gql`
