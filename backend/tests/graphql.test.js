@@ -229,6 +229,12 @@ describe("when user is part of groups", () => {
     expect(groupInDB.admins.length).toBe(2)
   })
 
+  test("admin can remove other users", async() => {
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+    await mutate(REMOVE_FROM_GROUP, { variables: { group : helper.groupObject.name, user: helper.secondUserObject.username } })
+    
+  })
+
   test("normal user can't add other users to admins", async() => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
     await mutate(ADD_TO_ADMINS, { variables: { group: helper.groupObject.name, user: helper.secondUserObject.username } })
