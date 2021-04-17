@@ -33,7 +33,7 @@ describe("messages", () => {
     await helper.erase()
     await helper.createUser()
   })
-  test("can get users messages", async () =>{
+  test("can get users messages", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const user = await query(USER_MESSAGES)
     expect(user.data.me.messages.length).toBe(1)
@@ -58,10 +58,13 @@ describe("adding group", () => {
 
     const result = await mutate( ADD_GROUP)
     const groupInDB = await helper.groupInDB()
+    await groupInDB.populate("users").execPopulate()
+    await groupInDB.populate("admins").execPopulate()
 
-    expect(result.data.createGroup.name).toBe(groupInDB.name)
+    expect(groupInDB.name).toBe(helper.groupObject.name)
     expect(result.data.createGroup.name).toBe(helper.groupObject.name)
-    expect(result.data.createGroup.users[0].name).toBe(helper.userObject.name)
+    expect(groupInDB.users[0].name).toBe(helper.userObject.name)
+    expect(groupInDB.admins[0].name).toBe(helper.userObject.name)
   })
 })
 
