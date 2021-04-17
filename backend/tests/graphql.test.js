@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 const scheduledJob = require("../scheduled-job")
@@ -219,6 +219,12 @@ describe("when user is part of groups", () => {
     expect(userInDB.events.length).toBe(0)
     const groupInDBBack = await helper.groupInDB()
     expect(groupInDBBack.users.length).toBe(1)
+    expect(groupInDBBack.admins.length).toBe(0)
+  })
+
+  test("admin can add other users to admins", async() => {
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+    await mutate(ADD_TO_ADMINS, { variables: { group: helper.groupObject.name, user: helper.secondUserObject.username } })
   })
 })
 
