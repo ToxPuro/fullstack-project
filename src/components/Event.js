@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react"
 import { useMutation, useQuery } from "@apollo/client"
 import { useParams } from "react-router-dom"
 import { USER_EVENTS, EVENT } from "../graphql/queries"
-import EventCalendar from "./EventCalendar"
 import { VOTE_EVENT } from "../graphql/mutations"
-import { Link } from "react-router-dom"
+import PickingEvent from "./PickingEvent"
 import DoneEvent from "./DoneEvent"
 import VotingEvent from "./VotingEvent"
 
@@ -48,7 +47,7 @@ const Event = ({ setNotification }) => {
     }
   },[event.data, user.data])
 
-  if(!event.data){
+  if(!event.data || !user.data){
     return(
       <div>
         ...loading
@@ -71,10 +70,7 @@ const Event = ({ setNotification }) => {
   }
   return(
     <div>
-      {event.data.event.name}
-      <EventCalendar dates = {event.data.event.dates.map(date => parseDate(date.date))} setVotes={setVotes} votes={votes}/>
-      <button id="voting-button" onClick={onClick}>Vote</button>
-      <button id="homepage-button"> <Link to="/">Home Page</Link></button>
+      <PickingEvent user={user.data.me} event={event.data.event} />
     </div>
   )
 }
