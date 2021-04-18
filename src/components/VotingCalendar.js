@@ -3,14 +3,14 @@ import * as dateFns from "date-fns"
 import "../App.css"
 import CalendarHeader from "./CalendarHeader"
 import CalendarDays from "./CalendarDays"
-const EventCalendar = ({ dates }) => {
+const EventCalendar = ({ dates, votes, setVotes }) => {
   console.log(dates)
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
       <CalendarHeader month={month} setMonth={setMonth}/>
       <CalendarDays month={month}/>
-      <Cells month={month} dates={dates} />
+      <Cells month={month} dates={dates} votes={votes} setVotes={setVotes}/>
     </div>
   )
 }
@@ -53,7 +53,8 @@ const Cells = ({ month, dates, setVotes, votes }) => {
 }
 
 
-const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
+const CalendarDate = ({ formattedDate, day, monthStart, dates, votes, setVotes }) => {
+  console.log(votes, setVotes)
   const checkDates = dates.map(date => dateFns.format(date, "d"))
   let style = ""
   if(checkDates.includes(dateFns.format(day, "d"))){
@@ -69,7 +70,6 @@ const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
     >
       <span className="number">{formattedDate}</span>
       <span className="bg">{formattedDate}</span>
-      1
     </div>
   )
 }

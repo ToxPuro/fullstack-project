@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import VotingCalendar from "./VotingCalendar"
 
 const parseDate = (date) => {
@@ -10,18 +10,25 @@ const parseDate = (date) => {
 
 
 const VotingEvent = ({ event, user }) => {
+  const [ votes, setVotes ] = useState([])
+  console.log(votes)
   useEffect(() => {
     if(event && user){
-      console.log(event.bestDates)
+      let initialVotes = event.bestDates.map(date => ({ date: parseDate(date.date), vote: "" }))
+      if(event.bestDates[0].votes.filter(vote => vote.voter === user.username).length !== 0){
+        initialVotes = event.bestDates.map(date => ({ date: parseDate(date.date), vote: date.votes.find(vote => vote.voter === user.username ).vote }))
+      }
+      setVotes(initialVotes)
     }
-  })
+  }, [event, user])
+
   const displayDates = event.bestDates.map(date => date.date)
   return(
     <div>
       <h2>{event.name}</h2>
       voting
       {displayDates}
-      <VotingCalendar dates = {event.bestDates.map(date => parseDate(date.date))}/>
+      <VotingCalendar dates = {event.bestDates.map(date => parseDate(date.date))} votes={votes} setVotes={setVotes}/>
     </div>
   )
 }
