@@ -72,7 +72,7 @@ eventSchema.methods.calculateVotes = async function () {
   }
 
   const getBestDates = (dates) => {
-    const bestDates = dates.filter(date => compareDates(date, dates[0]))
+    const bestDates = dates.filter(date => compareDates(date, dates[0]) === 0)
     return bestDates.map(date => ({ date: date.date, votes: [] }))
   }
 
@@ -93,7 +93,9 @@ eventSchema.methods.calculateVotes = async function () {
         this.finalDate = copyDates[0].date
       } else{
         this.status = "voting"
-        this.bestDates = getBestDates(copyDates)
+        const lol = getBestDates(copyDates)
+        console.log("lol",lol)
+        this.bestDates = lol
       }
     }
   }
