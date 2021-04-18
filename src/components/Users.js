@@ -4,21 +4,33 @@ import { USER_ID } from "../graphql/queries"
 import { useQuery, useMutation } from "@apollo/client"
 import Loader from "./Loader"
 import { REMOVE_FROM_GROUP, ADD_TO_ADMINS } from "../graphql/mutations"
-const Users = ({ users, admins, groupName }) => {
+const Users = ({ users, admins, group }) => {
   const userID = useQuery(USER_ID)
   const [remove] = useMutation(REMOVE_FROM_GROUP)
-  const [ addToAdminMutation] = useMutation(ADD_TO_ADMINS)
-  if(!userID.data && groupName){
+  const [ addToAdminMutation] = useMutation(ADD_TO_ADMINS, {
+    update: (store, response) => {
+      store.modify({
+        id: `Group:${group.id}`,
+        fields: {
+          admins(listInCache){
+            return listInCache.concat(response)
+          }
+        }
+      })
+    }
+  })
+  if(!userID.data && group.name){
     return(
       <Loader/>
     )
   }
   const removeUser = async (username) => {
-    await remove({ variables: { user: username, group: groupName } })
+    await remove({ variables: { user: username, group: group.name } })
   }
   const addToAdmin = async (username) => {
-    await addToAdminMutation({ variables: { user: username, group: groupName } })
+    await addToAdminMutation({ variables: { user: username, group: group.name } })
   }
+
   const adminsIDs = admins.map(admin => admin.id)
   const filteredUsers = users.filter(user => !adminsIDs.includes(user.id))
   const normalUsersView = filteredUsers.map(user => (<li key={user.id}><Link to={`/users/${user.username}`}>{user.name}</Link></li>))

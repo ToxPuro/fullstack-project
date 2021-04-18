@@ -187,7 +187,7 @@ const resolvers = {
       }
       const user = await User.findOne({ username: args.user })
       await group.updateOne({ $addToSet: { admins: user._id } })
-      return group
+      return user
     },
     voteEvent: async (root, args, context ) => {
       console.log("voting")

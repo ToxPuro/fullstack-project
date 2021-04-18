@@ -96,7 +96,7 @@ type Mutation {
   addToAdmins(
     group: String!
     user: String!
-  ): Group
+  ): User
   removeFromGroup(
     group: String!
     user: String!
