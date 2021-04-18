@@ -26,6 +26,16 @@ const eventSchema = new mongoose.Schema({
     default: "picking"
   },
   finalDate: Date,
+  bestDates: [
+    {
+      date: Date,
+      votes: [
+        {
+          vote: String
+        }
+      ]
+    }
+  ]
 },
 { minimize: false })
 
