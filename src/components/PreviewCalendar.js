@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
+import { useHistory } from "react-router-dom"
 
 const PreviewCalendar = ({ events }) => {
   console.log(events)
-  const dates = events.filter(event => event.status === "done").map(event => ({ date: event.finalDate, name: event.name }))
+  const dates = events.filter(event => event.status === "done").map(event => ({ date: event.finalDate, name: event.name, id: event.id }))
   console.log(dates)
   const [ month, setMonth ] = useState(new Date())
   return(
@@ -98,15 +99,22 @@ const Cells = ({ month, dates }) => {
 }
 
 const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
+  const history = useHistory()
   const test = dateFns.format(day, "DDD")
   console.log(test)
   if(dates[0]){
     const secondTest = dateFns.format( new Date(dates[0].date), "DDD")
     console.log(secondTest)
   }
+  const onClick = () => {
+    if(event){
+      history.push(`events/${event.id}`)
+    }
+  }
   const event = dates.find(date => dateFns.format( new Date(date.date), "DDD") === dateFns.format(day, "DDD"))
   return(
     <div
+      onClick = {onClick}
       id={`dates-${formattedDate}`}
       className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" : ""}`}
       key={day}
