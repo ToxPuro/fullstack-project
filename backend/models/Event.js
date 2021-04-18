@@ -75,7 +75,7 @@ eventSchema.methods.calculateVotes = async function () {
     })
     if(copyDates.length === 1){
       this.status = "done"
-      this.finalDate = copyDates.date
+      this.finalDate = copyDates[0].date
     }else{
       if(compareDates(copyDates[0], copyDates[1]) === -1){
         this.status = "done"

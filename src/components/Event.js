@@ -41,6 +41,7 @@ const Event = ({ setNotification }) => {
       console.log("User", user.data.me.username)
       let initialVotes = event.data.event.dates.map(date => ({ date: parseDate(date.date), vote: "blue" }))
       if(event.data.event.dates[0].votes.filter(vote => vote.voter === user.data.me.username).length !== 0){
+        console.log("dates", event.data.event.dates)
         initialVotes = event.data.event.dates.map(date => ({ date: parseDate(date.date), vote: date.votes.find(vote => vote.voter === user.data.me.username ).vote }))
       }
       setVotes(initialVotes)
