@@ -19,7 +19,7 @@ const resolvers = {
       return User.findOne({ username: args.username })
     },
     group: (root, args) => {
-      return Group.findById(args.id).populate("users")
+      return Group.findOne({ name: args.name })
     },
     allEvents: () => {
       return Event.find({})
@@ -122,7 +122,6 @@ const resolvers = {
       }
       const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id] })
       await group.save()
-      console.log("group", group)
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { groups: group._id } })
       return group
     },
@@ -144,10 +143,7 @@ const resolvers = {
       try{
         console.log("currentUserid", currentUser._id)
         const group = await Group.findOne({ _id: args.id })
-        console.log("group events",group.events)
-        console.log("currentUserEvents", currentUser.events)
         const [,result] = await group.removeUser(currentUser.username)
-        console.log("result",result)
         return result
       }catch(error){
         console.log(error)

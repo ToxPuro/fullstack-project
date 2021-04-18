@@ -1,10 +1,11 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import { USER_ID } from "../graphql/queries"
 import { useQuery, useMutation } from "@apollo/client"
 import Loader from "./Loader"
 import { REMOVE_FROM_GROUP, ADD_TO_ADMINS } from "../graphql/mutations"
 const Users = ({ users, admins, group, setNotification }) => {
+  const history = useHistory()
   const userID = useQuery(USER_ID)
   const [remove] = useMutation(REMOVE_FROM_GROUP, {
     update: (store, response) => {
@@ -68,7 +69,7 @@ const Users = ({ users, admins, group, setNotification }) => {
       <ul>
         {displayUsers}
       </ul>
-      {adminsIDs.includes(userID.data.me.id) ? "You are admin" : null}
+      {adminsIDs.includes(userID.data.me.id) ? <button onClick={() => history.push("")}> add users to group</button> : null}
     </div>
   )
 }

@@ -37,8 +37,9 @@ const Group = ({ setNotification }) => {
       }
     }
   })
-  const id= useParams().id
-  const group = useQuery(GET_GROUP, { variables: { id } })
+  const name= useParams().name
+  console.log(name)
+  const group = useQuery(GET_GROUP, { variables: { name } })
   const leave = async () => {
     await leaveGroup({ variables: { id: group.data.group.id } })
     setNotification({ message: `Left group ${group.data.group.name}`, error: false })

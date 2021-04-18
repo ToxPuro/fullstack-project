@@ -68,8 +68,8 @@ query event($id: ID!){
 }`
 
 export const GET_GROUP = gql`
-query group($id: ID!){
-  group(id: $id){
+query group($name: String!){
+  group(name: $name){
     name
     id
     users{

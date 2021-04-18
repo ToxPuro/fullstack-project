@@ -54,7 +54,7 @@ type Query {
   allEvents: [Event]!
   me: User
   event(id: ID!): Event! 
-  group(id: ID!): Group!
+  group(name: String!): Group!
   user(username: String!): User!
   allGroups: [Group]!
 }
