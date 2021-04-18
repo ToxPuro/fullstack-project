@@ -149,7 +149,7 @@ const resolvers = {
         const group = await Group.findOne({ _id: args.id })
         console.log("group events",group.events)
         console.log("currentUserEvents", currentUser.events)
-        const [user,result] = await group.removeUser(currentUser.username)
+        const [,result] = await group.removeUser(currentUser.username)
         console.log("result",result)
         return result
       }catch(error){
@@ -162,7 +162,7 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name: args.group })
-      if(group.admins.filter(admin => admin._id.toString() === currentUser._id.toString()).length === 0){
+      if(!group.isAdmin(currentUser._id)){
         console.log("yeet")
         throw new AuthenticationError("logged in user needs to be group admin")
       }

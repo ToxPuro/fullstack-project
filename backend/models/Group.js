@@ -32,6 +32,14 @@ const groupSchema = new mongoose.Schema({
 
 groupSchema.plugin(uniqueValidator)
 
+groupSchema.methods.isAdmin = function (userID) {
+  if(this.admins.filter(admin => admin._id.toString === userID.toString()). length===0){
+    return false
+  } else{
+    return true
+  }
+}
+
 groupSchema.methods.removeUser = async function (username) {
   const user = await User.findOne({ username: username })
   console.log(this)
