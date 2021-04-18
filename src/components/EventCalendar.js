@@ -63,22 +63,26 @@ const ChoiceDate = ({ day, formattedDate, votes, setVotes }) => {
     }
   }, [dayIndex])
   const onClick = (vote) => {
-    if(vote==="blue"){
-      setVote("green")
-      cloneVotes[dayIndex].vote = "green"
-      setVotes(cloneVotes)
+    console.log(day)
+    if(!(parseInt(dateFns.format(day, "DDD"))<  parseInt(dateFns.format(new Date, "DDD")))){
+      if(vote==="blue"){
+        setVote("green")
+        cloneVotes[dayIndex].vote = "green"
+        setVotes(cloneVotes)
 
+      }
+      else if(vote === "green"){
+        setVote("red")
+        cloneVotes[dayIndex].vote = "red"
+        setVotes(cloneVotes)
+      }
+      else{
+        setVote("blue")
+        cloneVotes[dayIndex].vote = "blue"
+        setVotes(cloneVotes)
+      }
     }
-    else if(vote === "green"){
-      setVote("red")
-      cloneVotes[dayIndex].vote = "red"
-      setVotes(cloneVotes)
-    }
-    else{
-      setVote("blue")
-      cloneVotes[dayIndex].vote = "blue"
-      setVotes(cloneVotes)
-    }
+
   }
   console.log(vote)
   return(
