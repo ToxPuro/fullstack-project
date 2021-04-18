@@ -55,4 +55,9 @@ mutation removeFromGroup($group: String!, $user: String!){
   removeFromGroup(group: $group, user: $user){name}
 }`
 
+export const ADD_TO_ADMINS = gql`
+mutation addToAdmins($group: String!, $user: String!){
+  addToAdmins(group: $group, user: $user){name}
+}`
+
 
