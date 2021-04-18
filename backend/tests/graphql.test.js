@@ -177,6 +177,7 @@ describe("when event has already been voted on", () => {
     const eventInDBBack = await helper.eventInDB()
     expect(eventInDBBack.dates[0].votes[0].voter).toStrictEqual(helper.userObject.username)
     expect(eventInDBBack.dates[0].votes[0].vote).toStrictEqual("blue")
+    expect(eventInDBBack.status).toStrictEqual("done")
     expect(result.data.voteEvent.dates[0].votes).toStrictEqual([{ voter: "TestiUsername", vote: "blue" }])
   })
 
@@ -254,7 +255,7 @@ describe("multiple voters", () => {
     const user = await helper.createUser()
     const secondUser = await helper.createSecondUser()
     const group = await helper.createGroup([user, secondUser])
-    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: helper.currentDate, votes: [{ voter: helper.userObject.username, vote: "red" }] }, { date: helper.nextDate, votes: [{ voter: helper.userObject.username, vote: "red" }] }], status: "picking" })
+    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: helper.currentDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" }] }, { date: helper.nextDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" } ] }], status: "picking" })
     await event.save()
   })
 
@@ -267,6 +268,8 @@ describe("multiple voters", () => {
     const eventInDBBack = await helper.eventInDB()
     expect(eventInDBBack.status).toBe("done")
   })
+
+  test("event goes correctly to voting status", async () => {})
 })
 
 describe("tests for scheduled-job", () => {

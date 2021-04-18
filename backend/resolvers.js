@@ -230,8 +230,6 @@ const resolvers = {
       const compareDates = (a, b) => {
         const aVotes = getVotes(a)
         const bVotes = getVotes(b)
-        console.log("aVotes", aVotes)
-        console.log("bVotes", bVotes)
         if(bVotes.red>aVotes.red){
           return -1
         }
@@ -249,7 +247,6 @@ const resolvers = {
 
       await event.populate("group").execPopulate()
       const userCount = event.group.users.length
-      console.log(userCount)
       if(userCount === event.dates[0].votes.length){
         const copyDates = [...event.dates]
         copyDates.sort((a,b) => {
@@ -259,14 +256,7 @@ const resolvers = {
           event.status = "done"
           event.finalDate = copyDates[0].date
         }else{
-          console.log("picking date")
-          console.log("first date")
-          console.log(copyDates[0])
-          console.log("second date")
-          console.log(copyDates[1])
-          console.log(compareDates(copyDates[0], copyDates[1]))
           if(compareDates(copyDates[0], copyDates[1])=== -1){
-            console.log("found best one")
             event.status = "done"
             event.finalDate = copyDates[0].date
           } else{
@@ -303,8 +293,6 @@ const resolvers = {
     },
     usersNotInGroup: async(root) => {
       const result = await  User.find({ groups: { $not: { $all: [root._id] } } } )
-      console.log("root",root._id)
-      console.log(result)
       return result
     },
   },
@@ -315,7 +303,6 @@ const resolvers = {
   },
   Event: {
     finalDate: async(root) => {
-      console.log("root",root.finalDate)
       return new Date(root.finalDate).toISOString()
     }
   }
