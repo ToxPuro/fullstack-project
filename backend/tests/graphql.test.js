@@ -255,7 +255,9 @@ describe("multiple voters", () => {
     const user = await helper.createUser()
     const secondUser = await helper.createSecondUser()
     const group = await helper.createGroup([user, secondUser])
-    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: helper.currentDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" }] }, { date: helper.nextDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" } ] }], status: "picking" })
+    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: helper.currentDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" }] }, 
+      { date: helper.nextDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" } ] },
+      { date: helper.dayAfter, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" } ] }], status: "picking" })
     await event.save()
   })
 
@@ -263,7 +265,7 @@ describe("multiple voters", () => {
     const eventInDB = await helper.eventInDB()
     console.log(eventInDB)
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
-    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: helper.currentDate.toISOString(), vote: "green" }, { date: helper.nextDate.toISOString(), vote: "red" }] } })
+    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: helper.currentDate.toISOString(), vote: "green" }, { date: helper.nextDate.toISOString(), vote: "red" }, { date: helper.dayAfter.toISOString(), vote: "red" }] } })
     expect(result.data.voteEvent.status).toBe("done")
     const eventInDBBack = await helper.eventInDB()
     expect(eventInDBBack.status).toBe("done")
@@ -273,7 +275,7 @@ describe("multiple voters", () => {
     const eventInDB = await helper.eventInDB()
     console.log(eventInDB)
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
-    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: helper.currentDate.toISOString(), vote: "blue" }, { date: helper.nextDate.toISOString(), vote: "blue" }] } })
+    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: helper.currentDate.toISOString(), vote: "blue" }, { date: helper.nextDate.toISOString(), vote: "blue" }, { date: helper.dayAfter.toISOString(), vote: "red" }] } })
     expect(result.data.voteEvent.status).toBe("voting")
     const eventInDBBack = await helper.eventInDB()
     expect(eventInDBBack.status).toBe("voting")

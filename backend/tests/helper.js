@@ -11,6 +11,7 @@ const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }
 const currentDate = new Date()
 const nextDate = dateFns.addDays(currentDate, 1)
+const dayAfter = dateFns.addDays(currentDate, 2)
 const eventObject = { name: "TestiName", group: "TestGroup", dates: [ { date: currentDate, votes: [] } ], finalDate: currentDate }
 const secondEventObject = { name: "SecondTestiName", group: "TestGroup", dates: [ { date: nextDate, votes: [] } ], finalDate: nextDate }
 
@@ -106,4 +107,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter }
