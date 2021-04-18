@@ -115,6 +115,8 @@ query{
 export const USERS_NOT_IN_GROUP = gql`
 query UsersNotInGroup($name: String!){
   group(name: $name){
+    id
+    name
     usersNotInGroup{
       name
       id
