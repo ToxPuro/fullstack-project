@@ -269,7 +269,15 @@ describe("multiple voters", () => {
     expect(eventInDBBack.status).toBe("done")
   })
 
-  test("event goes correctly to voting status", async () => {})
+  test("event goes correctly to voting status", async () => {
+    const eventInDB = await helper.eventInDB()
+    console.log(eventInDB)
+    await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+    const result = await mutate(VOTE_EVENT, { variables: { id: eventInDB._id.toString(), votes: [{ date: helper.currentDate.toISOString(), vote: "blue" }, { date: helper.nextDate.toISOString(), vote: "blue" }] } })
+    expect(result.data.voteEvent.status).toBe("voting")
+    const eventInDBBack = await helper.eventInDB()
+    expect(eventInDBBack.status).toBe("voting")
+  })
 })
 
 describe("tests for scheduled-job", () => {
