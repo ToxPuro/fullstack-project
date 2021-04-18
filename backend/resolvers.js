@@ -195,6 +195,7 @@ const resolvers = {
       }
       else if(event.status === "voting"){
         await event.updateBestDateVotes(args.votes, currentUser.username)
+        await event.save()
         return event
       } else{
         throw new ForbiddenError("event is not in correct state")

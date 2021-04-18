@@ -132,6 +132,7 @@ eventSchema.methods.updateBestDateVotes = async function (votes, username) {
       this.bestDates[dateIndex].votes.push({ voter: username, vote: vote.vote })
     }
   })
+  await this.save()
 }
 
 
