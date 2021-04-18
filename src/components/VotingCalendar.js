@@ -1,21 +1,20 @@
-import React, {  useState } from "react"
+import React, {  useState, useEffect } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
 import CalendarHeader from "./CalendarHeader"
 import CalendarDays from "./CalendarDays"
-const EventCalendar = ({ dates, votes, setVotes }) => {
-  console.log(dates)
+const EventCalendar = ({ dates, votes, setVotes, currentVote, setCurrentVote }) => {
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
       <CalendarHeader month={month} setMonth={setMonth}/>
       <CalendarDays month={month}/>
-      <Cells month={month} dates={dates} votes={votes} setVotes={setVotes}/>
+      <Cells month={month} dates={dates} votes={votes} setVotes={setVotes} currentVote={currentVote} setCurrentVote={setCurrentVote}/>
     </div>
   )
 }
 
-const Cells = ({ month, dates, setVotes, votes }) => {
+const Cells = ({ month, dates, setVotes, votes, currentVote, setCurrentVote }) => {
 
   const monthStart = dateFns.startOfMonth(month)
   const monthEnd = dateFns.endOfMonth(monthStart)
@@ -34,7 +33,7 @@ const Cells = ({ month, dates, setVotes, votes }) => {
       formattedDate = dateFns.format(day, dateFormat)
       const cloneDay = day
       days.push(
-        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} dates={dates} setVotes={setVotes} votes={votes}/>
+        <CalendarDate key={cloneDay} formattedDate = {formattedDate} day={cloneDay} monthStart={monthStart} dates={dates} setVotes={setVotes} votes={votes} currentVote={currentVote} setCurrentVote={setCurrentVote}/>
       )
       day = dateFns.addDays(day, 1)
     }
@@ -53,12 +52,11 @@ const Cells = ({ month, dates, setVotes, votes }) => {
 }
 
 
-const CalendarDate = ({ formattedDate, day, monthStart, dates, votes, setVotes }) => {
-  console.log(votes, setVotes)
+const CalendarDate = ({ formattedDate, day, monthStart, dates, votes, setVotes, currentVote, setCurrentVote }) => {
   const checkDates = dates.map(date => dateFns.format(date, "d"))
   let style = ""
   if(checkDates.includes(dateFns.format(day, "d"))){
-    style="green"
+    return <VoteDate setVotes={setVotes} votes={votes} day={day} formattedDate = {formattedDate} currentVote={currentVote} setCurrentVote={setCurrentVote}/>
   }
   if(!dateFns.isSameMonth(day, monthStart)){
     style="disabled"
@@ -73,5 +71,38 @@ const CalendarDate = ({ formattedDate, day, monthStart, dates, votes, setVotes }
     </div>
   )
 }
+
+const VoteDate = ({ day, formattedDate, votes, setVotes, currentVote, setCurrentVote }) => {
+  const [vote, setVote] = useState(null)
+  const cloneVotes = [...votes]
+  const dayIndex = cloneVotes.findIndex(vote => dateFns.format(vote.date, "DDD") === dateFns.format(day, "DDD"))
+  useEffect(() => {
+    if(cloneVotes[dayIndex]){
+      setVote(cloneVotes[dayIndex].vote)
+    }
+  }, [dayIndex])
+  const onClick = () => {
+    console.log(currentVote)
+    let result = currentVote
+    if(result>votes.length){
+      result = 1
+    }
+    setVote(result)
+    cloneVotes[dayIndex].vote = result
+    setVotes(cloneVotes)
+    setCurrentVote(result+1)
+  }
+  return(
+    <div onClick={() => onClick()}
+      id={`dates-${formattedDate}`}
+      className="col cell"
+      key={day}>
+      <span className="number">{formattedDate}</span>
+      <span className="bg">{formattedDate}</span>
+      {vote}
+    </div>
+  )
+}
+
 
 export default EventCalendar
