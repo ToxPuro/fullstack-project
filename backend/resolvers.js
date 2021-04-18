@@ -162,14 +162,11 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name: args.group })
-      const user = await User.findOne({ username: args.user })
       if(group.admins.filter(admin => admin._id.toString() === currentUser._id.toString()).length === 0){
         console.log("yeet")
         throw new AuthenticationError("logged in user needs to be group admin")
       }
-      await group.updateOne({ $pull: { users: user._id, admins: user._id } })
-      await user.updateOne({ $pull: { groups: group._id } })
-      await user.updateOne({ $pullAll: { events: group.events } })
+      const user = await group.removeUser(args.user)
       return user
 
     },

@@ -4,7 +4,7 @@ import { USER_ID } from "../graphql/queries"
 import { useQuery, useMutation } from "@apollo/client"
 import Loader from "./Loader"
 import { REMOVE_FROM_GROUP, ADD_TO_ADMINS } from "../graphql/mutations"
-const Users = ({ users, admins, group }) => {
+const Users = ({ users, admins, group, setNotification }) => {
   const userID = useQuery(USER_ID)
   const [remove] = useMutation(REMOVE_FROM_GROUP, {
     update: (store, response) => {
@@ -37,9 +37,17 @@ const Users = ({ users, admins, group }) => {
   }
   const removeUser = async (username) => {
     await remove({ variables: { user: username, group: group.name } })
+    setNotification({ message: `removed user ${username} from group`, error: false })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
   const addToAdmin = async (username) => {
     await addToAdminMutation({ variables: { user: username, group: group.name } })
+    setNotification({ message: `added user ${username} to admins`, error: false })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const adminsIDs = admins.map(admin => admin.id)
