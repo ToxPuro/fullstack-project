@@ -16,6 +16,9 @@ const GroupAddUsers = () => {
         fields: {
           users(listInCache){
             return listInCache.concat({ __ref: `User:${response.data.addToGroup.id}` })
+          },
+          usersNotInGroup(listInCache){
+            return listInCache.filter(user => user.__ref !== `User:${response.data.addToGroup.id}` )
           }
         }
       })
