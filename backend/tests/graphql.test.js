@@ -277,6 +277,8 @@ describe("multiple voters", () => {
     expect(result.data.voteEvent.status).toBe("voting")
     const eventInDBBack = await helper.eventInDB()
     expect(eventInDBBack.status).toBe("voting")
+    const bestDates = eventInDBBack.bestDates.map(date => date.date)
+    expect(bestDates.length).toBe(2)
   })
 })
 

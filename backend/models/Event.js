@@ -29,11 +29,7 @@ const eventSchema = new mongoose.Schema({
   bestDates: [
     {
       date: Date,
-      votes: [
-        {
-          vote: String
-        }
-      ]
+      votes: [String]
     }
   ]
 },
@@ -75,6 +71,11 @@ eventSchema.methods.calculateVotes = async function () {
     return 0
   }
 
+  const getBestDates = (dates) => {
+    const bestDates = dates.filter(date => compareDates(date, dates[0]))
+    return bestDates.map(date => ({ date: date.date, votes: [] }))
+  }
+
   await this.populate("group").execPopulate()
   const userCount = this.group.users.length
   if(userCount === this.dates[0].votes.length){
@@ -92,6 +93,7 @@ eventSchema.methods.calculateVotes = async function () {
         this.finalDate = copyDates[0].date
       } else{
         this.status = "voting"
+        this.bestDates = getBestDates(copyDates)
       }
     }
   }
