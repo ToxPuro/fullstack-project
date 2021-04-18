@@ -13,6 +13,7 @@ import User from "./components/User"
 import JoinGroup from "./components/JoinGroup"
 import Notification from "./components/Notification"
 import Messages from "./components/Messages"
+import GroupAddUsers from "./components/GroupAddUsers"
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 
 import useLogin from "./hooks/useLogin"
@@ -47,6 +48,9 @@ const AppRouter = ({ setNotification }) => {
       </Route>
       <Route path="/users/:username">
         {token ? <User/>: <Redirect to="/login"/>}
+      </Route>
+      <Route path ="/groups/:name/addusers">
+        { token ? <GroupAddUsers setNotification={setNotification}/>: <Redirect to="/login"/>}
       </Route>
       <Route path ="/groups/:name">
         { token ? <Group setNotification={setNotification}/>: <Redirect to="/login"/>}

@@ -69,7 +69,7 @@ const Users = ({ users, admins, group, setNotification }) => {
       <ul>
         {displayUsers}
       </ul>
-      {adminsIDs.includes(userID.data.me.id) ? <button onClick={() => history.push("")}> add users to group</button> : null}
+      {adminsIDs.includes(userID.data.me.id) ? <button onClick={() => history.push(`/groups/${group.name}/addusers`)}> add users to group</button> : null}
     </div>
   )
 }
