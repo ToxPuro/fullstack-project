@@ -5,6 +5,7 @@ import { USER_EVENTS, EVENT } from "../graphql/queries"
 import EventCalendar from "./EventCalendar"
 import { VOTE_EVENT } from "../graphql/mutations"
 import { Link } from "react-router-dom"
+import DoneEvent from "./DoneEvent"
 
 const parseDate = (date) => {
   console.log(date)
@@ -49,6 +50,13 @@ const Event = ({ setNotification }) => {
     return(
       <div>
         ...loading
+      </div>
+    )
+  }
+  if(event.data.event.status==="done"){
+    return(
+      <div>
+        <DoneEvent event = {event.data.event}/>
       </div>
     )
   }

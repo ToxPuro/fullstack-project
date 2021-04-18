@@ -33,8 +33,6 @@ const groupSchema = new mongoose.Schema({
 groupSchema.plugin(uniqueValidator)
 
 groupSchema.methods.isAdmin = function (userID) {
-  console.log(this.admins)
-  console.log(userID.toString())
   if(this.admins.filter(admin => admin.toString() === userID.toString()). length===0){
     return false
   } else{
