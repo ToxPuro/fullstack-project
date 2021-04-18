@@ -66,4 +66,13 @@ mutation addToAdmins($group: String!, $user: String!){
   }
 }`
 
+export const ADD_TO_GROUP = gql`
+mutation addToGroup($group: String!, $user: String!){
+  addToGroup(group: $group, user: $user){
+    name
+    username
+    id
+  }
+}`
+
 

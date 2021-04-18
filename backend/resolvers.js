@@ -134,6 +134,18 @@ const resolvers = {
       await currentUser.updateOne({ $addToSet: { groups: group._id, events: group.events } })
       return group
     },
+    addToGroup: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if(!currentUser){
+        throw new AuthenticationError("user needs to be logged in")
+      }
+      const user = await User.findOne({ username: args.user })
+      console.log("user", user._id)
+      const group = await Group.findOneAndUpdate({ name: args.group }, { $addToSet: { users: user._id } }, { new: true } )
+      console.log("group", group)
+      await user.updateOne({ $addToSet: { groups: group._id, events: group.events } })
+      return user
+    },
     leaveGroup: async (root, args, context) => {
       console.log("leaving ")
       const currentUser = context.currentUser
@@ -290,7 +302,10 @@ const resolvers = {
       return root.admins
     },
     usersNotInGroup: async(root) => {
-      return User.find({ id: { $not: { $all: root.users } } } )
+      const result = await  User.find({ groups: { $not: { $all: [root._id] } } } )
+      console.log("root",root._id)
+      console.log(result)
+      return result
     },
   },
   Date: {

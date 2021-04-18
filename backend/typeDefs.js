@@ -102,6 +102,10 @@ type Mutation {
     group: String!
     user: String!
   ): User
+  addToGroup(
+    group: String!
+    user: String!
+  ): User
 }
 `
 
