@@ -121,5 +121,18 @@ eventSchema.methods.updateVotes = async function (votes, username) {
   })
 }
 
+eventSchema.methods.updateBestDateVotes = async function (votes, username) {
+  const bestDates = this.bestDates
+  votes.forEach(vote => {
+    const dateIndex = bestDates.findIndex(date => date.date.toISOString() === vote.date)
+    const olderVote = bestDates[dateIndex].votes.findIndex(vote => vote.voter === username)
+    if(olderVote !== -1){
+      this.bestDates[dateIndex].votes[olderVote].vote = vote.vote
+    } else {
+      this.bestDates[dateIndex].votes.push({ voter: username, vote: vote.vote })
+    }
+  })
+}
+
 
 module.exports = mongoose.model("Event", eventSchema)
