@@ -234,11 +234,6 @@ const resolvers = {
       return new Date(root.finalDate).toISOString()
     }
   },
-  BestDate: {
-    date: async(root) => {
-      return new Date(root.date).toISOString()
-    }
-  }
 }
 
 module.exports = resolvers

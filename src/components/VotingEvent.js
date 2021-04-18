@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import VotingCalendar from "./VotingCalendar"
 
 const parseDate = (date) => {
@@ -9,7 +9,12 @@ const parseDate = (date) => {
 }
 
 
-const VotingEvent = ({ event }) => {
+const VotingEvent = ({ event, user }) => {
+  useEffect(() => {
+    if(event && user){
+      console.log(event.bestDates)
+    }
+  })
   const displayDates = event.bestDates.map(date => date.date)
   return(
     <div>

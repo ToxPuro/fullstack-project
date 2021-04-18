@@ -32,7 +32,12 @@ const eventSchema = new mongoose.Schema({
   bestDates: [
     {
       date: Date,
-      votes: [String]
+      votes: [
+        {
+          voter: String,
+          vote: String
+        }
+      ]
     }
   ]
 },

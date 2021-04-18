@@ -69,6 +69,7 @@ const CalendarDate = ({ formattedDate, day, monthStart, dates }) => {
     >
       <span className="number">{formattedDate}</span>
       <span className="bg">{formattedDate}</span>
+      1
     </div>
   )
 }
