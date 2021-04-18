@@ -8,7 +8,14 @@ type Event {
   id: ID!
   status: String!
   finalDate: String
+  bestDates: [BestDate]
 }
+
+type BestDate {
+  date: String
+  votes: [String]
+}
+
 type User {
   name: String!
   username: String!
