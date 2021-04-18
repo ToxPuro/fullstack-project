@@ -45,9 +45,10 @@ type Date {
 
 type Group {
   name: String!
-  users: [User!]!
+  users: [User]
   admins: [User]
   id: ID!
+  usersNotInGroup: [User]
 }
 
 type Query {

@@ -112,4 +112,15 @@ query{
   }
 }`
 
+export const USERS_NOT_IN_GROUP = gql`
+query UsersNotInGroup($name: String!){
+  group(name: $name){
+    usersNotInGroup{
+      name
+      id
+      username
+    }
+  }
+}`
+
 

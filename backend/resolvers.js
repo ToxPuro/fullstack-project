@@ -288,7 +288,10 @@ const resolvers = {
     admins: async(root) => {
       await root.populate("admins").execPopulate()
       return root.admins
-    }
+    },
+    usersNotInGroup: async(root) => {
+      return User.find({ id: { $not: { $all: root.users } } } )
+    },
   },
   Date: {
     date: async(root) => {
