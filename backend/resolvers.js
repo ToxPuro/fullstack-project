@@ -123,10 +123,7 @@ const resolvers = {
       const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id] })
       await group.save()
       console.log("group", group)
-      for(const i in users){
-        await users[i].updateOne({ $addToSet: { groups: group._id } })
-      }
-      await group.populate("users").execPopulate()
+      await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { groups: group._id } })
       return group
     },
     joinGroup: async (root, args, context) => {
@@ -166,9 +163,7 @@ const resolvers = {
         console.log("yeet")
         throw new AuthenticationError("logged in user needs to be group admin")
       }
-      console.log("BEFORE")
       const [user,]= await group.removeUser(args.user)
-      console.log("After")
       return user
 
     },
@@ -178,9 +173,7 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name : args.group })
-      console.log(group.admins)
-      console.log(currentUser._id)
-      if(group.admins.filter(admin => admin._id.toString() === currentUser._id.toString()).length === 0){
+      if(! group.isAdmin(currentUser._id)){
         console.log("yeet")
         throw new AuthenticationError("logged in user needs to be group admin")
       }
