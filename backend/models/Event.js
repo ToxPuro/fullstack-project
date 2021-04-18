@@ -33,6 +33,7 @@ const eventSchema = new mongoose.Schema({
 eventSchema.methods.calculateVotes = async function () {
 
   const getVotes = (date) => {
+    console.log("date", date)
     const votes = date.votes.reduce((object, vote) => {
       console.log(vote.vote)
       object[vote.vote] += 1
@@ -46,6 +47,7 @@ eventSchema.methods.calculateVotes = async function () {
   }
 
   const compareDates = (a, b) => {
+    console.log("a",a)
     const aVotes = getVotes(a)
     const bVotes = getVotes(b)
     if(bVotes.red>aVotes.red){
@@ -67,6 +69,7 @@ eventSchema.methods.calculateVotes = async function () {
   const userCount = this.group.users.length
   if(userCount === this.dates[0].votes.length){
     const copyDates = [...this.dates]
+    console.log("copyDates",copyDates)
     copyDates.sort((a,b) => {
       return compareDates(a,b)
     })
@@ -74,8 +77,8 @@ eventSchema.methods.calculateVotes = async function () {
       this.status = "done"
       this.finalDate = copyDates.date
     }else{
-      if(compareDates(copyDates[0, copyDates[1]]) === -1){
-        event.status = "done"
+      if(compareDates(copyDates[0], copyDates[1]) === -1){
+        this.status = "done"
         this.finalDate = copyDates[0].date
       } else{
         this.status = "voting"

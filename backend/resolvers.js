@@ -15,7 +15,6 @@ const resolvers = {
       return Group.find({})
     },
     user: (root, args) => {
-      console.log(args.username)
       return User.findOne({ username: args.username })
     },
     group: (root, args) => {
@@ -27,7 +26,6 @@ const resolvers = {
     me: async (root, args, context) => {
       const currentUser =  context.currentUser
       if(!currentUser){
-        console.log("user needs to be logged in")
         throw new AuthenticationError("user needs to be logged in")
       }
       return currentUser
@@ -88,10 +86,8 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const group = await Group.findOne({ name: args.group })
-      console.log(args.dates)
       const dates = args.dates.map(date => ( { date: parseDate(date), votes: []  } ))
       const finDate = finalDate(args.dates)
-      console.log(finDate)
       const event = new Event({ name: args.name, group: group._id, dates: dates, status: "picking", finalDate: finDate })
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { events: event } })
       await group.updateOne({ $addToSet: { events: event } })
@@ -107,17 +103,13 @@ const resolvers = {
       return context.currentUser
     },
     createGroup: async(root, args, context) => {
-      console.log("args", args)
       if(!context.currentUser){
         throw new AuthenticationError("user needs to be logged in")
       }
       let users = await User.find({ username: { $in: args.users } })
-      console.log(users)
       users = users.concat(context.currentUser)
       const usersID = users.map(user => user._id)
-      console.log("usersID", usersID)
       if(users.length-1 < args.users.length){
-        console.log("yeah")
         throw new UserInputError("Couldn't find users")
       }
       const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id] })
@@ -190,7 +182,6 @@ const resolvers = {
       return user
     },
     voteEvent: async (root, args, context ) => {
-      console.log("voting")
       const currentUser = context.currentUser
       if(!currentUser){
         throw new AuthenticationError("user needs to be logged in")
@@ -200,12 +191,8 @@ const resolvers = {
         throw new ForbiddenError("event is not in picking state")
       }
       const dates = event.dates
-      console.log(args.votes.map(vote => vote.date))
-      console.log(event.dates.map(date => date.date.toISOString()))
       args.votes.forEach(vote => {
-        console.log(vote)
         const dateIndex = event.dates.findIndex(date => date.date.toISOString() === vote.date)
-        console.log("dateIndex", dateIndex)
         const olderVote = dates[dateIndex].votes.findIndex(vote => vote.voter === currentUser.username)
         if(olderVote !== -1){
           event.dates[dateIndex].votes[olderVote].vote = vote.vote
@@ -216,7 +203,6 @@ const resolvers = {
 
       const getVotes = (date) => {
         const votes = date.votes.reduce((object, vote) => {
-          console.log(vote.vote)
           object[vote.vote] += 1
           return object
         }, {
@@ -244,26 +230,7 @@ const resolvers = {
         }
         return 0
       }
-
-      await event.populate("group").execPopulate()
-      const userCount = event.group.users.length
-      if(userCount === event.dates[0].votes.length){
-        const copyDates = [...event.dates]
-        copyDates.sort((a,b) => {
-          return compareDates(a,b)
-        })
-        if(copyDates.length === 1){
-          event.status = "done"
-          event.finalDate = copyDates[0].date
-        }else{
-          if(compareDates(copyDates[0], copyDates[1])=== -1){
-            event.status = "done"
-            event.finalDate = copyDates[0].date
-          } else{
-            event.status = "voting"
-          }
-        }
-      }
+      await event.calculateVotes()
       await event.save()
       return event
     }
