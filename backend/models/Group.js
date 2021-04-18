@@ -34,10 +34,12 @@ groupSchema.plugin(uniqueValidator)
 
 groupSchema.methods.removeUser = async function (username) {
   const user = await User.findOne({ username: username })
+  console.log(this)
   await this.updateOne({ $pull: { users: user._id, admins: user._id } })
   await user.updateOne({ $pull: { groups: this._id } })
   await user.updateOne({ $pullAll: { events: this.events } })
-  return user
+  const group = await this.model("Group").findOne({ name: this.name })
+  return [user, group]
 
 }
 

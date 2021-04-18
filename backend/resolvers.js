@@ -146,11 +146,12 @@ const resolvers = {
       }
       try{
         console.log("currentUserid", currentUser._id)
-        const group = await Group.findOneAndUpdate({ _id: args.id }, { $pull: { users: currentUser._id, admins: currentUser._id } }, { new: true } )
+        const group = await Group.findOne({ _id: args.id })
         console.log("group events",group.events)
         console.log("currentUserEvents", currentUser.events)
-        await group.removeUser(currentUser.username)
-        return group
+        const [user,result] = await group.removeUser(currentUser.username)
+        console.log("result",result)
+        return result
       }catch(error){
         console.log(error)
       }
@@ -165,7 +166,9 @@ const resolvers = {
         console.log("yeet")
         throw new AuthenticationError("logged in user needs to be group admin")
       }
-      const user = await group.removeUser(args.user)
+      console.log("BEFORE")
+      const [user,]= await group.removeUser(args.user)
+      console.log("After")
       return user
 
     },
