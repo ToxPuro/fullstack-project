@@ -6,6 +6,7 @@ import EventCalendar from "./EventCalendar"
 import { VOTE_EVENT } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 import DoneEvent from "./DoneEvent"
+import VotingEvent from "./VotingEvent"
 
 const parseDate = (date) => {
   console.log(date)
@@ -60,7 +61,13 @@ const Event = ({ setNotification }) => {
       </div>
     )
   }
-  console.log(votes)
+  if(event.data.event.status==="voting"){
+    return(
+      <div>
+        <VotingEvent event = {event.data.event}/>
+      </div>
+    )
+  }
   return(
     <div>
       {event.data.event.name}
