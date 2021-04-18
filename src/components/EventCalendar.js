@@ -1,49 +1,20 @@
 import React, { useEffect, useState } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
-
+import CalendarHeader from "./CalendarHeader"
 const EventCalendar = ({ dates, setVotes, votes }) => {
 
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
-      <Header month={month} setMonth={setMonth}/>
+      <CalendarHeader month={month} setMonth={setMonth}/>
       <Days month={month}/>
       <Cells month={month} dates={dates} setVotes={setVotes} votes={votes}/>
     </div>
   )
 }
 
-const Header = ({ month, setMonth }) => {
-  const dateFormat = "MMMM YYYYY"
 
-  const nextMonth = () => {
-    setMonth(dateFns.addMonths(month, 1))
-  }
-
-  const prevMonth = () => {
-    setMonth(dateFns.subMonths(month,1))
-  }
-
-  return (
-    <div className="header row flex-middle">
-      <div className="col col-start">
-        <div className="icon" onClick={prevMonth}>
-          chevron_left
-        </div>
-      </div>
-      <div className="col col-center">
-        <span>
-          {dateFns.format(month, dateFormat)}
-        </span>
-      </div>
-      <div className="col col-end" onClick={nextMonth}>
-        <div className="icon">chevron_right</div>
-      </div>
-    </div>
-  )
-
-}
 
 const Days = ({ month }) => {
 

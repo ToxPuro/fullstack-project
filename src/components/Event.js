@@ -32,7 +32,7 @@ const Event = ({ setNotification }) => {
   if(event.data.event.status==="voting"){
     return(
       <div>
-        <VotingEvent event = {event.data.event}/>
+        <VotingEvent event = {event.data.event} user={user.data.me} setNotification={setNotification}/>
       </div>
     )
   }
