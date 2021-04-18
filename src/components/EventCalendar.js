@@ -2,30 +2,16 @@ import React, { useEffect, useState } from "react"
 import * as dateFns from "date-fns"
 import "../App.css"
 import CalendarHeader from "./CalendarHeader"
+import CalendarDays from "./CalendarDays"
 const EventCalendar = ({ dates, setVotes, votes }) => {
 
   const [ month, setMonth ] = useState(new Date())
   return(
     <div className="calendar">
       <CalendarHeader month={month} setMonth={setMonth}/>
-      <Days month={month}/>
+      <CalendarDays month={month}/>
       <Cells month={month} dates={dates} setVotes={setVotes} votes={votes}/>
     </div>
-  )
-}
-
-
-
-const Days = ({ month }) => {
-
-  let startDate = dateFns.startOfWeek(month)
-
-  const shortWeekDaysArray = Array.from(Array(7)).map((e, i) => (<div className="col col-center" key={i}>
-    {dateFns.format(dateFns.addDays(startDate, i), "EEEEEE")}
-  </div> ))
-
-  return(
-    <div className="days row">{shortWeekDaysArray}</div>
   )
 }
 
