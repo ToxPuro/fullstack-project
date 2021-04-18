@@ -187,13 +187,20 @@ const resolvers = {
         throw new AuthenticationError("user needs to be logged in")
       }
       const event = await Event.findById(args.id)
-      if(event.status !== "picking"){
-        throw new ForbiddenError("event is not in picking state")
+      if(event.status === "picking"){
+        await event.updateVotes(args.votes, currentUser.username)
+        await event.calculateVotes()
+        await event.save()
+        return event
       }
-      await event.updateVotes(args.votes, currentUser.username)
-      await event.calculateVotes()
-      await event.save()
-      return event
+      else if(event.status === "voting"){
+        await event.updateBestDateVotes(args.votes, currentUser.username)
+        await event.calculateBestDateVotes()
+        return event
+      } else{
+        throw new ForbiddenError("event is not in correct state")
+      }
+
     }
   },
   User: {
