@@ -35,7 +35,7 @@ const eventSchema = new mongoose.Schema({
       votes: [
         {
           voter: String,
-          vote: Number
+          vote: String
         }
       ]
     }
