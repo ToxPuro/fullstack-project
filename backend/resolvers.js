@@ -190,46 +190,7 @@ const resolvers = {
       if(event.status !== "picking"){
         throw new ForbiddenError("event is not in picking state")
       }
-      const dates = event.dates
-      args.votes.forEach(vote => {
-        const dateIndex = event.dates.findIndex(date => date.date.toISOString() === vote.date)
-        const olderVote = dates[dateIndex].votes.findIndex(vote => vote.voter === currentUser.username)
-        if(olderVote !== -1){
-          event.dates[dateIndex].votes[olderVote].vote = vote.vote
-        } else {
-          event.dates[dateIndex].votes.push({ voter: currentUser.username, vote: vote.vote })
-        }
-      })
-
-      const getVotes = (date) => {
-        const votes = date.votes.reduce((object, vote) => {
-          object[vote.vote] += 1
-          return object
-        }, {
-          red: 0,
-          blue: 0,
-          green: 0
-        })
-        return votes
-      }
-
-      const compareDates = (a, b) => {
-        const aVotes = getVotes(a)
-        const bVotes = getVotes(b)
-        if(bVotes.red>aVotes.red){
-          return -1
-        }
-        if(aVotes.red>bVotes.red){
-          return 1
-        }
-        if(bVotes.green > aVotes.green){
-          return 1
-        }
-        if(aVotes.green > bVotes.green){
-          return -1
-        }
-        return 0
-      }
+      await event.updateVotes(args.votes, currentUser.username)
       await event.calculateVotes()
       await event.save()
       return event
