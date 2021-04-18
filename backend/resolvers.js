@@ -170,7 +170,7 @@ const resolvers = {
       await group.updateOne({ $pull: { users: user._id, admins: user._id } })
       await user.updateOne({ $pull: { groups: group._id } })
       await user.updateOne({ $pullAll: { events: group.events } })
-      return group
+      return user
 
     },
     addToAdmins: async (root, args, context) => {

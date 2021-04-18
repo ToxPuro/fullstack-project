@@ -100,7 +100,7 @@ type Mutation {
   removeFromGroup(
     group: String!
     user: String!
-  ): Group
+  ): User
 }
 `
 

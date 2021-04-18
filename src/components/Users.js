@@ -6,7 +6,18 @@ import Loader from "./Loader"
 import { REMOVE_FROM_GROUP, ADD_TO_ADMINS } from "../graphql/mutations"
 const Users = ({ users, admins, group }) => {
   const userID = useQuery(USER_ID)
-  const [remove] = useMutation(REMOVE_FROM_GROUP)
+  const [remove] = useMutation(REMOVE_FROM_GROUP, {
+    update: (store, response) => {
+      store.modify({
+        id: `Group:${group.id}`,
+        fields: {
+          users(listInCache){
+            return listInCache.filter(user => user.__ref !== `User:${response.data.removeFromGroup.id}`)
+          }
+        }
+      })
+    }
+  })
   const [ addToAdminMutation] = useMutation(ADD_TO_ADMINS, {
     update: (store, response) => {
       store.modify({
