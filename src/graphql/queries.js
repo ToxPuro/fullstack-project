@@ -64,6 +64,10 @@ query event($id: ID!){
         vote
       }
     }
+    bestDates{
+      date
+      votes
+    }
   }
 }`
 
