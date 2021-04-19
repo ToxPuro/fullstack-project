@@ -139,6 +139,30 @@ eventSchema.methods.calculateBestDatesVotes = async function () {
       })
     })
     console.log(usersVotes)
+    const matrix = []
+    for(let i=0; i<copyDates.length; i++){
+      matrix[i] = []
+      for(let j=0; j<copyDates.length; j++){
+        matrix[i][j] = 0
+      }
+    }
+    usersVotes.forEach(votes => {
+      const datesBased = []
+      votes.forEach(vote => {
+        if(vote.vote.length !== 0){
+          const dateInt = parseInt(vote.date)
+          datesBased.push(dateInt)
+          for(let i=0; i<copyDates.length; i++){
+            if(!datesBased.includes(i)){
+              matrix[dateInt][i] += 1
+            }
+          }
+
+        }
+      })
+    })
+    console.log(matrix)
+
   }
 
 }
