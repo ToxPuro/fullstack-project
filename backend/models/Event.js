@@ -125,7 +125,19 @@ eventSchema.methods.calculateBestDatesVotes = async function () {
       })
       return userVotes
     })
-    console.log(usersVotes[0])
+    usersVotes[1].sort((a,b) => {
+      if(b.vote.length===0){
+        return -1
+      }
+      if(a.vote.length===0){
+        return 1
+      }
+      else{
+        console.log("sorting")
+        return parseInt(a.vote)-parseInt(b.vote)
+      }
+    })
+    console.log(usersVotes[1])
 
   }
 
