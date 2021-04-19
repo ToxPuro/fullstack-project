@@ -41,7 +41,7 @@ const eventSchema = new mongoose.Schema({
     }
   ]
 },
-{ minimize: false })
+{ minimize: true })
 
 
 eventSchema.methods.calculateVotes = async function () {
@@ -109,18 +109,26 @@ eventSchema.methods.calculateVotes = async function () {
 
 eventSchema.methods.calculateBestDatesVotes = async function () {
   await this.populate("group").execPopulate()
+  console.log("voting")
   const userCount = this.group.users.length
+  console.log(userCount)
+  console.log(this.bestDates[0].votes.length)
   if(userCount === this.bestDates[0].votes.length){
     const copyDates = [...this.bestDates]
-    const votes = copyDates.map(date => date.votes)
-    //    const voters = copyDates[0].votes.map(vote => vote.voter)
-    const userVotesInList = votes.map(voteObject => voteObject.filter(vote => vote.voter === "fsdfsdf"))
-    console.log(userVotesInList)
-    const userVotes = userVotesInList.reduce((prev, curr) => {
-      return prev.concat(curr)
-    }, [])
-    console.log(userVotes)
+    const voters = copyDates[0].votes.map(vote => vote.voter)
+    const usersVotes = voters.map(voter => {
+      const userVotes = []
+      copyDates.forEach(date => {
+        const userVote = date.votes.filter(vote => vote.voter === voter)
+        const correctVote = { voter: userVote[0].voter, vote: userVote[0].vote, date: date.date }
+        userVotes.push(correctVote)
+      })
+      return userVotes
+    })
+    console.log(usersVotes[0])
+
   }
+
 }
 
 

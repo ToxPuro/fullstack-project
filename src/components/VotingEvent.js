@@ -23,6 +23,7 @@ const VotingEvent = ({ event, user }) => {
   useEffect(() => {
     if(event && user){
       let initialVotes = event.bestDates.map(date => ({ date: parseDate(date.date), vote: "" }))
+      console.log(event.bestDates[0])
       if(event.bestDates[0].votes.filter(vote => vote.voter === user.username).length !== 0){
         initialVotes = event.bestDates.map(date => ({ date: parseDate(date.date), vote: date.votes.find(vote => vote.voter === user.username ).vote }))
       }
