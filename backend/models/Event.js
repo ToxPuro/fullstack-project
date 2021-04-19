@@ -112,8 +112,14 @@ eventSchema.methods.calculateBestDatesVotes = async function () {
   const userCount = this.group.users.length
   if(userCount === this.bestDates[0].votes.length){
     const copyDates = [...this.bestDates]
-    console.log("copyDates", copyDates[0].votes)
-    console.log("voters",copyDates[0].votes.map(vote => vote.voter))
+    const votes = copyDates.map(date => date.votes)
+    //    const voters = copyDates[0].votes.map(vote => vote.voter)
+    const userVotesInList = votes.map(voteObject => voteObject.filter(vote => vote.voter === "fsdfsdf"))
+    console.log(userVotesInList)
+    const userVotes = userVotesInList.reduce((prev, curr) => {
+      return prev.concat(curr)
+    }, [])
+    console.log(userVotes)
   }
 }
 
