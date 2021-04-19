@@ -118,27 +118,27 @@ eventSchema.methods.calculateBestDatesVotes = async function () {
     const voters = copyDates[0].votes.map(vote => vote.voter)
     const usersVotes = voters.map(voter => {
       const userVotes = []
-      copyDates.forEach(date => {
-        const userVote = date.votes.filter(vote => vote.voter === voter)
-        const correctVote = { voter: userVote[0].voter, vote: userVote[0].vote, date: date.date }
+      for(const i in copyDates){
+        const userVote = copyDates[i].votes.filter(vote => vote.voter === voter)
+        const correctVote = { voter: userVote[0].voter, vote: userVote[0].vote, date: i }
         userVotes.push(correctVote)
-      })
+      }
       return userVotes
     })
-    usersVotes[1].sort((a,b) => {
-      if(b.vote.length===0){
-        return -1
-      }
-      if(a.vote.length===0){
-        return 1
-      }
-      else{
-        console.log("sorting")
-        return parseInt(a.vote)-parseInt(b.vote)
-      }
+    usersVotes.forEach(list => {
+      list.sort((a,b) => {
+        if(b.vote.length ===0){
+          return -1
+        }
+        if(a.vote.length===0){
+          return 1
+        }
+        else{
+          return parseInt(a.vote)-parseInt(b.vote)
+        }
+      })
     })
-    console.log(usersVotes[1])
-
+    console.log(usersVotes)
   }
 
 }
