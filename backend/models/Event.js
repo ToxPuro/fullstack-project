@@ -162,7 +162,37 @@ eventSchema.methods.calculateBestDatesVotes = async function () {
       })
     })
     console.log(matrix)
+    const powerMatrix = []
+    for(let i=0; i<copyDates.length; i++){
+      powerMatrix[i] = []
+      for(let j=0; j<copyDates.length; j++){
+        powerMatrix[i][j] = 0
+      }
+    }
+    for(let i=0; i<copyDates.length; i++){
+      for(let j=0; j<copyDates.length; j++){
+        if(i !== j){
+          if(matrix[i][j]>matrix[j][i]){
+            powerMatrix[i][j] = matrix[i][j]
+          } else{
+            powerMatrix[i][j] = 0
+          }
+        }
+      }
+    }
 
+    for(let i=0; i<copyDates.length; i++){
+      for(let j=0; j<copyDates.length; j++){
+        if(i !== j){
+          for(let k=0; k<copyDates.length; k++){
+            if(i !== k && j !== k){
+              powerMatrix[j][k] = Math.max(powerMatrix[j][k], Math.min(powerMatrix[j][i], powerMatrix[i][k]))
+            }
+          }
+        }
+      }
+    }
+    console.log("powerMatrix", powerMatrix)
   }
 
 }
