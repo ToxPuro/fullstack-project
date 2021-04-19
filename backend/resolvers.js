@@ -195,6 +195,7 @@ const resolvers = {
       }
       else if(event.status === "voting"){
         await event.updateBestDateVotes(args.votes, currentUser.username)
+        await event.calculateBestDatesVotes()
         await event.save()
         return event
       } else{

@@ -107,6 +107,11 @@ eventSchema.methods.calculateVotes = async function () {
 
 }
 
+eventSchema.methods.calculateBestDatesVotes = async function () {
+  const copyDates = [...this.bestDates]
+  console.log(copyDates)
+}
+
 
 eventSchema.methods.updateVotes = async function (votes, username) {
   const dates = this.dates
