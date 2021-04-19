@@ -108,8 +108,13 @@ eventSchema.methods.calculateVotes = async function () {
 }
 
 eventSchema.methods.calculateBestDatesVotes = async function () {
-  const copyDates = [...this.bestDates]
-  console.log(copyDates)
+  await this.populate("group").execPopulate()
+  const userCount = this.group.users.length
+  if(userCount === this.bestDates[0].votes.length){
+    const copyDates = [...this.bestDates]
+    console.log("copyDates", copyDates[0].votes)
+    console.log("voters",copyDates[0].votes.map(vote => vote.voter))
+  }
 }
 
 
