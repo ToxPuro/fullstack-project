@@ -85,12 +85,17 @@ const VoteDate = ({ day, formattedDate, votes, setVotes, currentVote, setCurrent
     console.log(currentVote)
     let result = currentVote
     if(result>votes.length){
-      result = 1
+      result = ""
     }
     setVote(result)
     cloneVotes[dayIndex].vote = result
     setVotes(cloneVotes)
-    setCurrentVote(result+1)
+    if(result===""){
+      setCurrentVote(1)
+    } else{
+      setCurrentVote(result+1)
+    }
+
   }
   return(
     <div onClick={() => onClick()}

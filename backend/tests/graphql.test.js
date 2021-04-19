@@ -255,7 +255,7 @@ describe("multiple voters", () => {
     const user = await helper.createUser()
     const secondUser = await helper.createSecondUser()
     const group = await helper.createGroup([user, secondUser])
-    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: helper.currentDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" }] }, 
+    const event = Event({ name: helper.eventObject.name, group: group, dates: [{ date: helper.currentDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" }] },
       { date: helper.nextDate, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" } ] },
       { date: helper.dayAfter, votes: [{ voter: helper.userObject.username, vote: "red" }, { voter: helper.secondUserObject.username, vote: "red" } ] }], status: "picking" })
     await event.save()
