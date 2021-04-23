@@ -251,13 +251,13 @@ describe("when user is part of groups", () => {
 
   test("user can send joining request to admins", async() => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
-    await mutate(JOIN_REQUEST, { variables: { group: helper.groupObject.name, content: `User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}` } })
+    await mutate(JOIN_REQUEST, { variables: { group: helper.groupObject.name } })
     const userInDB = await helper.userInDB()
-    expect(userInDB.messages.length).toBe(1)
-    expect(userInDB.messages[0].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
-    expect(userInDB.messages[0].username).toBe(helper.secondUserObject.username)
-    expect(userInDB.messages[0].read).toBe(false)
-    expect(userInDB.messages[0].type).toBe("Joining request")
+    expect(userInDB.messages.length).toBe(2)
+    expect(userInDB.messages[1].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
+    expect(userInDB.messages[1].username).toBe(helper.secondUserObject.username)
+    expect(userInDB.messages[1].read).toBe(false)
+    expect(userInDB.messages[1].type).toBe("Joining request")
   })
 })
 

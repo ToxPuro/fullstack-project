@@ -68,7 +68,6 @@ type Query {
 type Mutation {
   joinRequest(
     group: String!
-    content: String!
   ): Group
   createUser(
     username: String!

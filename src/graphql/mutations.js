@@ -75,4 +75,9 @@ mutation addToGroup($group: String!, $user: String!){
   }
 }`
 
+export const JOIN_REQUEST = gql`
+mutation joinRequest($group: String!){
+  joinRequest(group: $group){name}
+}`
+
 
