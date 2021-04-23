@@ -1,6 +1,16 @@
 const mongoose = require("mongoose")
 const { ForbiddenError } = require("apollo-server-express")
 
+
+const voteDateSchema = new mongoose.Schema({
+  date: Date,
+  votes: [{
+    voter: String,
+    vote: String
+  }
+  ]
+})
+
 const eventSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -11,17 +21,7 @@ const eventSchema = new mongoose.Schema({
     ref: "Group",
     required: true
   },
-  dates: [
-    {
-      date: Date,
-      votes: [
-        {
-          voter: String,
-          vote: String
-        }
-      ]
-    }
-  ],
+  dates: [voteDateSchema],
   status: {
     type: String,
     default: "picking"
@@ -30,17 +30,7 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     default: new Date ()
   },
-  bestDates: [
-    {
-      date: Date,
-      votes: [
-        {
-          voter: String,
-          vote: String
-        }
-      ]
-    }
-  ]
+  bestDates: [voteDateSchema]
 },
 { minimize: true })
 
