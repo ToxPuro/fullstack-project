@@ -199,6 +199,11 @@ const resolvers = {
         type: "Joining request",
         username: context.currentUser.username
       }
+      const users= await User.find({ _id: { $in: group.admins } })
+      users[0].messages = users[0].messages.concat(message)
+      users[0].save()
+      console.log(users)
+
       await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
       return group
     },
