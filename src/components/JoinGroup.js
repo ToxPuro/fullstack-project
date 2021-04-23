@@ -6,10 +6,14 @@ import { Link } from "react-router-dom"
 import Loader from "./Loader"
 
 const JoinGroupElement = ({ group, setNotification }) => {
-  const [ request ] = useMutation(JOIN_REQUEST)
+  const [ request ] = useMutation(JOIN_REQUEST,{
+    onError: error => {
+      console.log(error)
+    }
+  })
 
   const sendRequest = () => {
-    request({ variables: { id: group.id } })
+    request({ variables: { group: group.name } })
     setNotification({ message: `Send joining request to ${group.name}`, error: false })
     setTimeout(() => {
       setNotification(null)
