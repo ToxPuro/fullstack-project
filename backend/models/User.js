@@ -3,6 +3,7 @@ const uniqueValidator = require("mongoose-unique-validator")
 
 
 const messageSchema = new mongoose.Schema({
+  title: String,
   content: String,
   read: Boolean,
   type: String,

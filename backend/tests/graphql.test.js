@@ -255,6 +255,7 @@ describe("when user is part of groups", () => {
     const userInDB = await helper.userInDB()
     expect(userInDB.messages.length).toBe(2)
     expect(userInDB.messages[1].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
+    expect(userInDB.messages[1].title).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
     expect(userInDB.messages[1].username).toBe(helper.secondUserObject.username)
     expect(userInDB.messages[1].read).toBe(false)
     expect(userInDB.messages[1].type).toBe("Joining request")

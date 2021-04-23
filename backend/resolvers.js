@@ -194,6 +194,7 @@ const resolvers = {
     joinRequest: async (root, args, context) => {
       const group = await Group.findOne({ name: args.group })
       const message = {
+        title: `User ${context.currentUser.username} wants to join group ${group.name}`,
         content: `User ${context.currentUser.username} wants to join group ${group.name}`,
         read: false,
         type: "Joining request",

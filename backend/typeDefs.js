@@ -25,6 +25,7 @@ type User {
 type Message {
   content: String!
   read: Boolean!
+  sender: String!
 }
 
 type Token {

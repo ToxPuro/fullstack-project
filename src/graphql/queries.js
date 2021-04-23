@@ -21,6 +21,7 @@ query{
     messages{
       content
       read
+      sender
     }
   }
 }`
