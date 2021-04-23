@@ -6,7 +6,8 @@ const messageSchema = new mongoose.Schema({
   content: String,
   read: Boolean,
   type: String,
-  username: String
+  username: String,
+  sender: String
 })
 const userSchema = new mongoose.Schema({
   username: {

@@ -197,7 +197,8 @@ const resolvers = {
         content: `User ${context.currentUser.username} wants to join group ${group.name}`,
         read: false,
         type: "Joining request",
-        username: context.currentUser.username
+        username: context.currentUser.username,
+        sender: context.currentUser.username
       }
       await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
       return group
