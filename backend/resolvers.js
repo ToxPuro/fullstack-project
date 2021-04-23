@@ -192,6 +192,17 @@ const resolvers = {
       return event
     }
   },
+  messageAdmins: async (root, args, context) => {
+    const group = await Group.findOne({ name: args.group })
+    const message = {
+      content: args.content,
+      read: false,
+      type: "Joining request",
+      username: context.currentUser.username
+    }
+    await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
+    return group
+  },
   User: {
     groups: async (root) => {
       console.log(root)

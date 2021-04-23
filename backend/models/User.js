@@ -34,7 +34,9 @@ const userSchema = new mongoose.Schema({
   messages: {
     type:[{
       content: String,
-      read: Boolean
+      read: Boolean,
+      type: String,
+      username: String
     }],
     default: []
   }
