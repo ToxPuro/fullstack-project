@@ -66,7 +66,7 @@ type Query {
 
 
 type Mutation {
-  messageAdmins(
+  joinRequest(
     group: String!
     content: String!
   ): Group

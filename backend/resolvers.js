@@ -191,7 +191,7 @@ const resolvers = {
       await event.save()
       return event
     },
-    messageAdmins: async (root, args, context) => {
+    joinRequest: async (root, args, context) => {
       const group = await Group.findOne({ name: args.group })
       const message = {
         content: args.content,

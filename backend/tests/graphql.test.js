@@ -248,6 +248,11 @@ describe("when user is part of groups", () => {
     const groupInDB = await helper.groupInDB()
     expect(groupInDB.admins.length).toBe(1)
   })
+
+  test("user can send joining request to admins", async() => {
+    await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+    await mutate(JOIN_REQUEST, { variables: { group: helper.groupObject.name, content: `User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}` } })
+  })
 })
 
 describe("multiple voters", () => {
