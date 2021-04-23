@@ -23,6 +23,8 @@ type User {
 }
 
 type Message {
+  id: ID!
+  title: String!
   content: String!
   read: Boolean!
   sender: String!

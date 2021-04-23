@@ -5,6 +5,7 @@ import Loader from "./Loader"
 
 const Messages = () => {
   const messages = useQuery(USER_MESSAGES)
+  console.log(messages)
   if(!messages.data){
     return(
       <Loader/>
@@ -13,7 +14,7 @@ const Messages = () => {
   console.log(messages)
   return(
     <ul>
-      {messages.data.me.messages.map(message => message.content)}
+      {messages.data.me.messages.map(message => message.id)}
     </ul>
   )
 }

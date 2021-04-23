@@ -19,7 +19,8 @@ export const USER_MESSAGES = gql`
 query{
   me{
     messages{
-      content
+      id
+      title
       read
       sender
     }
