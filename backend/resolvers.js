@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
-const { UserInputError, AuthenticationError, ForbiddenError } = require("apollo-server-express")
+const { UserInputError, AuthenticationError } = require("apollo-server-express")
 require("dotenv").config()
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -190,18 +190,18 @@ const resolvers = {
       await event.vote(args.votes, currentUser.username)
       await event.save()
       return event
-    }
-  },
-  messageAdmins: async (root, args, context) => {
-    const group = await Group.findOne({ name: args.group })
-    const message = {
-      content: args.content,
-      read: false,
-      type: "Joining request",
-      username: context.currentUser.username
-    }
-    await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
-    return group
+    },
+    messageAdmins: async (root, args, context) => {
+      const group = await Group.findOne({ name: args.group })
+      const message = {
+        content: args.content,
+        read: false,
+        type: "Joining request",
+        username: context.currentUser.username
+      }
+      await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
+      return group
+    },
   },
   User: {
     groups: async (root) => {

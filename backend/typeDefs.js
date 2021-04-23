@@ -66,6 +66,10 @@ type Query {
 
 
 type Mutation {
+  messageAdmins(
+    group: String!
+    content: String!
+  ): Group
   createUser(
     username: String!
     name: String!
