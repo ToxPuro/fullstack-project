@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { ForbiddenError } = require("apollo-server-express")
 
 const eventSchema = new mongoose.Schema({
   name: {
@@ -236,5 +237,18 @@ eventSchema.methods.updateBestDateVotes = async function (votes, username) {
   await this.save()
 }
 
+eventSchema.methods.vote = async function(votes, username) {
+  if(this.status === "picking"){
+    await this.updateVotes(votes, username)
+    await this.calculateVotes()
+  }
+  else if(this.status === "voting"){
+    console.log("voting")
+    await this.updateBestDateVotes(votes, username)
+    await this.calculateBestDatesVotes()
+  } else{
+    throw new ForbiddenError("event is not in correct state")
+  }
+}
 
 module.exports = mongoose.model("Event", eventSchema)
