@@ -94,6 +94,11 @@ query group($name: String!){
   }
 }`
 
+export const GET_MESSAGE = gql`
+query message($id: ID!){
+  message(id: $id){title}
+}`
+
 export const GROUPS_THAT_USER_IS_NOT_IN = gql`
 query{
   me{
