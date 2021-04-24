@@ -102,7 +102,7 @@ query message($id: ID!){
     receivers
     type
     ... on JoiningRequest {
-      username
+      group
     }
   }
 }`

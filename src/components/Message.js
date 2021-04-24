@@ -1,8 +1,9 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import Loader from "./Loader"
-import { useQuery } from "@apollo/client"
+import { useQuery, useMutation } from "@apollo/client"
 import { GET_MESSAGE } from "../graphql/queries"
+import { ADD_TO_GROUP } from "../graphql/mutations"
 const Message = () => {
   const id = useParams().id
   const message = useQuery(GET_MESSAGE, { variables: { id } })
@@ -21,8 +22,9 @@ const Message = () => {
 }
 
 const JoiningRequest = ({ message }) => {
-  const AcceptRequest = () => {
-    console.log("lol")
+  const [add] = useMutation(ADD_TO_GROUP)
+  const AcceptRequest = async () => {
+    await add({ variables: { group: message.group, user: message.sender } })
   }
   console.log(message)
   return(

@@ -50,9 +50,7 @@ type JoiningRequest implements Message {
   sender: String!
   type: String!
   receivers: [String]!
-  username: String!
   group: String!
-
 }
 
 type Token {
