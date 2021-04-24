@@ -101,6 +101,9 @@ query message($id: ID!){
     sender
     receivers
     type
+    ... on JoiningRequest {
+      username
+    }
   }
 }`
 

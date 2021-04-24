@@ -6,8 +6,8 @@ const messageSchema = new mongoose.Schema({
   content: String,
   read: Boolean,
   type: String,
-  username: String,
   sender: String,
+  group: String,
   receivers:{
     type: [String],
     default: []

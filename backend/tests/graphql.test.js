@@ -265,11 +265,11 @@ describe("when user is part of groups", () => {
     expect(userInDB.messages.length).toBe(1)
     expect(userInDB.messages[0].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
     expect(userInDB.messages[0].title).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
-    expect(userInDB.messages[0].username).toBe(helper.secondUserObject.username)
     expect(userInDB.messages[0].read).toBe(false)
     expect(userInDB.messages[0].type).toBe("Joining request")
     expect(userInDB.messages[0].sender).toBe(helper.secondUserObject.username)
     expect(userInDB.messages[0].receivers[0]).toBe(helper.userObject.username)
+    expect(userInDB.messages[0].group).toBe(helper.groupObject.name)
   })
 })
 
