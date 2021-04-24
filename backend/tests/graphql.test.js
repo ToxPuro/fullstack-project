@@ -269,6 +269,7 @@ describe("when user is part of groups", () => {
     expect(userInDB.messages[0].read).toBe(false)
     expect(userInDB.messages[0].type).toBe("Joining request")
     expect(userInDB.messages[0].sender).toBe(helper.secondUserObject.username)
+    expect(userInDB.messages[0].receivers[0]).toBe(helper.userObject.username)
   })
 })
 

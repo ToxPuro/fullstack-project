@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const uniqueValidator = require("mongoose-unique-validator")
 
 
 const messageSchema = new mongoose.Schema({
@@ -8,7 +7,11 @@ const messageSchema = new mongoose.Schema({
   read: Boolean,
   type: String,
   username: String,
-  sender: String
+  sender: String,
+  receivers:{
+    type: [String],
+    default: []
+  }
 })
 
 
