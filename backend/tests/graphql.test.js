@@ -31,7 +31,8 @@ describe("login", () => {
 describe("messages", () => {
   beforeEach(async () => {
     await helper.erase()
-    await helper.createUser()
+    const user = await helper.createUser()
+    await helper.createMessage(user)
   })
   test("can get users messages", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
@@ -253,13 +254,13 @@ describe("when user is part of groups", () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
     await mutate(JOIN_REQUEST, { variables: { group: helper.groupObject.name } })
     const userInDB = await helper.userInDB()
-    expect(userInDB.messages.length).toBe(2)
-    expect(userInDB.messages[1].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
-    expect(userInDB.messages[1].title).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
-    expect(userInDB.messages[1].username).toBe(helper.secondUserObject.username)
-    expect(userInDB.messages[1].read).toBe(false)
-    expect(userInDB.messages[1].type).toBe("Joining request")
-    expect(userInDB.messages[1].sender).toBe(helper.secondUserObject.username)
+    expect(userInDB.messages.length).toBe(1)
+    expect(userInDB.messages[0].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
+    expect(userInDB.messages[0].title).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
+    expect(userInDB.messages[0].username).toBe(helper.secondUserObject.username)
+    expect(userInDB.messages[0].read).toBe(false)
+    expect(userInDB.messages[0].type).toBe("Joining request")
+    expect(userInDB.messages[0].sender).toBe(helper.secondUserObject.username)
   })
 })
 

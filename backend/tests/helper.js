@@ -5,10 +5,19 @@ const Group = require("../models/Group")
 const dateFns = require("date-fns")
 // passwordHash is encrypted from 'salainen'
 const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0Ok2"
-const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [], messages: [{ content: "TestContent", read: false }] }
+const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [], messages: [] }
 const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }
+const messageObject = { title: "TestTitle", content: "TestContent", read: false, type: "User message", sender: secondUserObject.username }
+const messageSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+  read: Boolean,
+  type: String,
+  username: String,
+  sender: String
+})
 const currentDate = new Date()
 const nextDate = dateFns.addDays(currentDate, 1)
 const dayAfter = dateFns.addDays(currentDate, 2)

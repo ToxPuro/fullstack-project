@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
+const Message = require("./models/Message")
 const { UserInputError, AuthenticationError } = require("apollo-server-express")
 require("dotenv").config()
 
@@ -192,17 +193,22 @@ const resolvers = {
       return event
     },
     joinRequest: async (root, args, context) => {
-      const group = await Group.findOne({ name: args.group })
-      const message = {
-        title: `User ${context.currentUser.username} wants to join group ${group.name}`,
-        content: `User ${context.currentUser.username} wants to join group ${group.name}`,
-        read: false,
-        type: "Joining request",
-        username: context.currentUser.username,
-        sender: context.currentUser.username
+      try{
+        const group = await Group.findOne({ name: args.group })
+        const message = new Message({
+          title: `User ${context.currentUser.username} wants to join group ${group.name}`,
+          content: `User ${context.currentUser.username} wants to join group ${group.name}`,
+          read: false,
+          type: "Joining request",
+          username: context.currentUser.username,
+          sender: context.currentUser.username
+        })
+        await message.save()
+        await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
+        return group
+      }catch(error){
+        console.log(error)
       }
-      await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
-      return group
     },
   },
   User: {
