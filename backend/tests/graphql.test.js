@@ -45,7 +45,7 @@ describe("messages", () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const messageInDB = await helper.messageInDB()
     const message = await query(GET_MESSAGE, { variables: { id: messageInDB.id } })
-    console.log(message)
+    expect(message.data.message.title).toBe(helper.messageObject.title)
   })
 })
 

@@ -34,6 +34,9 @@ const resolvers = {
     },
     event: async(root, args) => {
       return Event.findById(args.id)
+    },
+    message: async(root, args) => {
+      return Message.findById(args.id)
     }
 
   },
