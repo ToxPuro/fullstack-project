@@ -3,6 +3,7 @@ const User = require("../models/User")
 const Event = require("../models/Event")
 const Group = require("../models/Group")
 const dateFns = require("date-fns")
+const Message = require("../models/Message")
 // passwordHash is encrypted from 'salainen'
 const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0Ok2"
 const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [], messages: [] }
@@ -10,14 +11,6 @@ const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestNam
 const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }
 const messageObject = { title: "TestTitle", content: "TestContent", read: false, type: "User message", sender: secondUserObject.username }
-const messageSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  read: Boolean,
-  type: String,
-  username: String,
-  sender: String
-})
 const currentDate = new Date()
 const nextDate = dateFns.addDays(currentDate, 1)
 const dayAfter = dateFns.addDays(currentDate, 2)
@@ -85,6 +78,12 @@ const createEvent = async (group) => {
   return event
 }
 
+const createMessage = async(user) => {
+  const message =  new Message(messageObject)
+  await message.save()
+  await user.updateOne({ $addToSet: { messages: message } } )
+}
+
 const createSecondEvent = async (group) => {
   const event = new Event({ name: secondEventObject.name, group: group, dates: secondEventObject.dates, finalDate: secondEventObject.finalDate })
   await event.save()
@@ -116,4 +115,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter, createMessage }

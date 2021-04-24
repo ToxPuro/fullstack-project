@@ -38,7 +38,7 @@ describe("messages", () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const user = await query(USER_MESSAGES)
     expect(user.data.me.messages.length).toBe(1)
-    expect(user.data.me.messages[0].content).toBe(helper.userObject.messages[0].content)
+    expect(user.data.me.messages[0].content).toBe("TestContent")
   })
 })
 
@@ -254,6 +254,7 @@ describe("when user is part of groups", () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
     await mutate(JOIN_REQUEST, { variables: { group: helper.groupObject.name } })
     const userInDB = await helper.userInDB()
+    await userInDB.populate("messages").execPopulate()
     expect(userInDB.messages.length).toBe(1)
     expect(userInDB.messages[0].content).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)
     expect(userInDB.messages[0].title).toBe(`User ${helper.secondUserObject.username} wants to join group ${helper.groupObject.name}`)

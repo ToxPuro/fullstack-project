@@ -221,6 +221,10 @@ const resolvers = {
       await root.populate("events").execPopulate()
       return root.events
     },
+    messages: async (root) => {
+      await root.populate("messages").execPopulate()
+      return root.messages
+    },
     groupsUserNotIn: (root) => {
       return Group.find({ users: { $not: { $all: [root._id] } } })
     },
