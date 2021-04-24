@@ -98,6 +98,10 @@ const eventInDB = async () => {
   return await Event.findOne({ name: eventObject.name })
 }
 
+const messageInDB = async () => {
+  return await Message.findOne({ title: messageObject.title})
+}
+
 const secondEventInDB = async () => {
   return await Event.findOne({ name: secondEventObject.name })
 }
@@ -115,4 +119,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter, createMessage }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter, createMessage, messageInDB }
