@@ -12,20 +12,29 @@ const Message = () => {
       <Loader/>
     )
   }
-  console.log(message.data)
+  const messageData = message.data.message
+  if(message.data.message.type === "Joining request"){
+    return(
+      <JoiningRequest message={messageData}/>
+    )
+  }
+}
+
+const JoiningRequest = ({ message }) => {
+  console.log(message)
   return(
     <div>
       <span style={{ marginRight: 10 }}>
         title:
       </span>
-      <h2 style={{ display: "inline-block" }}>{message.data.message.title}</h2>
+      <h2 style={{ display: "inline-block" }}>{message.title}</h2>
       <br/>
       <span>
-        sender: {message.data.message.sender}
+        sender: {message.sender}
       </span>
       <br/>
       <span>
-        receivers: {message.data.message.receivers}
+        receivers: {message.receivers}
       </span>
     </div>
   )

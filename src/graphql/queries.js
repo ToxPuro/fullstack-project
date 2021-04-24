@@ -100,6 +100,7 @@ query message($id: ID!){
     title
     sender
     receivers
+    type
   }
 }`
 

@@ -28,6 +28,7 @@ type Message {
   content: String!
   read: Boolean!
   sender: String!
+  type: String!
   receivers: [String]!
 }
 
