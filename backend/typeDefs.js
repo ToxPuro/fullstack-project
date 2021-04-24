@@ -22,7 +22,7 @@ type User {
   messages: [Message]
 }
 
-type Message {
+interface Message {
   id: ID!
   title: String!
   content: String!
@@ -30,6 +30,29 @@ type Message {
   sender: String!
   type: String!
   receivers: [String]!
+}
+
+type UserMessage implements Message {
+  id: ID!
+  title: String!
+  content: String!
+  read: Boolean!
+  sender: String!
+  type: String!
+  receivers: [String]!
+}
+
+type JoinRequest implements Message {
+  id: ID!
+  title: String!
+  content: String!
+  read: Boolean!
+  sender: String!
+  type: String!
+  receivers: [String]!
+  username: String!
+  group: String!
+
 }
 
 type Token {

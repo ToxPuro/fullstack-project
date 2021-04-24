@@ -21,6 +21,9 @@ const Message = () => {
 }
 
 const JoiningRequest = ({ message }) => {
+  const AcceptRequest = () => {
+    console.log("lol")
+  }
   console.log(message)
   return(
     <div>
@@ -36,6 +39,8 @@ const JoiningRequest = ({ message }) => {
       <span>
         receivers: {message.receivers}
       </span>
+      <br/>
+      <button onClick={AcceptRequest}>Accept request</button>
     </div>
   )
 }
