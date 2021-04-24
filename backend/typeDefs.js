@@ -60,7 +60,8 @@ type Group {
 type Query {
   allEvents: [Event]!
   me: User
-  event(id: ID!): Event! 
+  event(id: ID!): Event!
+  message(id: ID!): Message! 
   group(name: String!): Group!
   user(username: String!): User!
   allGroups: [Group]!
