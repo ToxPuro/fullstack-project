@@ -13,7 +13,7 @@ const Message = () => {
   }
   return(
     <div>
-      <span>
+      <span style={{ marginRight: 10 }}>
         title:
       </span>
       <h2 style={{ display: "inline-block" }}>{message.data.message.title}</h2>
