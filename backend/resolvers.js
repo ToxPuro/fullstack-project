@@ -259,6 +259,17 @@ const resolvers = {
       return new Date(root.finalDate).toISOString()
     }
   },
+  Message: {
+    __resolveType(message){
+      if(message.type === "Joining request"){
+        return "JoiningRequest"
+      }
+      if(message.type === "User message"){
+        return "UserMessage"
+      }
+      return null
+    }
+  }
 }
 
 module.exports = resolvers

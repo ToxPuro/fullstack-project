@@ -42,7 +42,7 @@ type UserMessage implements Message {
   receivers: [String]!
 }
 
-type JoinRequest implements Message {
+type JoiningRequest implements Message {
   id: ID!
   title: String!
   content: String!

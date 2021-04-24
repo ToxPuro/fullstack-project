@@ -45,7 +45,12 @@ query event($id: ID!){
 
 const GET_MESSAGE = gql`
 query message($id: ID!){
-  message(id: $id){title}
+  message(id: $id){
+    title
+    sender
+    receivers
+    type
+  }
 }`
 
 const VOTE_EVENT = gql`
