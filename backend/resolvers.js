@@ -198,13 +198,16 @@ const resolvers = {
     joinRequest: async (root, args, context) => {
       try{
         const group = await Group.findOne({ name: args.group })
+        await group.populate("admins").execPopulate()
+        const adminUsernames = group.admins.map(admin => admin.username)
         const message = new Message({
           title: `User ${context.currentUser.username} wants to join group ${group.name}`,
           content: `User ${context.currentUser.username} wants to join group ${group.name}`,
           read: false,
           type: "Joining request",
           username: context.currentUser.username,
-          sender: context.currentUser.username
+          sender: context.currentUser.username,
+          receivers: adminUsernames
         })
         await message.save()
         await User.updateMany({ _id: { $in: group.admins } }, { $addToSet: { messages: message } })
