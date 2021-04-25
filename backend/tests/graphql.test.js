@@ -51,7 +51,7 @@ describe("messages", () => {
   test("can mark message as read", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const messageInDB = await helper.messageInDB()
-    const result = await query(READ_MESSAGE, { variables: { id: messageInDB.id } })
+    const result = await mutate(READ_MESSAGE, { variables: { id: messageInDB.id } })
     expect(result.data.message.read).toBe(true)
     const messageInDBBack = await helper.messageInDB()
     expect(messageInDBBack).toBe(true)

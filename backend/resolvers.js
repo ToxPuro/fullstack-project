@@ -216,6 +216,11 @@ const resolvers = {
         console.log(error)
       }
     },
+    readMessage: async (root, args) => {
+      const message = await Message.findOneAndUpdate({ id: args.id }, { read: true }, { new: true })
+      return message
+
+    }
   },
   User: {
     groups: async (root) => {

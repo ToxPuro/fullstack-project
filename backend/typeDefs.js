@@ -139,6 +139,9 @@ type Mutation {
     group: String!
     user: String!
   ): User
+  readMessage(
+    id: ID!
+  ): Message
 }
 `
 
