@@ -15,6 +15,7 @@ import Notification from "./components/Notification"
 import Messages from "./components/Messages"
 import Message from "./components/Message"
 import GroupAddUsers from "./components/GroupAddUsers"
+import SendMessage from "./components/SendMessage"
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 
 import useLogin from "./hooks/useLogin"
@@ -41,6 +42,9 @@ const AppRouter = ({ setNotification }) => {
   const { logout, login, signIn } = useLogin(setToken, setNotification)
   return(
     <Switch>
+      <Route path ="/sendMessage">
+        { token ? <SendMessage/>: <Redirect to="/login"/>}
+      </Route>
       <Route path ="/messages/:id">
         { token ? <Message/>: <Redirect to="/login"/>}
       </Route>
