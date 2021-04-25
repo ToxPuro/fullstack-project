@@ -11,6 +11,7 @@ const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestNam
 const groupObject = { name: "TestGroup" }
 const secondGroupObject = { name: "SecondTestGroup" }
 const messageObject = { title: "TestTitle", content: "TestContent", read: false, type: "User message", sender: secondUserObject.username }
+const secondMessageObject = { title: "SecondTestTitle", content: "SecondTestContent", read: true, type: "User message", sender: secondUserObject.username }
 const currentDate = new Date()
 const nextDate = dateFns.addDays(currentDate, 1)
 const dayAfter = dateFns.addDays(currentDate, 2)
@@ -83,6 +84,13 @@ const createMessage = async(user) => {
   await message.save()
   await user.updateOne({ $addToSet: { messages: message } } )
 }
+
+const createSecondMessage = async(user) => {
+  const message =  new Message(secondMessageObject)
+  await message.save()
+  await user.updateOne({ $addToSet: { messages: message } } )
+}
+
 
 const createSecondEvent = async (group) => {
   const event = new Event({ name: secondEventObject.name, group: group, dates: secondEventObject.dates, finalDate: secondEventObject.finalDate })
