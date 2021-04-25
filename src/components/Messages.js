@@ -14,7 +14,7 @@ const Messages = () => {
     )
   }
   const displayMessages = messages.data.me.messages.map(
-    message => (<li  onClick={() => history.push(`/messages/${message.id}`)}key={message.id}>{message.title}</li>)
+    message => (<li  onClick={() => history.push(`/messages/${message.id}`)}key={message.id}>{message.title} {message.read ? null : <b>unread</b> }</li>)
   )
   console.log(messages)
   return(
