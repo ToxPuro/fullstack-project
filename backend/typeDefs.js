@@ -131,15 +131,15 @@ type Mutation {
   addToAdmins(
     group: String!
     user: String!
-  ): User
+  ): User!
   removeFromGroup(
     group: String!
     user: String!
-  ): User
+  ): User!
   addToGroup(
     group: String!
     user: String!
-  ): User
+  ): User!
   readMessage(
     id: ID!
   ): Message
@@ -148,6 +148,9 @@ type Mutation {
     message: String!
     title: String!
   ): Message
+  deleteMessage(
+    id: ID!
+  ): ID!
 }
 `
 
