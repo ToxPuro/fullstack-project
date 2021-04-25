@@ -12,6 +12,7 @@ query{
       status
       finalDate
     }
+    unReadMessagesCount
   }
 }`
 
