@@ -218,10 +218,7 @@ const resolvers = {
     },
     readMessage: async (root, args) => {
       try{
-        console.log("reading")
-        console.log(args.id)
-        const message = await Message.findOne({ _id: args.id })
-        console.log(message)
+        const message = await Message.findOneAndUpdate({ _id: args.id }, { read: true }, { new: true })
         return message
       }catch(error){
         console.log(error)

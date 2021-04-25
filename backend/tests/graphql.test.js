@@ -55,7 +55,7 @@ describe("messages", () => {
     const result = await mutate(READ_MESSAGE, { variables: { id: messageInDB._id.toString() } })
     expect(result.data.readMessage.read).toBe(true)
     const messageInDBBack = await helper.messageInDB()
-    expect(messageInDBBack).toBe(true)
+    expect(messageInDBBack.read).toBe(true)
   })
 })
 
