@@ -68,8 +68,13 @@ describe("messages", () => {
 
   test("can send user messages", async () => {
     await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
-    const result = await mutate(SEND_USER_MESSAGE, { variables: { receivers: [helper.userObject.username], message: "TestMessage" } })
-    console.log(result)
+    const result = await mutate(SEND_USER_MESSAGE, { variables: { receivers: [helper.userObject.username], message: "TestMessage", title: "UserMessageTestTitle" } })
+    expect(result.data.sendUserMessage.title).toBe("UserMessageTestTitle")
+    const userInDB  = await helper.userInDB()
+    expect(userInDB.messages.length).toBe(3)
+    await userInDB.populate("messages").execPopulate()
+    expect(userInDB.messages[userInDB.messages.length-1].type).toBe("User message")
+
   })
 })
 

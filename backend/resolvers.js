@@ -216,6 +216,19 @@ const resolvers = {
         console.log(error)
       }
     },
+    sendUserMessage: async (root, args, context) => {
+      const message = new Message({
+        title: args.title,
+        content: args.message,
+        read: false,
+        type: "User message",
+        sender: context.currentUser.username,
+        receivers: args.receivers,
+      })
+      await message.save()
+      await User.updateMany({ username: { $in: args.receivers } }, { $addToSet: { messages: message } })
+      return message
+    },
     readMessage: async (root, args) => {
       try{
         const message = await Message.findOneAndUpdate({ _id: args.id }, { read: true }, { new: true })
@@ -224,7 +237,7 @@ const resolvers = {
         console.log(error)
       }
 
-    }
+    },
   },
   User: {
     groups: async (root) => {

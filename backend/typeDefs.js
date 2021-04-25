@@ -143,6 +143,11 @@ type Mutation {
   readMessage(
     id: ID!
   ): Message
+  sendUserMessage(
+    receivers: [String!]!
+    message: String!
+    title: String!
+  ): Message
 }
 `
 

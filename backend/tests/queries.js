@@ -119,8 +119,8 @@ query{
 }`
 
 const SEND_USER_MESSAGE = gql`
-mutation sendUserMessage($receivers: [String!]!, $message: String!){
-  sendUserMessage(receivers: $receivers, message: $message){
+mutation sendUserMessage($receivers: [String!]!, $message: String!, $title: String!){
+  sendUserMessage(receivers: $receivers, message: $message, title: $title){
     title
     receivers
     content
