@@ -78,7 +78,8 @@ describe("messages", () => {
 
   test("can delete messages", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
-    await mutate(DELETE_MESSAGE, { variables: { id: helper.messageInDB()._id.toString() } })
+    const messageInDB = await helper.messageInDB()
+    await mutate(DELETE_MESSAGE, { variables: { id: messageInDB._id.toString() } })
     const userInDB = await helper.userInDB()
     expect(userInDB.messages.length).toBe(1)
   })
