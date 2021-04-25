@@ -75,6 +75,11 @@ mutation addToGroup($group: String!, $user: String!){
   }
 }`
 
+export const READ_MESSAGE = gql`
+mutation readMessage($id: ID!){
+  readMessage(id: $id){read}
+}`
+
 export const JOIN_REQUEST = gql`
 mutation joinRequest($group: String!){
   joinRequest(group: $group){name}
