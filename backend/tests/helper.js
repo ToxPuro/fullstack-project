@@ -34,6 +34,7 @@ const erase = async() => {
   await User.deleteMany({})
   await Event.deleteMany({})
   await Group.deleteMany({})
+  await Message.deleteMany({})
 }
 
 const createUser = async() => {
