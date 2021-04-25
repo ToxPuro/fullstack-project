@@ -19,7 +19,19 @@ const Messages = () => {
     setAsRead({ variables: { id } })
     history.push(`/messages/${id}`)
   }
-  const displayMessages = messages.data.me.messages.map(
+  const messagesData = [...messages.data.me.messages]
+  console.log(messagesData)
+  messagesData.sort((a,b) => {
+    if(a.title < b.title){
+      return -1
+    }
+    if(b.title < a.title){
+      return 1
+    }
+    return 0
+  })
+  console.log(messagesData)
+  const displayMessages = messagesData.map(
     message => (<li  onClick={() => onClick(message.id)}key={message.id}>{message.title} {message.read ? null : <b>unread</b> }</li>)
   )
   console.log(messages)
