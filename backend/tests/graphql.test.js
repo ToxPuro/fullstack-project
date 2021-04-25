@@ -44,15 +44,16 @@ describe("messages", () => {
   test("can get message with id", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const messageInDB = await helper.messageInDB()
-    const message = await query(GET_MESSAGE, { variables: { id: messageInDB.id } })
+    const message = await query(GET_MESSAGE, { variables: { id: messageInDB._id.toString() } })
     expect(message.data.message.title).toBe(helper.messageObject.title)
   })
 
   test("can mark message as read", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const messageInDB = await helper.messageInDB()
-    const result = await mutate(READ_MESSAGE, { variables: { id: messageInDB.id } })
-    expect(result.data.message.read).toBe(true)
+    console.log(messageInDB)
+    const result = await mutate(READ_MESSAGE, { variables: { id: messageInDB._id.toString() } })
+    expect(result.data.readMessage.read).toBe(true)
     const messageInDBBack = await helper.messageInDB()
     expect(messageInDBBack).toBe(true)
   })
