@@ -107,7 +107,7 @@ const eventInDB = async () => {
 }
 
 const messageInDB = async () => {
-  return await Message.findOne({ title: messageObject.title})
+  return await Message.findOne({ title: messageObject.title })
 }
 
 const secondEventInDB = async () => {
