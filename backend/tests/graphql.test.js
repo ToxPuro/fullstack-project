@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 const scheduledJob = require("../scheduled-job")
@@ -32,6 +32,7 @@ describe("messages", () => {
   beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
+    await helper.createSecondUser()
     await helper.createMessage(user)
     await helper.createSecondMessage(user)
   })
@@ -63,6 +64,12 @@ describe("messages", () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await query(UNREAD_MESSAGES)
     expect(result.data.me.unReadMessagesCount).toBe(1)
+  })
+
+  test("can send user messages", async () => {
+    await helper.login(setOptions, mutate, helper.secondUserObject.username, "salainen")
+    const result = await mutate(SEND_USER_MESSAGE, { variables: { receivers: [helper.userObject.username], message: "TestMessage" } })
+    console.log(result)
   })
 })
 
