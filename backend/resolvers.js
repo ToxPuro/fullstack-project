@@ -243,9 +243,9 @@ const resolvers = {
     groupsUserNotIn: (root) => {
       return Group.find({ users: { $not: { $all: [root._id] } } })
     },
-    unReadMessages: async (root) => {
+    unReadMessagesCount: async (root) => {
       await root.populate("messages").execPopulate()
-      return root.messages.length
+      return root.messages.filter(message => message.read === false).length
     }
   },
   Group: {

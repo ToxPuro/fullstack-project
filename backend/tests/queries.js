@@ -114,7 +114,7 @@ mutation readMessage($id: ID!){
 const UNREAD_MESSAGES = gql`
 query{
   me{
-    unReadMessages
+    unReadMessagesCount
   }
 }`
 

@@ -20,7 +20,7 @@ type User {
   groups: [Group]
   groupsUserNotIn: [Group]
   messages: [Message]
-  unReadMessages: Int
+  unReadMessagesCount: Int
 }
 
 interface Message {

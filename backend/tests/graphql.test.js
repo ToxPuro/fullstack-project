@@ -62,7 +62,7 @@ describe("messages", () => {
   test("can get number of unread messages", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await query(UNREAD_MESSAGES)
-    expect(result.data.me.unReadMessages).toBe(1)
+    expect(result.data.me.unReadMessagesCount).toBe(1)
   })
 })
 
