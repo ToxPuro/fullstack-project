@@ -105,6 +105,9 @@ query message($id: ID!){
     ... on JoiningRequest {
       group
     }
+    ... on UserMessage {
+      content
+    }
   }
 }`
 

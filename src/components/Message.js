@@ -19,6 +19,16 @@ const Message = () => {
       <JoiningRequest message={messageData}/>
     )
   }
+  else if(message.data.message.type === "User message"){
+    return(
+      <UserMessage message={messageData}/>
+    )
+  }
+  return(
+    <div>
+      None
+    </div>
+  )
 }
 
 const JoiningRequest = ({ message }) => {
@@ -43,6 +53,30 @@ const JoiningRequest = ({ message }) => {
       </span>
       <br/>
       <button onClick={AcceptRequest}>Accept request</button>
+    </div>
+  )
+}
+
+const UserMessage = ({ message }) => {
+  return(
+    <div>
+      <span style={{ marginRight: 10 }}>
+        title:
+      </span>
+      <h2 style={{ display: "inline-block" }}>{message.title}</h2>
+      <br/>
+      <span>
+        sender: {message.sender}
+      </span>
+      <br/>
+      <span>
+        receivers: {message.receivers}
+      </span>
+      <br/>
+      <div>
+        content:
+        {message.content}
+      </div>
     </div>
   )
 }
