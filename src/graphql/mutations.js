@@ -79,7 +79,14 @@ export const READ_MESSAGE = gql`
 mutation readMessage($id: ID!){
   readMessage(id: $id){read}
 }`
-
+export const SEND_USER_MESSAGE = gql`
+mutation sendUserMessage($receivers: [String!]!, $message: String!, $title: String!){
+  sendUserMessage(receivers: $receivers, message: $message, title: $title){
+    title
+    receivers
+    content
+  }
+}`
 export const JOIN_REQUEST = gql`
 mutation joinRequest($group: String!){
   joinRequest(group: $group){name}
