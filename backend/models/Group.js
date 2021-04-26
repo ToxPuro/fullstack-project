@@ -27,6 +27,13 @@ const groupSchema = new mongoose.Schema({
       ref: "Event"
     }],
     default: []
+  },
+  messages: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message"
+    }],
+    default: []
   }
 })
 

@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE, DELETE_MESSAGE } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE, DELETE_MESSAGE, SEND_GROUP_MESSAGE } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 const scheduledJob = require("../scheduled-job")
@@ -306,6 +306,13 @@ describe("when user is part of groups", () => {
     expect(userInDB.messages[0].sender).toBe(helper.secondUserObject.username)
     expect(userInDB.messages[0].receivers[0]).toBe(helper.userObject.username)
     expect(userInDB.messages[0].group).toBe(helper.groupObject.name)
+  })
+
+  test("user can add group messages", async() => {
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+    await mutate(SEND_GROUP_MESSAGE, { variables: { group: helper.groupObject.name } } )
+    const groupInDB = await helper.groupInDB()
+    expect(groupInDB.messages.length).toBe(1)
   })
 })
 
