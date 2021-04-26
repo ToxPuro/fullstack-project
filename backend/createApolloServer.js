@@ -23,6 +23,10 @@ async function createApolloServer() {
   })
 
 
+  app.get("/health", (req, res) => {
+    res.send("ok")
+  })
+
   app.use("/testing", testingRouter)
 
   apolloServer.applyMiddleware({ app })
