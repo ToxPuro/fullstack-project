@@ -14,9 +14,12 @@ beforeAll( async () => {
   await helper.erase()
 })
 
+beforeEach ( async () => {
+  await helper.erase()
+})
+
 describe("login", () => {
-  beforeAll( async () => {
-    await helper.erase()
+  beforeEach( async () => {
     await helper.createUser()
   })
   test("can login and query me works", async () => {
@@ -87,8 +90,7 @@ describe("messages", () => {
 
 describe("adding group", () => {
 
-  beforeAll( async () => {
-    await helper.erase()
+  beforeEach( async () => {
     await helper.createUser()
     await helper.createSecondUser()
   })
@@ -114,7 +116,7 @@ describe("adding group", () => {
 })
 
 describe("joining group", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
     await helper.createSecondUser()
@@ -135,8 +137,7 @@ describe("joining group", () => {
 })
 
 describe("adding event", () => {
-  beforeAll(async () => {
-    await helper.erase()
+  beforeEach(async () => {
     const user = await helper.createUser()
     await helper.createGroup([user])
   })
@@ -163,8 +164,7 @@ describe("adding event", () => {
 })
 
 describe("when there is event", () => {
-  beforeAll(async () => {
-    await helper.erase()
+  beforeEach(async () => {
     const user = await helper.createUser()
     const group = await helper.createGroup([user])
     await helper.createEvent(group)
@@ -207,7 +207,7 @@ describe("when there is event", () => {
 
 
 describe("when event has already been voted on", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
     const group = await helper.createGroup([user])
