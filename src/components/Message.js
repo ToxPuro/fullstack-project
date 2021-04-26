@@ -14,23 +14,40 @@ const Message = () => {
     )
   }
   const messageData = message.data.message
+  return(
+    <div>
+      <span style={{ marginRight: 10 }}>
+      title:
+      </span>
+      <h2 style={{ display: "inline-block" }}>{message.title}</h2>
+      <br/>
+      <span>
+      sender: {message.sender}
+      </span>
+      <br/>
+      <span>
+      receivers: {message.receivers}
+      </span>
+      <MessageType message={messageData}/>
+    </div>
+  )
+}
+const MessageType = ({message}) => {
   if(message.data.message.type === "Joining request"){
     return(
-      <JoiningRequest message={messageData}/>
+      <JoiningRequest message={message}/>
     )
   }
   else if(message.data.message.type === "User message"){
     return(
-      <UserMessage message={messageData}/>
+      <UserMessage message={message}/>
     )
   }
   return(
     <div>
-      None
     </div>
   )
 }
-
 const JoiningRequest = ({ message }) => {
   const [add] = useMutation(ADD_TO_GROUP)
   const AcceptRequest = async () => {
@@ -39,18 +56,6 @@ const JoiningRequest = ({ message }) => {
   console.log(message)
   return(
     <div>
-      <span style={{ marginRight: 10 }}>
-        title:
-      </span>
-      <h2 style={{ display: "inline-block" }}>{message.title}</h2>
-      <br/>
-      <span>
-        sender: {message.sender}
-      </span>
-      <br/>
-      <span>
-        receivers: {message.receivers}
-      </span>
       <br/>
       <button onClick={AcceptRequest}>Accept request</button>
     </div>
@@ -60,18 +65,6 @@ const JoiningRequest = ({ message }) => {
 const UserMessage = ({ message }) => {
   return(
     <div>
-      <span style={{ marginRight: 10 }}>
-        title:
-      </span>
-      <h2 style={{ display: "inline-block" }}>{message.title}</h2>
-      <br/>
-      <span>
-        sender: {message.sender}
-      </span>
-      <br/>
-      <span>
-        receivers: {message.receivers}
-      </span>
       <br/>
       <div>
         content:
