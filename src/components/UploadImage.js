@@ -1,22 +1,21 @@
-import React from "react"
+import React, { useState } from "react"
 import { Formik } from "formik"
 import axios from "axios"
+import { Image } from "cloudinary-react"
 
 
 const SignIn = () => {
+  const [imageID, setImageID] = useState(null)
   const onSubmit = async ({ image }) => {
     console.log(image.type)
     const formData = new FormData()
     formData.append("file", image)
     formData.append("upload_preset", "ml_default")
-    try{
-      await axios.post(
-        "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
-        formData,
-      )
-    } catch(error){
-      console.log(error)
-    }
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
+      formData,
+    )
+    setImageID(response.data.public_id)
   }
 
 
@@ -55,6 +54,7 @@ const SignIn = () => {
           </form>
         )}
       </Formik>
+      {imageID ? <Image cloudName="dfayht8i9" publicId={imageID}/> : null}
     </div>
   )}
 
