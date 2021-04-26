@@ -33,6 +33,13 @@ const Messages = () => {
     message => (<MessageListElement message={message} key={message.id}/>)
   )
   console.log(messages)
+  if(messagesData.length === 0){
+    return(
+      <div>
+        <h1>No messages</h1>
+      </div>
+    )
+  }
   return(
     <ul>
       {displayMessages}
