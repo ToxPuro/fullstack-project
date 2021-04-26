@@ -42,15 +42,23 @@ const Messages = () => {
 const MessageListElement = ({ message }) => {
   const [setAsRead] = useMutation(READ_MESSAGE)
   const history = useHistory()
-  const onClick = (id) => {
+  const readMessage = (id) => {
     setAsRead({ variables: { id } })
     history.push(`/messages/${id}`)
   }
+
+  const deleteMessage = (id) => {
+    console.log(id)
+  }
+
   return(
-    <li  onClick={() => onClick(message.id)}>
-      {message.title}
-      {message.read ? null : <b>unread</b> }
-      <button> Delete </button>
+    <li>
+      <span>
+        <p onClick={() => readMessage(message.id)} style={{ display: "inline-block", marginRight: 10 }}>{message.title}</p>
+        {message.read ? null : <b>unread</b> }
+        <button onClick = {() => deleteMessage(message.id)}> Delete </button>
+      </span>
+
     </li>
   )
 }
