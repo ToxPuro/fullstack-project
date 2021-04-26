@@ -17,6 +17,7 @@ import Message from "./components/Message"
 import GroupAddUsers from "./components/GroupAddUsers"
 import GroupMessages from "./components/GroupMessages"
 import SendMessage from "./components/SendMessage"
+import UploadImage from "./components/UploadImage"
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 
 import useLogin from "./hooks/useLogin"
@@ -43,6 +44,9 @@ const AppRouter = ({ setNotification }) => {
   const { logout, login, signIn } = useLogin(setToken, setNotification)
   return(
     <Switch>
+      <Route path="/upload">
+        <UploadImage/>
+      </Route>
       <Route path ="/sendMessage">
         { token ? <SendMessage/>: <Redirect to="/login"/>}
       </Route>
