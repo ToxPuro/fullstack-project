@@ -4,6 +4,7 @@ const User = require("./models/User")
 const Event = require("./models/Event")
 const Group = require("./models/Group")
 const Message = require("./models/Message")
+const GroupMessage = require("./models/GroupMessage")
 const { UserInputError, AuthenticationError } = require("apollo-server-express")
 require("dotenv").config()
 
@@ -216,6 +217,11 @@ const resolvers = {
         console.log(error)
       }
     },
+    deleteMessage: async (root, args, context) => {
+      await Message.deleteOne({ _id: args.id })
+      await User.findOneAndUpdate({ _id: context.currentUser }, { $pull: { messages: args.id } })
+      return args.id
+    },
     sendUserMessage: async (root, args, context) => {
       const message = new Message({
         title: args.title,
@@ -227,6 +233,16 @@ const resolvers = {
       })
       await message.save()
       await User.updateMany({ username: { $in: args.receivers } }, { $addToSet: { messages: message } })
+      return message
+    },
+    sendGroupMessage: async (root, args,context) => {
+      const message = new GroupMessage({
+        content: args.message,
+        sender: context.currentUser.username,
+        read: false
+      })
+      await message.save()
+      await Group.findOneAndUpdate({ name: args.group }, { $addToSet: { messages: message } })
       return message
     },
     readMessage: async (root, args) => {

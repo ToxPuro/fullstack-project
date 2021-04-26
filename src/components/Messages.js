@@ -4,10 +4,9 @@ import { USER_MESSAGES } from "../graphql/queries"
 import Loader from "./Loader"
 import { useHistory } from "react-router-dom"
 import { READ_MESSAGE } from "../graphql/mutations"
+import { DELETE_MESSAGE } from "../graphql/mutations"
 
 const Messages = () => {
-  const [setAsRead] = useMutation(READ_MESSAGE)
-  const history = useHistory()
   const messages = useQuery(USER_MESSAGES)
   console.log(messages)
   if(!messages.data){
@@ -15,10 +14,7 @@ const Messages = () => {
       <Loader/>
     )
   }
-  const onClick = (id) => {
-    setAsRead({ variables: { id } })
-    history.push(`/messages/${id}`)
-  }
+
   let messagesData = [...messages.data.me.messages]
   console.log(messagesData)
   messagesData.sort((a,b) => {
@@ -34,13 +30,45 @@ const Messages = () => {
   messagesData.reverse()
   console.log(messagesData)
   const displayMessages = messagesData.map(
-    message => (<li  onClick={() => onClick(message.id)}key={message.id}>{message.title} {message.read ? null : <b>unread</b> }</li>)
+    message => (<MessageListElement message={message} key={message.id}/>)
   )
   console.log(messages)
+  if(messagesData.length === 0){
+    return(
+      <div>
+        <h1>No messages</h1>
+      </div>
+    )
+  }
   return(
     <ul>
       {displayMessages}
     </ul>
+  )
+}
+
+const MessageListElement = ({ message }) => {
+  const [setAsRead] = useMutation(READ_MESSAGE)
+  const [deleteMessageMutation] = useMutation(DELETE_MESSAGE)
+  const history = useHistory()
+  const readMessage = (id) => {
+    setAsRead({ variables: { id } })
+    history.push(`/messages/${id}`)
+  }
+
+  const deleteMessage = (id) => {
+    deleteMessageMutation({ variables: { id } })
+  }
+
+  return(
+    <li>
+      <span>
+        <p onClick={() => readMessage(message.id)} style={{ display: "inline-block", marginRight: 10 }}>{message.title}</p>
+        {message.read ? null : <b>unread</b> }
+        <button onClick = {() => deleteMessage(message.id)}> Delete </button>
+      </span>
+
+    </li>
   )
 }
 

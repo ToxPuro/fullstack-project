@@ -50,7 +50,7 @@ const createSecondUser = async() => {
 }
 
 const createGroup = async (users) => {
-  const group = new Group({ name: groupObject.name, users: users, events: [], admins: [users[0]] })
+  const group = new Group({ name: groupObject.name, users: users, events: [], admins: [users[0]], messages: [] })
   for(const i in users){
     await users[i].updateOne({ $addToSet: { groups: group } })
   }
@@ -63,7 +63,7 @@ const createSecondGroup = async (users) => {
   if(users){
     admins = [users[0]]
   }
-  const group = new Group({ name: secondGroupObject.name, users: users, events: [], admins: admins })
+  const group = new Group({ name: secondGroupObject.name, users: users, events: [], admins: admins, messages: [] })
   for(const i in users){
     await users[i].updateOne({ $addToSet: { groups: group } })
   }

@@ -54,6 +54,13 @@ type JoiningRequest implements Message {
   group: String!
 }
 
+type GroupMessage {
+  id: ID!
+  content: String!
+  read: Boolean!
+  sender: String!
+}
+
 type Token {
   value: String!
 }
@@ -151,6 +158,10 @@ type Mutation {
   deleteMessage(
     id: ID!
   ): ID!
+  sendGroupMessage(
+    group: String!
+    message: String!
+  ): GroupMessage
 }
 `
 

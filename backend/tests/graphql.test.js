@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE, DELETE_MESSAGE } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE, DELETE_MESSAGE, SEND_GROUP_MESSAGE } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 const scheduledJob = require("../scheduled-job")
@@ -14,9 +14,12 @@ beforeAll( async () => {
   await helper.erase()
 })
 
+beforeEach ( async () => {
+  await helper.erase()
+})
+
 describe("login", () => {
-  beforeAll( async () => {
-    await helper.erase()
+  beforeEach( async () => {
     await helper.createUser()
   })
   test("can login and query me works", async () => {
@@ -87,8 +90,7 @@ describe("messages", () => {
 
 describe("adding group", () => {
 
-  beforeAll( async () => {
-    await helper.erase()
+  beforeEach( async () => {
     await helper.createUser()
     await helper.createSecondUser()
   })
@@ -114,7 +116,7 @@ describe("adding group", () => {
 })
 
 describe("joining group", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
     await helper.createSecondUser()
@@ -135,8 +137,7 @@ describe("joining group", () => {
 })
 
 describe("adding event", () => {
-  beforeAll(async () => {
-    await helper.erase()
+  beforeEach(async () => {
     const user = await helper.createUser()
     await helper.createGroup([user])
   })
@@ -163,8 +164,7 @@ describe("adding event", () => {
 })
 
 describe("when there is event", () => {
-  beforeAll(async () => {
-    await helper.erase()
+  beforeEach(async () => {
     const user = await helper.createUser()
     const group = await helper.createGroup([user])
     await helper.createEvent(group)
@@ -207,7 +207,7 @@ describe("when there is event", () => {
 
 
 describe("when event has already been voted on", () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await helper.erase()
     const user = await helper.createUser()
     const group = await helper.createGroup([user])
@@ -306,6 +306,13 @@ describe("when user is part of groups", () => {
     expect(userInDB.messages[0].sender).toBe(helper.secondUserObject.username)
     expect(userInDB.messages[0].receivers[0]).toBe(helper.userObject.username)
     expect(userInDB.messages[0].group).toBe(helper.groupObject.name)
+  })
+
+  test("user can add group messages", async() => {
+    await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
+    await mutate(SEND_GROUP_MESSAGE, { variables: { group: helper.groupObject.name, message: "TestGroupMessage" } } )
+    const groupInDB = await helper.groupInDB()
+    expect(groupInDB.messages.length).toBe(1)
   })
 })
 
