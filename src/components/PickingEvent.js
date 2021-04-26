@@ -42,6 +42,7 @@ const PickingEvent = ({ event, user, setNotification }) => {
   }
   return(
     <div>
+      <h2>{event.name}</h2>
       <EventCalendar dates = {event.dates.map(date => parseDate(date.date))} setVotes={setVotes} votes={votes}/>
       <button id="voting-button" onClick={onClick}>Vote</button>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>

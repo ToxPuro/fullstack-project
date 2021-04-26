@@ -189,8 +189,6 @@ describe("when there are events", function () {
       .contains("Voted successfully")
       .should("have.css", "color", "rgb(0, 128, 0)")
     cy.reload()
-    cy.get(`#dates-${formattedDate}`)
-      .should("have.css", "background-color", "rgb(127, 255, 0)")
     cy.get("#homepage-button").click()
     cy.get(`#dates-${formattedDate}`).contains("EventTestName")
 
