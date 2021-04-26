@@ -11,7 +11,7 @@ const SendMessage = () => {
   const onSubmit = ({ receivers, title, message }) => {
     let receiversList = receivers.split(",")
     receiversList = receiversList.map(receiver => receiver.replace(/(^[ '^$*#&]+)|([ '^$*#&]+$)/g, ""))
-    console.log(receiversList<)
+    console.log(receiversList)
     sendMessage({ variables: { receivers: receiversList, message, title } })
   }
   return(

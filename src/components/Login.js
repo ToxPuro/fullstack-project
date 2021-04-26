@@ -15,12 +15,6 @@ const validationSchema = yup.object().shape({
 
 })
 
-const Test = () => {
-  const list = [{ m:"Hei" },{ m:"Hey" }, { m: "Hi" }]
-  return ( <div> { list.map(elem => (<div key={elem.m}> {elem.m} </div>)) } </div> )
-
-}
-
 const Login = ({ login }) => {
   return(
     <div>
@@ -71,7 +65,6 @@ const Login = ({ login }) => {
       </Formik>
       <h2>Not yet signed in?</h2>
       <button id="signIn-button"><Link to="SignIn">Sign In</Link></button>
-      <Test/>
     </div>
   )}
 

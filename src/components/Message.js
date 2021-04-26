@@ -19,26 +19,26 @@ const Message = () => {
       <span style={{ marginRight: 10 }}>
       title:
       </span>
-      <h2 style={{ display: "inline-block" }}>{message.title}</h2>
+      <h2 style={{ display: "inline-block" }}>{messageData.title}</h2>
       <br/>
       <span>
-      sender: {message.sender}
+      sender: {messageData.sender}
       </span>
       <br/>
       <span>
-      receivers: {message.receivers}
+      receivers: {messageData.receivers}
       </span>
       <MessageType message={messageData}/>
     </div>
   )
 }
-const MessageType = ({message}) => {
-  if(message.data.message.type === "Joining request"){
+const MessageType = ({ message }) => {
+  if(message.type === "Joining request"){
     return(
       <JoiningRequest message={message}/>
     )
   }
-  else if(message.data.message.type === "User message"){
+  else if(message.type === "User message"){
     return(
       <UserMessage message={message}/>
     )
