@@ -310,7 +310,7 @@ describe("when user is part of groups", () => {
 
   test("user can add group messages", async() => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
-    await mutate(SEND_GROUP_MESSAGE, { variables: { group: helper.groupObject.name } } )
+    await mutate(SEND_GROUP_MESSAGE, { variables: { group: helper.groupObject.name, message: "TestGroupMessage" } } )
     const groupInDB = await helper.groupInDB()
     expect(groupInDB.messages.length).toBe(1)
   })
