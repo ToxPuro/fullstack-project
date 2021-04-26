@@ -4,6 +4,10 @@ const uniqueValidator = require("mongoose-unique-validator")
 
 
 const userSchema = new mongoose.Schema({
+  avatarUrl: {
+    type: String,
+    default: ""
+  },
   username: {
     type: String,
     required: true,
