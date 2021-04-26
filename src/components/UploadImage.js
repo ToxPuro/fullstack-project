@@ -8,14 +8,13 @@ const SignIn = () => {
     const formData = new FormData()
     formData.append("file", image)
     formData.append("upload_preset", "ml_default")
-
-    const response = await axios.post(
-      "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
-      formData
-    )
-
-    console.log(response.data.public_id)
-
+    try{
+      await axios.post(
+        "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
+        formData)
+    } catch(error){
+      console.log(error)
+    }
   }
 
 
