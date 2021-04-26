@@ -219,6 +219,7 @@ const resolvers = {
     deleteMessage: async (root, args, context) => {
       await Message.deleteOne({ _id: args.id })
       await User.findOneAndUpdate({ _id: context.currentUser }, { $pull: { messages: args.id } })
+      return args.id
     },
     sendUserMessage: async (root, args, context) => {
       const message = new Message({

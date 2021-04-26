@@ -4,6 +4,7 @@ import { USER_MESSAGES } from "../graphql/queries"
 import Loader from "./Loader"
 import { useHistory } from "react-router-dom"
 import { READ_MESSAGE } from "../graphql/mutations"
+import { DELETE_MESSAGE } from "../graphql/mutations"
 
 const Messages = () => {
   const messages = useQuery(USER_MESSAGES)
@@ -41,6 +42,7 @@ const Messages = () => {
 
 const MessageListElement = ({ message }) => {
   const [setAsRead] = useMutation(READ_MESSAGE)
+  const [deleteMessageMutation] = useMutation(DELETE_MESSAGE)
   const history = useHistory()
   const readMessage = (id) => {
     setAsRead({ variables: { id } })
@@ -48,7 +50,7 @@ const MessageListElement = ({ message }) => {
   }
 
   const deleteMessage = (id) => {
-    console.log(id)
+    deleteMessageMutation({ variables: { id } })
   }
 
   return(

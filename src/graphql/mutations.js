@@ -93,4 +93,8 @@ mutation joinRequest($group: String!){
   joinRequest(group: $group){name}
 }`
 
+export const DELETE_MESSAGE = gql`
+mutation deleteMessage($id: ID!){
+  deleteMessage(id: $id)
+}`
 
