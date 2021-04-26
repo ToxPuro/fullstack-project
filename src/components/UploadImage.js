@@ -1,10 +1,21 @@
 import React from "react"
 import { Formik } from "formik"
+import axios from "axios"
 
 
 const SignIn = () => {
   const onSubmit = async ({ image }) => {
-    console.log(image.name, image.type, image.size )
+    const formData = new FormData()
+    formData.append("file", image)
+    formData.append("upload_preset", "ml_default")
+
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
+      formData
+    )
+
+    console.log(response.data.public_id)
+
   }
 
 
