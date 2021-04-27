@@ -34,7 +34,7 @@ const JoinGroupElement = ({ group, setNotification }) => {
     <li>
       <span>
         {group.name}
-        { group.type === "open" ? <button onClick={sendRequest}>Request</button> : <button onClick={JoinGroup}>Join</button>}
+        { group.privacyOption === "open" ? <button onClick={sendRequest}>Request</button> : <button onClick={JoinGroup}>Join</button>}
       </span>
     </li>
   )
