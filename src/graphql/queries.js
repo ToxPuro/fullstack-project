@@ -83,6 +83,7 @@ query group($name: String!){
   group(name: $name){
     name
     id
+    privacyOption
     users{
       name
       username
