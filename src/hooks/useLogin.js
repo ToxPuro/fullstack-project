@@ -51,8 +51,8 @@ const useLogin = (setToken, setNotification) => {
     client.resetStore()
   }
 
-  const signIn = async( username, name, password ) => {
-    const result = await signInMutation({ variables: { username, name, password } })
+  const signIn = async( username, name, password, imageID ) => {
+    const result = await signInMutation({ variables: { username, name, password, imageID } })
     return result
   }
 

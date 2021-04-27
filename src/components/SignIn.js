@@ -1,6 +1,7 @@
 import React from "react"
 import { Formik } from "formik"
 import * as yup from "yup"
+import axios from "axios"
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -20,8 +21,18 @@ const validationSchema = yup.object().shape({
 
 const SignIn = ({ login, signIn }) => {
   const onSubmit = async ({ username, name, password, image }, { resetForm }) => {
-    console.log(image.type)
-    const signInSuccessful = await signIn(username, name, password)
+    let imageID = null
+    if(image){
+      const formData = new FormData()
+      formData.append("file", image)
+      formData.append("upload_preset", "ml_default")
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
+        formData,
+      )
+      imageID = response.data.public_id
+    }
+    const signInSuccessful = await signIn(username, name, password, imageID)
     console.log(signInSuccessful)
     if(signInSuccessful){
       await login({ username, password })
