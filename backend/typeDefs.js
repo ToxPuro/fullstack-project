@@ -123,6 +123,7 @@ type Mutation {
   createGroup(
     name: String!
     users: [String]!
+    privacyOption: String!
   ): Group
   joinGroup(
     id: ID!

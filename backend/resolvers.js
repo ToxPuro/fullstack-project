@@ -43,7 +43,6 @@ const resolvers = {
   },
   Mutation: {
     createUser: async (root, args) => {
-      
       const name = args.name
       const username = args.username
       const saltRounds = 10
@@ -120,7 +119,7 @@ const resolvers = {
       if(users.length-1 < args.users.length){
         throw new UserInputError("Couldn't find users")
       }
-      const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id] })
+      const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id], privacyOption: args.privacyOption })
       await group.save()
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { groups: group._id } })
       return group
