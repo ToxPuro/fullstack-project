@@ -119,6 +119,7 @@ query{
     groupsUserCanJoin{
       name
       id
+      privacyOption
     }
   }
 }`

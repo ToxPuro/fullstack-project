@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import { GROUPS_THAT_USER_CAN_JOIN } from "../graphql/queries"
 import { JOIN_REQUEST } from "../graphql/mutations"
@@ -31,19 +31,22 @@ const JoinGroupElement = ({ group, setNotification }) => {
 }
 
 const JoinGroup = ({ setNotification }) => {
+  const [ groupPrivacyType, setGroupPrivacyType ] = useState("public")
   const groups = useQuery(GROUPS_THAT_USER_CAN_JOIN)
   if(!groups.data){
     return(
       <Loader/>
     )
   }
+  let displayGroups = groups.data.me.groupsUserCanJoin.filter(group => group.privacyOption === groupPrivacyType)
   return (
     <div>
       Hello World
       <ul>
-        {groups.data ? groups.data.me.groupsUserCanJoin.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
+        {groups.data ? displayGroups.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
+      <button onClick={() => setGroupPrivacyType("open")}></button>
     </div>
   )
 }

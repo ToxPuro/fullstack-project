@@ -87,6 +87,7 @@ type Group {
   admins: [User]
   id: ID!
   usersNotInGroup: [User]
+  privacyOption: String!
 }
 
 type Query {
