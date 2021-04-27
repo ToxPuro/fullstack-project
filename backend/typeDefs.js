@@ -18,7 +18,7 @@ type User {
   id: ID!
   events: [Event]
   groups: [Group]
-  groupsUserNotIn: [Group]
+  openGroupsUserNotIn: [Group]
   messages: [Message]
   unReadMessagesCount: Int
   avatarID: String!
