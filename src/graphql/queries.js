@@ -112,11 +112,11 @@ query message($id: ID!){
   }
 }`
 
-export const GROUPS_THAT_USER_IS_NOT_IN = gql`
+export const GROUPS_THAT_USER_CAN_JOIN = gql`
 query{
   me{
     id
-    groupsUserNotIn{
+    groupsUserCanJoin{
       name
       id
     }

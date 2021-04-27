@@ -1,7 +1,7 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { useQuery, useMutation } from "@apollo/client"
-import { GET_GROUP, GROUPS_THAT_USER_IS_NOT_IN, USER_ID } from "../graphql/queries"
+import { GET_GROUP, GROUPS_THAT_USER_CAN_JOIN, USER_ID } from "../graphql/queries"
 import Users from "./Users"
 import Loader from "./Loader"
 import { LEAVE_GROUP } from "../graphql/mutations"
@@ -14,10 +14,10 @@ const Group = ({ setNotification }) => {
   const [leaveGroup] = useMutation(LEAVE_GROUP, {
     update: (store, response) => {
       console.log(response)
-      const dataInStore = store.readQuery({ query: GROUPS_THAT_USER_IS_NOT_IN })
+      const dataInStore = store.readQuery({ query: GROUPS_THAT_USER_CAN_JOIN })
       if(dataInStore){
         store.writeQuery({
-          query: GROUPS_THAT_USER_IS_NOT_IN,
+          query: GROUPS_THAT_USER_CAN_JOIN,
           data: {
             me: {
               ...dataInStore.me,

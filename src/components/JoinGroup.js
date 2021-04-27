@@ -1,6 +1,6 @@
 import React from "react"
 import { useQuery, useMutation } from "@apollo/client"
-import { GROUPS_THAT_USER_IS_NOT_IN } from "../graphql/queries"
+import { GROUPS_THAT_USER_CAN_JOIN } from "../graphql/queries"
 import { JOIN_REQUEST } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 import Loader from "./Loader"
@@ -31,7 +31,7 @@ const JoinGroupElement = ({ group, setNotification }) => {
 }
 
 const JoinGroup = ({ setNotification }) => {
-  const groups = useQuery(GROUPS_THAT_USER_IS_NOT_IN)
+  const groups = useQuery(GROUPS_THAT_USER_CAN_JOIN)
   if(!groups.data){
     return(
       <Loader/>
@@ -41,7 +41,7 @@ const JoinGroup = ({ setNotification }) => {
     <div>
       Hello World
       <ul>
-        {groups.data ? groups.data.me.groupsUserNotIn.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
+        {groups.data ? groups.data.me.groupsUserCanJoin.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>

@@ -12,7 +12,7 @@ mutation addEvent($name: String! $group: String! $dates: [String!]!){
 
 export const SIGN_IN = gql`
 mutation createUser($name: String! $username: String! $password: String! $avatarID: String){
-  createUser(name: $name, username: $username, password: $password, imageID: $ID){name}
+  createUser(name: $name, username: $username, password: $password, avatarID: $avatarID){name}
 }`
 
 export const ADD_GROUP = gql`
