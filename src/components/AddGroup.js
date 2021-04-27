@@ -4,7 +4,14 @@ import { Link } from "react-router-dom"
 import { useMutation } from "@apollo/client"
 import { ADD_GROUP } from "../graphql/mutations"
 import { USER_GROUPS } from "../graphql/queries"
+import Select from "react-select"
+
+const options = [{ value: "private", label: "private" }, { value: "open", label: "open" }, { value: "public", label: "public" }]
+
 const AddGroup = ({ setNotification }) => {
+  const [privacyChoice, setPrivacyChoice ] = useState("private")
+  console.log(privacyChoice)
+  const handleChoice = selectedOption => setPrivacyChoice(selectedOption.value)
   const[addGroup]  = useMutation(ADD_GROUP, {
     update: (store, response) => {
       const dataInStore = store.readQuery({ query: USER_GROUPS })
@@ -26,6 +33,7 @@ const AddGroup = ({ setNotification }) => {
   return(
     <div>
       <h1>New Group</h1>
+      <Select id="group-privacy" options={options} onChange={handleChoice}/>
       <Formik
         initialValues={{ name: "", user: "" }}
         onSubmit={async ({ name }, { resetForm }) => {
