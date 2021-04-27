@@ -1,12 +1,18 @@
 import React, { useState } from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import { GROUPS_THAT_USER_CAN_JOIN } from "../graphql/queries"
-import { JOIN_REQUEST } from "../graphql/mutations"
+import { JOIN_REQUEST, JOIN_GROUP } from "../graphql/mutations"
 import { Link } from "react-router-dom"
 import Loader from "./Loader"
 
 const JoinGroupElement = ({ group, setNotification }) => {
   const [ request ] = useMutation(JOIN_REQUEST,{
+    onError: error => {
+      console.log(error)
+    }
+  })
+
+  const [ join ] = useMutation(JOIN_GROUP, {
     onError: error => {
       console.log(error)
     }
@@ -21,7 +27,7 @@ const JoinGroupElement = ({ group, setNotification }) => {
   }
 
   const JoinGroup = () => {
-    console.log("joining")
+    join({ variables: { id: group.id } })
   }
 
   return(
