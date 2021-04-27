@@ -15,6 +15,7 @@ const SignIn = () => {
       "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
       formData,
     )
+    console.log(response.data.public_id)
     setImageID(response.data.public_id)
   }
 
