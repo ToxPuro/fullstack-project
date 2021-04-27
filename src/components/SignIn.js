@@ -19,14 +19,15 @@ const validationSchema = yup.object().shape({
 })
 
 const SignIn = ({ login, signIn }) => {
-  const onSubmit = async ({ username, name, password }, { resetForm }) => {
+  const onSubmit = async ({ username, name, password, image }, { resetForm }) => {
+    console.log(image.type)
     const signInSuccessful = await signIn(username, name, password)
     console.log(signInSuccessful)
     if(signInSuccessful){
       await login({ username, password })
     }
 
-    resetForm({ values: { username: "", password: "", name: "" } })
+    resetForm({ values: { username: "", password: "", name: "", image: null } })
   }
 
 
@@ -39,7 +40,7 @@ const SignIn = ({ login, signIn }) => {
     <div>
       <h1>Sign In</h1>
       <Formik
-        initialValues={{ username: "", password: "", name: "" }}
+        initialValues={{ username: "", password: "", name: "", image: null }}
         onSubmit={onSubmit}
         validationSchema = {validationSchema}
       >
@@ -48,6 +49,7 @@ const SignIn = ({ login, signIn }) => {
           handleChange,
           handleBlur,
           handleSubmit,
+          setFieldValue,
           isValid,
           /* and other goodies */
         }) => (
@@ -82,6 +84,16 @@ const SignIn = ({ login, signIn }) => {
               onBlur={handleBlur}
               value={values.password}
             />
+
+            <br/>
+
+          image: <input
+              id="image"
+              type="file"
+              name="image"
+              onChange={(event) => {
+                setFieldValue("image", event.currentTarget.files[0])
+              }}/>
             <br/>
             { (isValid) ?             <button type="submit" id="submit-button">
              Sign In
