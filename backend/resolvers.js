@@ -272,7 +272,7 @@ const resolvers = {
       return root.messages
     },
     groupsUserCanJoin: (root) => {
-      return Group.find({ users: { $not: { $all: [root._id] } } })
+      return Group.find({ users: { $not: { $all: [root._id] } }, privacyOption: { $ne: "private" } })
     },
     unReadMessagesCount: async (root) => {
       await root.populate("messages").execPopulate()

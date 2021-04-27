@@ -249,7 +249,7 @@ describe("when user is part of groups", () => {
     expect(groups.data.me.groups[0].name).toBe(helper.groupObject.name)
   })
 
-  test("can get groups that user is not part of", async () => {
+  test("can get groups that user can join", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await query(GROUPS_THAT_USER_CAN_JOIN)
     console.log(result)
