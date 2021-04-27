@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { useQuery } from "@apollo/client"
 import { USER_EVENTS } from "../graphql/queries"
 import Loader from "./Loader"
+import { Image } from "cloudinary-react"
 
 
 const HomePage = ({ logout }) => {
@@ -27,10 +28,11 @@ const HomePage = ({ logout }) => {
       <Loader/>
     )
   }
-
+  console.log(user.data.me.avatarID)
   return(
     <div>
       <h2>Hello {user.data.me.name} </h2>
+      <Image cloudName="dfayht8i9" publicId={user.data.me.avatarID}/>
       <PreviewCalendar events={user.data.me.events} />
       <Events events={user.data.me.events}/>
       <Button id="addEvent-button"><Link to="/addevent">add event</Link></Button>

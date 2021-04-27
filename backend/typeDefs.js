@@ -21,6 +21,7 @@ type User {
   groupsUserNotIn: [Group]
   messages: [Message]
   unReadMessagesCount: Int
+  avatarID: String!
 }
 
 interface Message {

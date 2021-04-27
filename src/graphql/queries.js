@@ -13,6 +13,7 @@ query{
       finalDate
     }
     unReadMessagesCount
+    avatarID
   }
 }`
 
