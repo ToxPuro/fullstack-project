@@ -41,7 +41,7 @@ const JoinGroup = ({ setNotification }) => {
   let displayGroups = groups.data.me.groupsUserCanJoin.filter(group => group.privacyOption === groupPrivacyType)
   return (
     <div>
-      Hello World
+      { groupPrivacyType === "public" ? <h2>Join Groups</h2> : <h2>Send Join Requests</h2> }
       <ul>
         {groups.data ? displayGroups.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
       </ul>
