@@ -20,17 +20,21 @@ const JoinGroupElement = ({ group, setNotification }) => {
     }, 5000)
   }
 
+  const JoinGroup = () => {
+    console.log("joining")
+  }
+
   return(
     <li>
       <span>
         {group.name}
-        <button onClick={sendRequest}>Request</button>
+        { group.type === "open" ? <button onClick={sendRequest}>Request</button> : <button onClick={JoinGroup}>Join</button>}
       </span>
     </li>
   )
 }
 
-const JoinGroup = ({ setNotification }) => {
+const JoinGroupList = ({ setNotification }) => {
   const [ groupPrivacyType, setGroupPrivacyType ] = useState("public")
   const groups = useQuery(GROUPS_THAT_USER_CAN_JOIN)
   if(!groups.data){
@@ -49,13 +53,13 @@ const JoinGroup = ({ setNotification }) => {
   return (
     <div>
       { groupPrivacyType === "public" ? <h2>Join Groups</h2> : <h2>Send Join Requests</h2> }
+      <button onClick={changePrivacyType}>Change</button>
       <ul>
         {groups.data ? displayGroups.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
-      <button onClick={changePrivacyType}>Change</button>
     </div>
   )
 }
 
-export default JoinGroup
+export default JoinGroupList
