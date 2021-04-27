@@ -237,6 +237,7 @@ describe("when user is part of groups", () => {
     const group = await helper.createGroup([user, secondUser])
     await helper.createEvent(group)
     await helper.createSecondGroup()
+    await helper.createThirdGroup()
   })
 
   test("can get users groups", async () => {
@@ -251,7 +252,7 @@ describe("when user is part of groups", () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
     const result = await query(GROUPS_THAT_USER_CAN_JOIN)
     console.log(result)
-    expect(result.data.me.groupsUserCanJoin[0].name).toBe(helper.secondGroupObject.name)
+    expect(result.data.me.groupsUserCanJoin.length).toBe(1)
 
   })
 

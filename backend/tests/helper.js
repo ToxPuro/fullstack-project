@@ -9,7 +9,9 @@ const passwordHash = "$2b$10$BWXtVXCXvNrRRNelbC8McurdUJdPBV2qrug6pISDZV5HPPA9V0O
 const userObject =  { username: "TestiUsername", name: "TestName", events: [], passwordHash, groups: [], messages: [] }
 const secondUserObject = { username: "SecondTestiUsername", name: "SecondTestName", events: [], passwordHash }
 const groupObject = { name: "TestGroup" }
-const secondGroupObject = { name: "SecondTestGroup" }
+const secondGroupObject = { name: "SecondTestGroup", privacyOption: "private" }
+const thirdGroupObject = { name: "ThirdTestGroup", privacyOption: "open" }
+const fourthGroupObject = { name: "FourthTestGroup", privacyOption: "public" }
 const messageObject = { title: "TestTitle", content: "TestContent", read: false, type: "User message", sender: secondUserObject.username }
 const secondMessageObject = { title: "SecondTestTitle", content: "SecondTestContent", read: true, type: "User message", sender: secondUserObject.username }
 const currentDate = new Date()
@@ -64,6 +66,32 @@ const createSecondGroup = async (users) => {
     admins = [users[0]]
   }
   const group = new Group({ name: secondGroupObject.name, users: users, events: [], admins: admins, messages: [] })
+  for(const i in users){
+    await users[i].updateOne({ $addToSet: { groups: group } })
+  }
+  await group.save()
+  return group
+}
+
+const createThirdGroup = async (users) => {
+  let admins = []
+  if(users){
+    admins = [users[0]]
+  }
+  const group = new Group({ name: thirdGroupObject.name, users: users, events: [], admins: admins, messages: [], privacyOption: thirdGroupObject.privacyOption })
+  for(const i in users){
+    await users[i].updateOne({ $addToSet: { groups: group } })
+  }
+  await group.save()
+  return group
+}
+
+const createFourthGroup = async (users) => {
+  let admins = []
+  if(users){
+    admins = [users[0]]
+  }
+  const group = new Group({ name: fourthGroupObject.name, users: users, events: [], admins: admins, messages: [], privacyOption: fourthGroupObject.privacyOption })
   for(const i in users){
     await users[i].updateOne({ $addToSet: { groups: group } })
   }
@@ -128,4 +156,4 @@ const secondUserInDB = async () => {
 }
 
 
-module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter, createMessage, createSecondMessage, messageInDB, messageObject }
+module.exports = { userObject, groupObject, login, erase, eventObject, secondUserObject, createUser, createSecondUser, createGroup, createEvent, eventInDB, userInDB, groupInDB, secondUserInDB, createSecondGroup, createThirdGroup, createFourthGroup, secondGroupObject, currentDate, nextDate, secondEventObject, createSecondEvent, secondEventInDB, dayAfter, createMessage, createSecondMessage, messageInDB, messageObject }
