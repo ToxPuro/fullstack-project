@@ -21,7 +21,7 @@ const validationSchema = yup.object().shape({
 
 const SignIn = ({ login, signIn }) => {
   const onSubmit = async ({ username, name, password, image }, { resetForm }) => {
-    let imageID = null
+    let avatarID = null
     if(image){
       const formData = new FormData()
       formData.append("file", image)
@@ -30,9 +30,10 @@ const SignIn = ({ login, signIn }) => {
         "https://api.cloudinary.com/v1_1/dfayht8i9/image/upload",
         formData,
       )
-      imageID = response.data.public_id
+      avatarID = response.data.public_id
+      console.log(avatarID)
     }
-    const signInSuccessful = await signIn(username, name, password, imageID)
+    const signInSuccessful = await signIn(username, name, password, avatarID)
     console.log(signInSuccessful)
     if(signInSuccessful){
       await login({ username, password })

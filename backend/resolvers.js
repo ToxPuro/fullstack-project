@@ -43,16 +43,19 @@ const resolvers = {
   },
   Mutation: {
     createUser: async (root, args) => {
+      
       const name = args.name
       const username = args.username
       const saltRounds = 10
       const passwordHash = await bcrypt.hash(args.password, saltRounds)
+      const avatarID = args.avatarID ? args.avatarID : "blankUserPhoto_iwfvqv"
       const user = new User({
         username,
         name,
         passwordHash,
         events: [],
-        groups: []
+        groups: [],
+        avatarID,
       })
       return user.save()
         .catch(error => {

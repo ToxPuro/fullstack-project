@@ -109,7 +109,7 @@ type Mutation {
     username: String!
     name: String!
     password: String!
-    imageID: String
+    avatarID: String
   ): User
   login(
     username: String!
