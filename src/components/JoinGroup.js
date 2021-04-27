@@ -38,6 +38,13 @@ const JoinGroup = ({ setNotification }) => {
       <Loader/>
     )
   }
+  const changePrivacyType = () => {
+    if(groupPrivacyType === "open"){
+      setGroupPrivacyType("public")
+    } else{
+      setGroupPrivacyType("open")
+    }
+  }
   let displayGroups = groups.data.me.groupsUserCanJoin.filter(group => group.privacyOption === groupPrivacyType)
   return (
     <div>
@@ -46,7 +53,7 @@ const JoinGroup = ({ setNotification }) => {
         {groups.data ? displayGroups.map(group => (<JoinGroupElement setNotification = {setNotification} key = {group.id} group={group} />)) : null }
       </ul>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
-      <button onClick={() => setGroupPrivacyType("open")}></button>
+      <button onClick={changePrivacyType}>Change</button>
     </div>
   )
 }
