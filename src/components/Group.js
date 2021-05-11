@@ -1,7 +1,7 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { useQuery, useMutation } from "@apollo/client"
-import { GET_GROUP, GROUPS_THAT_USER_IS_NOT_IN, USER_ID } from "../graphql/queries"
+import { GET_GROUP, GROUPS_THAT_USER_CAN_JOIN, USER_ID } from "../graphql/queries"
 import Users from "./Users"
 import Loader from "./Loader"
 import { LEAVE_GROUP } from "../graphql/mutations"
@@ -14,10 +14,10 @@ const Group = ({ setNotification }) => {
   const [leaveGroup] = useMutation(LEAVE_GROUP, {
     update: (store, response) => {
       console.log(response)
-      const dataInStore = store.readQuery({ query: GROUPS_THAT_USER_IS_NOT_IN })
+      const dataInStore = store.readQuery({ query: GROUPS_THAT_USER_CAN_JOIN })
       if(dataInStore){
         store.writeQuery({
-          query: GROUPS_THAT_USER_IS_NOT_IN,
+          query: GROUPS_THAT_USER_CAN_JOIN,
           data: {
             me: {
               ...dataInStore.me,
@@ -62,6 +62,7 @@ const Group = ({ setNotification }) => {
       </span>
       <Users users = {group.data.group.users} admins = {group.data.group.admins} group={group.data.group} setNotification={setNotification}/>
       <button id="group-messages-button"><Link to={`/groups/${group.data.group.name}/messages`}>Messages</Link></button>
+      <button id="group-settings-button"><Link to={`/groups/${group.data.group.name}/settings`}>Change Settings</Link></button>
       <button id="homepage-button"> <Link to="/">Home Page</Link></button>
     </div>
   )

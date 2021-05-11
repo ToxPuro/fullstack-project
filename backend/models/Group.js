@@ -34,6 +34,10 @@ const groupSchema = new mongoose.Schema({
       ref: "Group message"
     }],
     default: []
+  },
+  privacyOption: {
+    type: String,
+    default: "private"
   }
 })
 

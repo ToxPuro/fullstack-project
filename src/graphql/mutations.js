@@ -11,13 +11,13 @@ mutation addEvent($name: String! $group: String! $dates: [String!]!){
 }`
 
 export const SIGN_IN = gql`
-mutation createUser($name: String! $username: String! $password: String!){
-  createUser(name: $name, username: $username, password: $password){name}
+mutation createUser($name: String! $username: String! $password: String! $avatarID: String){
+  createUser(name: $name, username: $username, password: $password, avatarID: $avatarID){name}
 }`
 
 export const ADD_GROUP = gql`
-mutation addGroup($name: String! $users: [String]!){
-  createGroup(name: $name, users: $users){name id}
+mutation addGroup($name: String! $users: [String]!, $privacyOption: String!){
+  createGroup(name: $name, users: $users, privacyOption: $privacyOption){name id}
 }`
 
 export const JOIN_GROUP = gql`

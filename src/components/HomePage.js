@@ -27,7 +27,7 @@ const HomePage = ({ logout }) => {
       <Loader/>
     )
   }
-
+  console.log(user.data.me.avatarID)
   return(
     <div>
       <h2>Hello {user.data.me.name} </h2>

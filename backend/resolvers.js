@@ -47,12 +47,14 @@ const resolvers = {
       const username = args.username
       const saltRounds = 10
       const passwordHash = await bcrypt.hash(args.password, saltRounds)
+      const avatarID = args.avatarID ? args.avatarID : "blankUserPhoto_iwfvqv"
       const user = new User({
         username,
         name,
         passwordHash,
         events: [],
-        groups: []
+        groups: [],
+        avatarID,
       })
       return user.save()
         .catch(error => {
@@ -117,7 +119,7 @@ const resolvers = {
       if(users.length-1 < args.users.length){
         throw new UserInputError("Couldn't find users")
       }
-      const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id] })
+      const group = new Group({ name: args.name, users: usersID, events: [], admins: [context.currentUser.id], privacyOption: args.privacyOption })
       await group.save()
       await User.updateMany({ _id:{ $in: group.users  } }, { $addToSet: { groups: group._id } })
       return group
@@ -269,8 +271,8 @@ const resolvers = {
       await root.populate("messages").execPopulate()
       return root.messages
     },
-    groupsUserNotIn: (root) => {
-      return Group.find({ users: { $not: { $all: [root._id] } } })
+    groupsUserCanJoin: (root) => {
+      return Group.find({ users: { $not: { $all: [root._id] } }, privacyOption: { $ne: "private" } })
     },
     unReadMessagesCount: async (root) => {
       await root.populate("messages").execPopulate()

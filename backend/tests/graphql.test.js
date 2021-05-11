@@ -3,7 +3,7 @@ const  { createTestClient } = require("apollo-server-integration-testing")
 const Event = require("../models/Event")
 const mongoDB=require("../mongoDB")
 const dateFns = require("date-fns")
-const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_IS_NOT_IN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE, DELETE_MESSAGE, SEND_GROUP_MESSAGE } = require("./queries")
+const { ADD_EVENT, ADD_GROUP, ME, USER_GROUPS, USER_EVENTS, GET_EVENT, VOTE_EVENT, JOIN_GROUP, GROUPS_THAT_USER_CAN_JOIN, LEAVE_GROUP, DELETE_EVENT, USER_MESSAGES, ADD_TO_ADMINS, REMOVE_FROM_GROUP, JOIN_REQUEST, GET_MESSAGE, READ_MESSAGE, UNREAD_MESSAGES, SEND_USER_MESSAGE, DELETE_MESSAGE, SEND_GROUP_MESSAGE } = require("./queries")
 const helper = require("./helper")
 const { query, mutate, setOptions } = createTestClient({ apolloServer })
 const scheduledJob = require("../scheduled-job")
@@ -237,6 +237,8 @@ describe("when user is part of groups", () => {
     const group = await helper.createGroup([user, secondUser])
     await helper.createEvent(group)
     await helper.createSecondGroup()
+    await helper.createThirdGroup()
+    await helper.createFourthGroup()
   })
 
   test("can get users groups", async () => {
@@ -247,10 +249,11 @@ describe("when user is part of groups", () => {
     expect(groups.data.me.groups[0].name).toBe(helper.groupObject.name)
   })
 
-  test("can get groups that user is not part of", async () => {
+  test("can get groups that user can join", async () => {
     await helper.login(setOptions, mutate, helper.userObject.username, "salainen")
-    const result = await query(GROUPS_THAT_USER_IS_NOT_IN)
-    expect(result.data.me.groupsUserNotIn[0].name).toBe(helper.secondGroupObject.name)
+    const result = await query(GROUPS_THAT_USER_CAN_JOIN)
+    console.log(result)
+    expect(result.data.me.groupsUserCanJoin.length).toBe(2)
 
   })
 

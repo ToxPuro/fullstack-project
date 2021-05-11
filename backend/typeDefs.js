@@ -18,9 +18,10 @@ type User {
   id: ID!
   events: [Event]
   groups: [Group]
-  groupsUserNotIn: [Group]
+  groupsUserCanJoin: [Group]
   messages: [Message]
   unReadMessagesCount: Int
+  avatarID: String!
 }
 
 interface Message {
@@ -86,6 +87,7 @@ type Group {
   admins: [User]
   id: ID!
   usersNotInGroup: [User]
+  privacyOption: String!
 }
 
 type Query {
@@ -108,6 +110,7 @@ type Mutation {
     username: String!
     name: String!
     password: String!
+    avatarID: String
   ): User
   login(
     username: String!
@@ -121,6 +124,7 @@ type Mutation {
   createGroup(
     name: String!
     users: [String]!
+    privacyOption: String!
   ): Group
   joinGroup(
     id: ID!
