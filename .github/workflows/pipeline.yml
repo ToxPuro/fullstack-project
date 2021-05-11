@@ -42,11 +42,12 @@ jobs:
           wait-on: http://localhost:4000
       - name: deploy
         if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
-        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        uses: gonuit/heroku-docker-deploy@v1.3.2 # This is the action
         with:
+          email: "puro.touko2@gmail.com"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "date-selector"
-          heroku_email: "puro.touko2@gmail.com"
-          healthcheck: "https://date-selector.herokuapp.com/health"
-          checkstring: "ok"
-          rollbackonhealthcheckfailed: true
+          dockerfile_directory: ./
+          dockerfile_name: Dockerfile
+          process_type: web
+          
