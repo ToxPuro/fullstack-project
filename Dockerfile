@@ -18,8 +18,6 @@ RUN npm install --production && adduser -D appuser
 
 USER appuser
 
-RUN npm run build
-
 EXPOSE 4000
 
 COPY --from=builder /usr/src/app/backend /usr/src/app/backend
