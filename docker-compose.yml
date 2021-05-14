@@ -1,0 +1,27 @@
+## I tried to make my dev environment use containers by launching backend and development front from this compose
+## unfortunately I got stuck on some issues on react front not proxying correctly to backend. Eventhough I set proxy: "http://dev-server:4000/graphql" 
+## I got 431 headers too big -error 
+## Tried to solve with nginx but then got web socket errors
+## So now my dev env uses docker to run backend unit tests from test container
+
+version: "3"
+
+services:
+  dev-server:
+    build: .
+    command: npm run start-server-dev
+    ports:
+      - 4000:4000
+    container_name: dev-server
+  dev-env:
+    build: .
+    command: npm start
+    ports:
+      - 4002:4000
+    container_name: dev-env
+    depends_on:
+      - dev-server
+  test:
+    build: .
+    command: npm test
+    container_name: test
