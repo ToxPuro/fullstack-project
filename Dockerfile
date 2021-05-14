@@ -18,6 +18,8 @@ RUN npm install --production && adduser -D appuser
 
 USER appuser
 
+EXPOSE 4000
+
 COPY --from=builder /usr/src/app/backend /usr/src/app/backend
 
 CMD ["npm", "run", "start-server"]
