@@ -1,3 +1,5 @@
+# optimizations for 3.7
+
 FROM node:15-alpine3.10 AS builder
 
 WORKDIR /usr/src/app
@@ -12,7 +14,9 @@ WORKDIR /usr/src/app
 
 COPY package.json .
 
-RUN npm install --production
+RUN npm install --production && adduser -D appuser
+
+USER appuser
 
 COPY --from=builder /usr/src/app/backend /usr/src/app/backend
 
